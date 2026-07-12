@@ -40,6 +40,7 @@ dependencies {
     testImplementation("org.springframework.modulith:spring-modulith-starter-test")
     testImplementation("org.testcontainers:testcontainers-junit-jupiter")
     testImplementation("org.testcontainers:testcontainers-postgresql")
+    testImplementation("com.ninja-squad:springmockk:5.0.1")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
@@ -68,4 +69,21 @@ detekt {
     autoCorrect = true
 
     config.setFrom(files("src/main/detekt/detekt.yml"))
+}
+
+// Tasket "check" är kopplat till det gamla tasket "detekt" som inte hittar reglerna i "io.github.pwestlin:detekt-rules".
+
+// 1. Tvinga 'check' (och därmed CI) att köra de typ-säkra analyserna
+tasks.named("check") {
+    dependsOn("detektMain", "detektTest")
+}
+
+// 2. Konfigurera om det korta bekvämlighetskommandot './gradlew detekt'
+tasks.named("detekt") {
+    // Låt kommandot delegera direkt vidare till de typ-säkra taskerna...
+    dependsOn("detektMain", "detektTest")
+
+    // ...men stäng av själva exekveringen av den generiska scannern.
+    // Det gör att den bara markeras som SKIPPED och inte gör något dubbelarbete utan typanalys.
+    enabled = false
 }

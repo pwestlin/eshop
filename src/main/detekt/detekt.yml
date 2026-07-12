@@ -13,6 +13,13 @@ style:
     active: false
   MaxLineLength:
     active: false
+  VarCouldBeVal:
+    active: true
+    ignoreAnnotated:
+      - 'com.ninjasquad.springmockk.MockkBean'
+      - 'com.ninjasquad.springmockk.MockkSpyBean'
+      - 'org.springframework.beans.factory.annotation.Autowired'
+      - 'org.springframework.test.context.bean.override.mockito.MockitoBean'
 
 ktlint:
   FinalNewline:

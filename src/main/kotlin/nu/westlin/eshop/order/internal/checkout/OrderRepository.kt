@@ -1,0 +1,30 @@
+package nu.westlin.eshop.order.internal.checkout
+
+import nu.westlin.eshop.common.OrderId
+import nu.westlin.eshop.order.internal.domain.Order
+import org.springframework.data.jdbc.core.JdbcAggregateTemplate
+import org.springframework.data.repository.ListCrudRepository
+import org.springframework.data.repository.findByIdOrNull
+import org.springframework.stereotype.Repository
+
+@Repository
+interface SpringDataOrderRepository : ListCrudRepository<Order, OrderId>
+
+@Repository
+class OrderRepository(
+    private val springDataRepository: SpringDataOrderRepository,
+    private val entityTemplate: JdbcAggregateTemplate,
+) {
+
+    fun findById(id: OrderId): Order? = springDataRepository.findByIdOrNull(id)
+
+    /**
+     * Tvingar fram SQL INSERT.
+     */
+    fun insert(order: Order): Order = entityTemplate.insert(order)
+
+    /**
+     * Tvingar fram SQL UPDATE.
+     */
+    fun update(order: Order): Order = entityTemplate.update(order)
+}
