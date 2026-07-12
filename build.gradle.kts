@@ -61,3 +61,11 @@ kotlin {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+detekt {
+    // Gör att din detekt.yml ärver alla standardregler istället för att skriva över dem helt
+    buildUponDefaultConfig = true
+    autoCorrect = true
+
+    config.setFrom(files("src/main/detekt/detekt.yml"))
+}
