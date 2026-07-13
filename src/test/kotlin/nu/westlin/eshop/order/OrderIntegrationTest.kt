@@ -30,13 +30,11 @@ class OrderIntegrationTest @Autowired constructor(
 
     @Test
     fun `should process checkout, store order and publish OrderPlacedEvent`(scenario: Scenario) {
-        // 1. Förbered testdata med client-generated orderId för idempotens
 
         val checkoutRequest = CheckoutRequest.example()
         val orderId = OrderId(checkoutRequest.orderId)
         val customerId = CustomerId(checkoutRequest.customerId)
 
-        // 2. Kör scenariot via RestTestClient
         scenario.stimulate {
             client.post()
                 .uri("/orders")
@@ -48,11 +46,9 @@ class OrderIntegrationTest @Autowired constructor(
                 .expectHeader().location("http://localhost/orders/${orderId.value}")
                 .expectBody<CheckoutResponse>()
                 .value { response ->
-                    // Här är 'uuid' automatiskt en icke-nullable UUID (smart castad av AssertJ-blocket)
                     assertThat(response).isEqualTo(CheckoutResponse(orderId.value))
                 }
         }
-            // 3. Låt Spring Modulith fånga upp och asynkront verifiera outbox-eventet
             .andWaitForEventOfType(OrderPlacedEvent::class.java)
             .matching { event -> event.orderId == orderId }
             .toArriveAndVerify {
@@ -60,7 +56,6 @@ class OrderIntegrationTest @Autowired constructor(
                 val all = orderRepository.findAll()
                 println("all = $all")
 
-                // 4. Verifiera persistenslagret (Spring Data JDBC) i din Testcontainers-Postgres
                 val storedOrder = orderRepository.findById(orderId)
 
                 assertThat(storedOrder).isNotNull

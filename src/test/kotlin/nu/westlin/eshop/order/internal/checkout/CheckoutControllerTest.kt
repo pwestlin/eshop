@@ -69,7 +69,6 @@ class CheckoutControllerTest(@Autowired private val client: RestTestClient) {
             .expectHeader().location("http://localhost/orders/${createdOrder.id.value}")
             .expectBody<CheckoutResponse>()
             .value { response ->
-                // Här är 'uuid' automatiskt en icke-nullable UUID (smart castad av AssertJ-blocket)
                 assertThat(response).isEqualTo(CheckoutResponse(createdOrder.id.value))
             }
     }
