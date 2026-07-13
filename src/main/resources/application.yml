@@ -13,6 +13,15 @@ spring:
       max-lifetime: 180000
       idle-timeout: 170000
 
+  sql:
+    init:
+      mode: always
+
   docker:
     compose:
       lifecycle-management: start_only
+
+logging:
+  level:
+    nu.westlin.eshop: debug
+    root: warn
