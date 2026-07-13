@@ -1,0 +1,15 @@
+### Skapa order bec7defb-1cfe-4af2-ba4a-74c438ce7eb1
+POST http://localhost:8080/order
+Content-Type: application/json
+
+{
+  "orderId": "bec7defb-1cfe-4af2-ba4a-74c438ce7eb1",
+  "customerId": "498b2d3f-8186-4b53-8aa6-4568ac9219c4",
+  "items": [
+    {
+      "productId": "6a668bc2-34be-41bb-a070-ad1854f2bffd",
+      "quantity": 42,
+      "price": 7
+    }
+  ]
+}
