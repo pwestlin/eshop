@@ -27,3 +27,11 @@ ktlint:
   MaximumLineLength:
     active: false
 
+potential-bugs:
+  IgnoredReturnValue:
+    active: true
+    ignoreFunctionCall:
+      # Matchar varianten som tar en Runnable (eller Kotlin-lambda som utvärderas till Unit)
+      - "org.springframework.modulith.test.Scenario.stimulate(java.lang.Runnable)"
+      # Matchar varianten som tar en Supplier (när lambdat råkar returnera WebTestClient-objektet)
+      - "org.springframework.modulith.test.Scenario.stimulate(java.util.function.Supplier)"

@@ -20,13 +20,5 @@ class OrderRepository(
 
     fun findAll(): List<Order> = springDataRepository.findAll()
 
-    /**
-     * Tvingar fram SQL INSERT.
-     */
     fun insert(order: Order): Order = entityTemplate.insert(order)
-
-    /**
-     * Tvingar fram SQL UPDATE.
-     */
-    fun update(order: Order): Order = entityTemplate.update(order)
 }

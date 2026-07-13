@@ -20,3 +20,9 @@ CREATE TABLE IF NOT EXISTS order_line_items
             REFERENCES orders (id)
             ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS customers
+(
+    id   UUID PRIMARY KEY,
+    name VARCHAR(20) NOT NULL
+);

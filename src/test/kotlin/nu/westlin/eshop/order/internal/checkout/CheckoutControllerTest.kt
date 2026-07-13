@@ -40,7 +40,7 @@ class CheckoutControllerTest(@Autowired private val client: RestTestClient) {
     }
 
     @Test
-    fun `checkout order`() {
+    fun `checkout order - all is good`() {
         val request = CheckoutRequest.example()
 
         val createdOrder = Order.new(
@@ -55,7 +55,7 @@ class CheckoutControllerTest(@Autowired private val client: RestTestClient) {
                 customerId = CustomerId(request.customerId),
                 items = request.toDomainItems(),
             )
-        } returns createdOrder
+        } returns ProcessCheckoutResult.Ok(createdOrder)
 
         client
             .post()

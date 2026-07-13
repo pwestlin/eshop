@@ -1,5 +1,6 @@
 package nu.westlin.eshop.order.internal.checkout
 
+import nu.westlin.eshop.order.internal.OrderSpringDataJdbcConfiguration
 import nu.westlin.eshop.order.internal.domain.Order
 import nu.westlin.eshop.order.internal.domain.example
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.Import
 
 @DataJdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(SharedTestcontainersConfiguration::class, OrderRepository::class)
+@Import(SharedTestcontainersConfiguration::class, OrderRepository::class, OrderSpringDataJdbcConfiguration::class)
 class OrderRepositoryTest @Autowired constructor(private val orderRepository: OrderRepository) {
 
     @Test
@@ -20,6 +21,7 @@ class OrderRepositoryTest @Autowired constructor(private val orderRepository: Or
         val order = Order.example()
         val createdOrder = orderRepository.insert(order)
         assertThat(createdOrder.id).isEqualTo(order.id)
+        println("Alla: ${orderRepository.findAll()}")
         assertThat(orderRepository.findById(order.id)).isEqualTo(createdOrder)
     }
 }

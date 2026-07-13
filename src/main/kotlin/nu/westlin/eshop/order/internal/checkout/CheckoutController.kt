@@ -3,6 +3,10 @@ package nu.westlin.eshop.order.internal.checkout
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.ProductId
+import nu.westlin.eshop.order.internal.checkout.ProcessCheckoutResult.CustomerDoesNotExist
+import nu.westlin.eshop.order.internal.checkout.ProcessCheckoutResult.Ok
+import nu.westlin.eshop.order.internal.checkout.ProcessCheckoutResult.OrderAlreadyExist
+import nu.westlin.eshop.order.internal.checkout.ProcessCheckoutResult.ProductsDoesNotExist
 import nu.westlin.eshop.order.internal.domain.OrderLineItem
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -23,19 +27,27 @@ class CheckoutController(private val checkoutService: CheckoutService) {
     fun createOrderId(): UUID = OrderId.generate().value
 
     @PostMapping("", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun checkout(@RequestBody request: CheckoutRequest): ResponseEntity<CheckoutResponse> {
-        val order = checkoutService.processCheckout(
+    fun checkout(@RequestBody request: CheckoutRequest): ResponseEntity<Any> {
+        val result = checkoutService.processCheckout(
             orderId = OrderId(request.orderId),
             customerId = CustomerId(request.customerId),
             items = request.toDomainItems(),
         )
 
-        val location: URI = ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(order.id.value)
-            .toUri()
-        return ResponseEntity.created(location).body(CheckoutResponse(orderId = order.id.value))
+        return when (result) {
+            is Ok -> {
+                val location: URI = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(result.order.id.value)
+                    .toUri()
+                ResponseEntity.created(location).body(CheckoutResponse(orderId = result.order.id.value))
+            }
+
+            is OrderAlreadyExist, is CustomerDoesNotExist, is ProductsDoesNotExist -> ResponseEntity.badRequest().body(
+                result,
+            )
+        }
     }
 }
 

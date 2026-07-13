@@ -1,5 +1,6 @@
-package nu.westlin.eshop.common
+package nu.westlin.eshop.order.internal
 
+import nu.westlin.eshop.common.OrderId
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
