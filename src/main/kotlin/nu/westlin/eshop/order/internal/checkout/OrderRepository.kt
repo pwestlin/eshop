@@ -18,6 +18,8 @@ class OrderRepository(
 
     fun findById(id: OrderId): Order? = springDataRepository.findByIdOrNull(id)
 
+    fun findAll(): List<Order> = springDataRepository.findAll()
+
     /**
      * Tvingar fram SQL INSERT.
      */

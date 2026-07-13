@@ -16,7 +16,7 @@ import java.net.URI
 import java.util.*
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/orders")
 class CheckoutController(private val checkoutService: CheckoutService) {
 
     @GetMapping("/id/create", produces = [MediaType.APPLICATION_JSON_VALUE])

@@ -13,10 +13,13 @@ data class Order(
     val id: OrderId,
     val customerId: CustomerId,
     val status: OrderStatus,
-    // TODO pwestlin: Får inte vara tom. "OrderLineItems"?
+    // TODO pwestlin: Får inte vara tom. "OrderLineItems"? Hur funkar det med Spring Data JDBC?
     @MappedCollection(idColumn = "order_id")
     val items: Set<OrderLineItem>,
 ) {
+
+    // TODO pwestlin: överlagra equals och hashCode med enbart id.
+    //  Kolla alla tester så de inte gör equals utan nåt smartare (strukturell equals) med AssertJ.
 
     // Snygg domän-funktion för att byta status (skapar en kopia)
     fun ship(): Order = this.copy(status = OrderStatus.SHIPPED)
@@ -38,7 +41,9 @@ data class OrderLineItem(
     val productId: ProductId,
     val quantity: Int,
     val price: Int,
-)
+) {
+    companion object
+}
 
 enum class OrderStatus {
     PENDING,
