@@ -8,6 +8,7 @@ import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 
 @Table("orders")
+// TODO pwestlin: Privat konstruktor? Hur går det med Spring Data JDBC?
 data class Order(
     @Id
     val id: OrderId,
@@ -18,17 +19,27 @@ data class Order(
     val items: Set<OrderLineItem>,
 ) {
 
-    // TODO pwestlin: överlagra equals och hashCode med enbart id.
-    //  Kolla alla tester så de inte gör equals utan nåt smartare (strukturell equals) med AssertJ.
-
+    // TODO pwestlin: Använd
     // Snygg domän-funktion för att byta status (skapar en kopia)
-    fun ship(): Order = this.copy(status = OrderStatus.SHIPPED)
+    fun ship(): Order = this.copy(status = OrderStatus.Shipped)
+
+    // equals() and hashCode() are overridden because Order is an entity and not a value object (as of DDD).
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Order
+
+        return id == other.id
+    }
+
+    override fun hashCode(): Int = id.hashCode()
 
     companion object {
         fun new(id: OrderId, customerId: CustomerId, items: Set<OrderLineItem>): Order = Order(
             id = id,
             customerId = customerId,
-            status = OrderStatus.PENDING,
+            status = OrderStatus.Pending,
             items = items,
         )
     }
@@ -46,8 +57,8 @@ data class OrderLineItem(
 }
 
 enum class OrderStatus {
-    PENDING,
-    PROCESSING,
-    SHIPPED,
-    CANCELLED,
+    Pending,
+    Processing,
+    Shipped,
+    Cancelled,
 }

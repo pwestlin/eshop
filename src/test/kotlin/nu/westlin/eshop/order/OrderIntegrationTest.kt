@@ -30,7 +30,6 @@ class OrderIntegrationTest @Autowired constructor(
 
     @Test
     fun `should process checkout, store order and publish OrderPlacedEvent`(scenario: Scenario) {
-
         val checkoutRequest = CheckoutRequest.example()
         val orderId = OrderId(checkoutRequest.orderId)
         val customerId = CustomerId(checkoutRequest.customerId)
@@ -60,7 +59,7 @@ class OrderIntegrationTest @Autowired constructor(
 
                 assertThat(storedOrder).isNotNull
                 assertThat(storedOrder?.customerId).isEqualTo(customerId)
-                assertThat(storedOrder?.status).isEqualTo(OrderStatus.PENDING)
+                assertThat(storedOrder?.status).isEqualTo(OrderStatus.Pending)
             }
     }
 }

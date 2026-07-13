@@ -8,7 +8,7 @@ import kotlin.random.Random
 fun Order.Companion.example(
     id: OrderId = OrderId.generate(),
     customerId: CustomerId = CustomerId.generate(),
-    status: OrderStatus = OrderStatus.PENDING,
+    status: OrderStatus = OrderStatus.Pending,
     items: Set<OrderLineItem> = List(3) { OrderLineItem.example() }.toSet(),
 ): Order = Order(
     id = id,

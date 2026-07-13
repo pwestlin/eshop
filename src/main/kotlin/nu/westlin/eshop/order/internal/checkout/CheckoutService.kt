@@ -19,7 +19,7 @@ class CheckoutService(
     // TODO pwestlin: Returnera sumtyp för ev fel?
     @Transactional
     fun processCheckout(customerId: CustomerId, items: Set<OrderLineItem>, orderId: OrderId): Order {
-        // TODO pwestlin: Kolla om OrderId redan finns (idempotens)
+        // TODO pwestlin: Kolla om OrderId redan finns (idempotens). Denna kontroll ska göras i controllern!
 
         val order = Order.new(
             id = orderId,
