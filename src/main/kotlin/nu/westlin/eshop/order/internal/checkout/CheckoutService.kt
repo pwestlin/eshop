@@ -21,11 +21,10 @@ class CheckoutService(
     private val eventPublisher: ApplicationEventPublisher,
     private val catalogService: CatalogService,
 ) {
-    // TODO pwestlin: Returnera sumtyp för ev fel?
+
     @Transactional
     @Suppress("ReturnCount")
     fun processCheckout(customerId: CustomerId, items: OrderLineItems, orderId: OrderId): ProcessCheckoutResult {
-        // TODO pwestlin: Kolla om OrderId redan finns (idempotens). Denna kontroll ska göras i controllern!
 
         if (!customerService.exists(customerId)) {
             return ProcessCheckoutResult.CustomerDoesNotExist(customerId)

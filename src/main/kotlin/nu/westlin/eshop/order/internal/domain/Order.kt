@@ -9,7 +9,6 @@ import org.springframework.data.relational.core.mapping.Table
 
 @Table("orders")
 data class Order(
-    // TODO pwestlin: Generera order id från en sekvens?
     @Id
     val id: OrderId,
     val customerId: CustomerId,

@@ -29,6 +29,8 @@ class CheckoutController(private val checkoutService: CheckoutService) {
 
     @PostMapping("", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun checkout(@RequestBody request: CheckoutRequest): ResponseEntity<Any> {
+        // TODO pwestlin: Kolla om OrderId redan finns (idempotens)?
+
         val result = checkoutService.processCheckout(
             orderId = OrderId(request.orderId),
             customerId = CustomerId(request.customerId),

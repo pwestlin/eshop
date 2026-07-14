@@ -5,8 +5,6 @@ package nu.westlin.eshop.test
 import org.springframework.test.web.servlet.client.EntityExchangeResult
 import org.springframework.test.web.servlet.client.RestTestClient
 
-// TODO pwestlin: KDoc
-
 val <T : Any> EntityExchangeResult<T>.requiredBody: T
     get() = this.responseBody ?: throw AssertionError("Expected response body to be present, but it was null.")
 
