@@ -14,8 +14,6 @@ data class Order(
     val id: OrderId,
     val customerId: CustomerId,
     val status: OrderStatus,
-    // TODO pwestlin: Får inte vara tom. "OrderLineItems"? Hur funkar det med Spring Data JDBC?
-    //  Se https://share.gemini.google/ScqPdCVPDxxG.
     @MappedCollection(idColumn = "order_id")
     val items: OrderLineItems,
 ) {
