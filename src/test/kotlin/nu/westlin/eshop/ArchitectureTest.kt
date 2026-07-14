@@ -14,6 +14,11 @@ class ArchitectureTest {
         modules.verify()
     }
 
+    @Test
+    fun `print module information`() {
+        println(modules)
+    }
+
     @Disabled
     @Test
     fun `create module documentation`() {

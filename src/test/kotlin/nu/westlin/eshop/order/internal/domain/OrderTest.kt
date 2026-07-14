@@ -62,4 +62,16 @@ class OrderTest {
             .usingRecursiveComparison()
             .isEqualTo(order.copy(status = OrderStatus.Shipped))
     }
+
+    @Test
+    fun `subTotal should be the sum of all OrderLineItems`() {
+        val order = Order.example(
+            items = setOf(
+                OrderLineItem.example(price = 1, quantity = 5),
+                OrderLineItem.example(price = 3, quantity = 3),
+                OrderLineItem.example(price = 5, quantity = 1),
+            ),
+        )
+        assertThat(order.subTotal).isEqualTo(19)
+    }
 }

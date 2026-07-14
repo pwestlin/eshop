@@ -8,18 +8,21 @@ import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 
 @Table("orders")
-// TODO pwestlin: Privat konstruktor? Hur går det med Spring Data JDBC?
+// TODO pwestlin: Privat konstruktor? Hur går det med Spring Data JDBC? Tydligen kan man använda @PersistenceCreator på en Secondary Constructor.
 data class Order(
     @Id
     val id: OrderId,
     val customerId: CustomerId,
     val status: OrderStatus,
     // TODO pwestlin: Får inte vara tom. "OrderLineItems"? Hur funkar det med Spring Data JDBC?
+    //  Se https://share.gemini.google/ScqPdCVPDxxG.
     @MappedCollection(idColumn = "order_id")
     val items: Set<OrderLineItem>,
 ) {
 
-    // TODO pwestlin: Använd
+    val subTotal: Int
+        get() = items.sumOf { it.price * it.quantity }
+
     // Snygg domän-funktion för att byta status (skapar en kopia)
     fun ship(): Order = this.copy(status = OrderStatus.Shipped)
 
