@@ -6,7 +6,7 @@ import nu.westlin.eshop.common.OrderPlacedEvent
 import nu.westlin.eshop.common.ProductId
 import nu.westlin.eshop.customer.CustomerService
 import nu.westlin.eshop.order.internal.domain.Order
-import nu.westlin.eshop.order.internal.domain.OrderLineItem
+import nu.westlin.eshop.order.internal.domain.OrderLineItems
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -21,7 +21,7 @@ class CheckoutService(
 ) {
     // TODO pwestlin: Returnera sumtyp för ev fel?
     @Transactional
-    fun processCheckout(customerId: CustomerId, items: Set<OrderLineItem>, orderId: OrderId): ProcessCheckoutResult {
+    fun processCheckout(customerId: CustomerId, items: OrderLineItems, orderId: OrderId): ProcessCheckoutResult {
         // TODO pwestlin: Kolla om OrderId redan finns (idempotens). Denna kontroll ska göras i controllern!
 
         if (!customerService.exists(customerId)) {
@@ -42,7 +42,7 @@ class CheckoutService(
             OrderPlacedEvent(
                 orderId = order.id,
                 customerId = order.customerId,
-                items = order.items.map { item ->
+                items = order.items.value.map { item ->
                     OrderPlacedEvent.OrderPlacedItem(
                         productId = item.productId,
                         quantity = item.quantity,

@@ -8,6 +8,7 @@ import nu.westlin.eshop.order.internal.checkout.ProcessCheckoutResult.Ok
 import nu.westlin.eshop.order.internal.checkout.ProcessCheckoutResult.OrderAlreadyExist
 import nu.westlin.eshop.order.internal.checkout.ProcessCheckoutResult.ProductsDoesNotExist
 import nu.westlin.eshop.order.internal.domain.OrderLineItem
+import nu.westlin.eshop.order.internal.domain.OrderLineItems
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -60,7 +61,7 @@ data class CheckoutRequest(val orderId: UUID, val customerId: UUID, val items: S
     companion object
 }
 
-fun CheckoutRequest.toDomainItems(): Set<OrderLineItem> = items.map { it.toDomainItem() }.toSet()
+fun CheckoutRequest.toDomainItems(): OrderLineItems = OrderLineItems(items.map { it.toDomainItem() }.toSet())
 
 fun CheckoutRequest.CheckoutItemRequest.toDomainItem(): OrderLineItem = OrderLineItem(
     id = null,

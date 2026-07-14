@@ -9,7 +9,7 @@ fun Order.Companion.example(
     id: OrderId = OrderId.generate(),
     customerId: CustomerId = CustomerId.generate(),
     status: OrderStatus = OrderStatus.Pending,
-    items: Set<OrderLineItem> = List(3) { OrderLineItem.example() }.toSet(),
+    items: OrderLineItems = OrderLineItems.example(),
 ): Order = Order(
     id = id,
     customerId = customerId,
@@ -27,4 +27,10 @@ fun OrderLineItem.Companion.example(
     productId = productId,
     quantity = quantity,
     price = price,
+)
+
+fun OrderLineItems.Companion.example(
+    value: Set<OrderLineItem> = List(3) { OrderLineItem.example() }.toSet(),
+): OrderLineItems = OrderLineItems(
+    value = value,
 )

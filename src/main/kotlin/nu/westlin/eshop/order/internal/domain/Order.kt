@@ -17,11 +17,11 @@ data class Order(
     // TODO pwestlin: Får inte vara tom. "OrderLineItems"? Hur funkar det med Spring Data JDBC?
     //  Se https://share.gemini.google/ScqPdCVPDxxG.
     @MappedCollection(idColumn = "order_id")
-    val items: Set<OrderLineItem>,
+    val items: OrderLineItems,
 ) {
 
     val subTotal: Int
-        get() = items.sumOf { it.price * it.quantity }
+        get() = items.subTotal
 
     // Snygg domän-funktion för att byta status (skapar en kopia)
     fun ship(): Order = this.copy(status = OrderStatus.Shipped)
@@ -39,7 +39,7 @@ data class Order(
     override fun hashCode(): Int = id.hashCode()
 
     companion object {
-        fun new(id: OrderId, customerId: CustomerId, items: Set<OrderLineItem>): Order = Order(
+        fun new(id: OrderId, customerId: CustomerId, items: OrderLineItems): Order = Order(
             id = id,
             customerId = customerId,
             status = OrderStatus.Pending,
@@ -64,4 +64,16 @@ enum class OrderStatus {
     Processing,
     Shipped,
     Cancelled,
+}
+
+@JvmInline
+value class OrderLineItems(val value: Set<OrderLineItem>) {
+    init {
+        require(value.isNotEmpty()) { "value can't be empty" }
+    }
+
+    val subTotal: Int
+        get() = value.sumOf { it.price * it.quantity }
+
+    companion object
 }

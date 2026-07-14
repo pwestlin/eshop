@@ -40,7 +40,7 @@ class OrderTest {
     fun `new creates an order with status Pending`() {
         val orderId = OrderId.generate()
         val customerId = CustomerId.generate()
-        val orderLineItems = List(3) { OrderLineItem.example() }.toSet()
+        val orderLineItems = OrderLineItems(List(3) { OrderLineItem.example() }.toSet())
 
         val order = Order.new(
             id = orderId,
@@ -66,10 +66,12 @@ class OrderTest {
     @Test
     fun `subTotal should be the sum of all OrderLineItems`() {
         val order = Order.example(
-            items = setOf(
-                OrderLineItem.example(price = 1, quantity = 5),
-                OrderLineItem.example(price = 3, quantity = 3),
-                OrderLineItem.example(price = 5, quantity = 1),
+            items = OrderLineItems(
+                setOf(
+                    OrderLineItem.example(price = 1, quantity = 5),
+                    OrderLineItem.example(price = 3, quantity = 3),
+                    OrderLineItem.example(price = 5, quantity = 1),
+                ),
             ),
         )
         assertThat(order.subTotal).isEqualTo(19)
