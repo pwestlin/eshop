@@ -30,5 +30,6 @@ CREATE TABLE IF NOT EXISTS products
 (
     id          INTEGER     NOT NULL CHECK (id > 0) PRIMARY KEY,
     name        VARCHAR(20) NOT NULL,
-    description VARCHAR(40) NOT NULL
+    description VARCHAR(40) NOT NULL,
+    price       INT         NOT NULL
 );

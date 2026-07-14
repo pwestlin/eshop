@@ -18,6 +18,7 @@ class ProductRepositoryTest @Autowired constructor(private val repository: Produ
 
     @Test
     fun `insert new product`() {
+        println("repository.findAll() = ${repository.findAll()}")
         val product = Product.example()
         repository.insert(product)
 

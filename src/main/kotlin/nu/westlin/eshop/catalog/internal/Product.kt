@@ -10,6 +10,7 @@ data class Product(
     val id: ProductId,
     val name: String,
     val description: String,
+    val price: Int,
 ) {
 
     // equals() and hashCode() are overridden because Order is an entity and not a value object (as of DDD).
