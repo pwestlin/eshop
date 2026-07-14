@@ -3,6 +3,7 @@ package nu.westlin.eshop.customer.internal
 import nu.westlin.eshop.common.CustomerId
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate
 import org.springframework.data.repository.ListCrudRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -18,6 +19,10 @@ class CustomerRepository(
     }
 
     fun exists(id: CustomerId): Boolean = springDataRepository.existsById(id)
+
+    fun getById(id: CustomerId): Customer = springDataRepository.findByIdOrNull(
+        id,
+    ) ?: throw IllegalArgumentException("Customer with id $id does not exist")
 
     fun findAll(): List<Customer> = springDataRepository.findAll()
 }

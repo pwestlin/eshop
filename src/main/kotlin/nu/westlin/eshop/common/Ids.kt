@@ -1,6 +1,7 @@
 package nu.westlin.eshop.common
 
 import java.util.*
+import kotlin.random.Random
 
 @JvmInline
 value class OrderId(val value: UUID) {
@@ -10,9 +11,14 @@ value class OrderId(val value: UUID) {
 }
 
 @JvmInline
-value class ProductId(val value: UUID) {
+value class ProductId(val value: Int) {
+
+    init {
+        require(value > 0) { "value '$value' must be > 0" }
+    }
+
     companion object {
-        fun generate(): ProductId = ProductId(UUID.randomUUID())
+        fun generate(): ProductId = ProductId(Random.nextInt(1, Int.MAX_VALUE - 1))
     }
 }
 

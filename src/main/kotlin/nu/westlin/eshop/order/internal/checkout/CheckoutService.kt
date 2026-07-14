@@ -1,5 +1,6 @@
 package nu.westlin.eshop.order.internal.checkout
 
+import nu.westlin.eshop.catalog.CatalogService
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.OrderPlacedEvent
@@ -18,9 +19,11 @@ class CheckoutService(
     private val orderRepository: OrderRepository,
     private val customerService: CustomerService,
     private val eventPublisher: ApplicationEventPublisher,
+    private val catalogService: CatalogService,
 ) {
     // TODO pwestlin: Returnera sumtyp för ev fel?
     @Transactional
+    @Suppress("ReturnCount")
     fun processCheckout(customerId: CustomerId, items: OrderLineItems, orderId: OrderId): ProcessCheckoutResult {
         // TODO pwestlin: Kolla om OrderId redan finns (idempotens). Denna kontroll ska göras i controllern!
 
@@ -28,7 +31,16 @@ class CheckoutService(
             return ProcessCheckoutResult.CustomerDoesNotExist(customerId)
         }
 
-        // TODO pwestlin: Kontrollera products
+        val notExistingProductIds = items.value.mapNotNull { item ->
+            if (catalogService.exists(item.productId)) {
+                null
+            } else {
+                item.productId
+            }
+        }.toSet()
+        if (notExistingProductIds.isNotEmpty()) {
+            return ProcessCheckoutResult.ProductsDoesNotExist(notExistingProductIds)
+        }
 
         val order = Order.new(
             id = orderId,

@@ -2,7 +2,9 @@ package nu.westlin.eshop.customer.internal
 
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
+import nu.westlin.eshop.test.isExactlyInstanceOf
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.data.jdbc.test.autoconfigure.DataJdbcTest
@@ -23,7 +25,22 @@ class CustomerRepositoryTest @Autowired constructor(private val repository: Cust
     fun `exists returns true if one is found`() {
         val customer = Customer.example()
         repository.insert(customer)
-        println("Alla: ${repository.findAll()}")
         assertThat(repository.exists(customer.id)).isTrue
+    }
+
+    @Test
+    fun `getById returns customer`() {
+        val customer = Customer.example()
+        repository.insert(customer)
+
+        assertThat(repository.getById(customer.id)).isEqualTo(customer)
+    }
+
+    @Test
+    fun `getById throws IllegalArgumentException if customer does not exist`() {
+        val customerId = CustomerId.generate()
+        assertThatThrownBy { repository.getById(customerId) }
+            .isExactlyInstanceOf<IllegalArgumentException>()
+            .hasMessage("Customer with id $customerId does not exist")
     }
 }

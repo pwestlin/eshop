@@ -8,8 +8,8 @@ import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 
 @Table("orders")
-// TODO pwestlin: Privat konstruktor? Hur går det med Spring Data JDBC? Tydligen kan man använda @PersistenceCreator på en Secondary Constructor.
 data class Order(
+    // TODO pwestlin: Generera order id från en sekvens?
     @Id
     val id: OrderId,
     val customerId: CustomerId,

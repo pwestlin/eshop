@@ -54,7 +54,7 @@ class CheckoutController(private val checkoutService: CheckoutService) {
 
 data class CheckoutRequest(val orderId: UUID, val customerId: UUID, val items: Set<CheckoutItemRequest>) {
 
-    data class CheckoutItemRequest(val productId: UUID, val quantity: Int, val price: Int) {
+    data class CheckoutItemRequest(val productId: Int, val quantity: Int, val price: Int) {
         companion object
     }
 

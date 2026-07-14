@@ -1,4 +1,3 @@
--- Tabell för Order (Aggregate Root)
 CREATE TABLE IF NOT EXISTS orders
 (
     id          UUID PRIMARY KEY,
@@ -6,14 +5,13 @@ CREATE TABLE IF NOT EXISTS orders
     status      VARCHAR(20) NOT NULL
 );
 
--- Tabell för OrderLineItem (Child Entity)
 CREATE TABLE IF NOT EXISTS order_line_items
 (
     id         BIGSERIAL PRIMARY KEY,
-    order_id   UUID NOT NULL, -- Matchar nu orders.id som UUID
-    product_id UUID NOT NULL,
-    quantity   INT  NOT NULL,
-    price      INT  NOT NULL,
+    order_id   UUID    NOT NULL,
+    product_id INTEGER NOT NULL CHECK (id > 0),
+    quantity   INT     NOT NULL,
+    price      INT     NOT NULL,
 
     CONSTRAINT fk_order_line_items_orders
         FOREIGN KEY (order_id)
@@ -23,6 +21,14 @@ CREATE TABLE IF NOT EXISTS order_line_items
 
 CREATE TABLE IF NOT EXISTS customers
 (
-    id   UUID PRIMARY KEY,
-    name VARCHAR(20) NOT NULL
+    id    UUID PRIMARY KEY,
+    name  VARCHAR(20) NOT NULL,
+    email VARCHAR(40) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS products
+(
+    id          INTEGER     NOT NULL CHECK (id > 0) PRIMARY KEY,
+    name        VARCHAR(20) NOT NULL,
+    description VARCHAR(40) NOT NULL
 );

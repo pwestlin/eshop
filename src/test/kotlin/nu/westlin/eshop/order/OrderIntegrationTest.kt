@@ -2,12 +2,15 @@ package nu.westlin.eshop.order
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import nu.westlin.eshop.catalog.CatalogService
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.OrderPlacedEvent
+import nu.westlin.eshop.common.ProductId
 import nu.westlin.eshop.common.example
 import nu.westlin.eshop.customer.CustomerService
 import nu.westlin.eshop.order.internal.checkout.CheckoutRequest
+import nu.westlin.eshop.order.internal.checkout.CheckoutRequest.CheckoutItemRequest
 import nu.westlin.eshop.order.internal.checkout.CheckoutResponse
 import nu.westlin.eshop.order.internal.checkout.OrderRepository
 import nu.westlin.eshop.order.internal.checkout.ProcessCheckoutResult
@@ -45,6 +48,9 @@ class OrderIntegrationTest @Autowired constructor(
     @MockkBean
     private lateinit var customerService: CustomerService
 
+    @MockkBean
+    private lateinit var catalogService: CatalogService
+
     @Test
     fun `should process checkout, store order and publish OrderPlacedEvent`(scenario: Scenario) {
         val checkoutRequest = CheckoutRequest.example()
@@ -52,6 +58,9 @@ class OrderIntegrationTest @Autowired constructor(
         val customerId = CustomerId(checkoutRequest.customerId)
 
         every { customerService.exists(customerId) } returns true
+        checkoutRequest.items.forEach { item ->
+            every { catalogService.exists(ProductId(item.productId)) } returns true
+        }
 
         scenario.stimulate {
             client.post()
@@ -69,12 +78,8 @@ class OrderIntegrationTest @Autowired constructor(
         }
             .andWaitForEventOfType(OrderPlacedEvent::class.java)
             .matching { event -> event.orderId == orderId }
-            .toArriveAndVerify {
-                println("it = $it")
-                val all = orderRepository.findAll()
-                println("all = $all")
-
-                val storedOrder = orderRepository.findById(orderId)
+            .toArriveAndVerify { orderPlacedEvent ->
+                val storedOrder = orderRepository.findById(orderPlacedEvent.orderId)
 
                 assertThat(storedOrder).isNotNull
                 assertThat(storedOrder?.customerId).isEqualTo(customerId)
@@ -105,6 +110,68 @@ class OrderIntegrationTest @Autowired constructor(
                 .expectBody<ProcessCheckoutResult.CustomerDoesNotExist>()
                 .value { response ->
                     assertThat(response).isEqualTo(ProcessCheckoutResult.CustomerDoesNotExist(customerId))
+                }
+        }
+
+        assertThat(orderRepository.findById(orderId)).isNull()
+
+        assertThat(events.ofType(OrderPlacedEvent::class.java)).isEmpty()
+    }
+
+    @Test
+    fun `should not process checkout because two productIds does not exist`(
+        scenario: Scenario,
+        events: AssertablePublishedEvents,
+    ) {
+        val productId1 = 5
+        val productId2 = 42
+        val productId3 = 69
+        val items = setOf(
+            CheckoutItemRequest(
+                productId = productId1,
+                quantity = 5,
+                price = 5,
+            ),
+            CheckoutItemRequest(
+                productId = productId2,
+                quantity = 42,
+                price = 42,
+            ),
+            CheckoutItemRequest(
+                productId = productId3,
+                quantity = 69,
+                price = 69,
+            ),
+        )
+        val checkoutRequest = CheckoutRequest.example(items = items)
+        val orderId = OrderId(checkoutRequest.orderId)
+        val customerId = CustomerId(checkoutRequest.customerId)
+
+        every { customerService.exists(customerId) } returns true
+
+        every { catalogService.exists(ProductId(productId1)) } returns true
+        every { catalogService.exists(ProductId(productId2)) } returns false
+        every { catalogService.exists(ProductId(productId3)) } returns false
+
+        scenario.stimulate {
+            client.post()
+                .uri("/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(checkoutRequest)
+                .exchange()
+                .expectStatus().isBadRequest
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectHeader().doesNotExist(HttpHeaders.LOCATION)
+                .expectBody<ProcessCheckoutResult.ProductsDoesNotExist>()
+                .value { response ->
+                    assertThat(response).isEqualTo(
+                        ProcessCheckoutResult.ProductsDoesNotExist(
+                            setOf(
+                                ProductId(productId2),
+                                ProductId(productId3),
+                            ),
+                        ),
+                    )
                 }
         }
 

@@ -4,13 +4,14 @@ import nu.westlin.eshop.order.internal.checkout.CheckoutRequest
 import nu.westlin.eshop.order.internal.checkout.CheckoutRequest.CheckoutItemRequest
 import nu.westlin.eshop.order.internal.checkout.CheckoutResponse
 import java.util.*
+import kotlin.random.Random
 
 fun CheckoutRequest.Companion.example(
     orderId: UUID = UUID.randomUUID(),
     customerId: UUID = UUID.randomUUID(),
     items: Set<CheckoutItemRequest> = setOf(
         CheckoutItemRequest(
-            productId = UUID.randomUUID(),
+            productId = Random.nextInt(1, Int.MAX_VALUE - 1),
             quantity = 42,
             price = 7,
         ),

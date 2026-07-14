@@ -1,15 +1,15 @@
-package nu.westlin.eshop.customer.internal
+package nu.westlin.eshop.catalog.internal
 
-import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.ProductId
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 
-@Table("customers")
-data class Customer(
+@Table("products")
+data class Product(
     @Id
-    val id: CustomerId,
+    val id: ProductId,
     val name: String,
-    val email: Email,
+    val description: String,
 ) {
 
     // equals() and hashCode() are overridden because Order is an entity and not a value object (as of DDD).
@@ -17,7 +17,7 @@ data class Customer(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Customer
+        other as Product
 
         return id == other.id
     }
@@ -25,16 +25,4 @@ data class Customer(
     override fun hashCode(): Int = id.hashCode()
 
     companion object
-}
-
-@JvmInline
-value class Email(val value: String) {
-
-    init {
-        require(emailRegex.matches(value)) { "value '$value' does not match regex $emailRegex" }
-    }
-
-    companion object {
-        val emailRegex: Regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$".toRegex()
-    }
 }
