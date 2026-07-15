@@ -1,6 +1,7 @@
 package nu.westlin.eshop.customer.internal
 
 import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -9,8 +10,6 @@ import org.springframework.boot.data.jdbc.test.autoconfigure.DataJdbcTest
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase
 import org.springframework.context.annotation.Import
 import org.springframework.data.repository.findByIdOrNull
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 
 @DataJdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -34,7 +33,7 @@ class CustomerOrderRepositoryTest @Autowired constructor(
 
     @Test
     fun `findAllByCustomerIdAndInstantGreaterThanEqual - should find two`() {
-        val now = Instant.now().truncatedTo(ChronoUnit.MICROS)
+        val now = instantNowTruncated()
         val customerId = CustomerId.generate()
         repository.insert(CustomerOrder.example(customerId = customerId, instant = now.minusSeconds(42)))
         val customerOrder2 = repository.insert(

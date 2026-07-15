@@ -5,14 +5,13 @@ import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.OrderPlacedEvent
 import nu.westlin.eshop.common.ProductId
+import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.customer.CustomerService
 import nu.westlin.eshop.order.internal.domain.Order
 import nu.westlin.eshop.order.internal.domain.OrderLineItems
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 
 @Service
 class CheckoutService(
@@ -62,7 +61,7 @@ class CheckoutService(
 
                     )
                 }.toSet(),
-                occurredAt = Instant.now().truncatedTo(ChronoUnit.MICROS),
+                occurredAt = instantNowTruncated(),
             ),
         )
         return ProcessCheckoutResult.Ok(createdOrder)

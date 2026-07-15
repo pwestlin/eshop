@@ -2,6 +2,7 @@ package nu.westlin.eshop.customer.internal
 
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.OrderShippedEvent
+import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.common.logger
 import nu.westlin.eshop.customer.Percentage
 import org.springframework.data.annotation.Id
@@ -19,7 +20,10 @@ class CustomerLoyaltyService(private val customerOrderRepository: CustomerOrderR
     private val logger = logger()
 
     fun loyaltyDiscount(customerId: CustomerId): DiscountTier {
-        val orders = customerOrderRepository.findAllByCustomerIdAndInstantGreaterThanEqual(customerId, Instant.now())
+        val orders = customerOrderRepository.findAllByCustomerIdAndInstantGreaterThanEqual(
+            customerId,
+            instantNowTruncated(),
+        )
         val ordersTotalSum = orders.sumOf { it.totalPrice }
         return DiscountTier.fromTotalSum(ordersTotalSum)
     }
@@ -38,6 +42,7 @@ fun OrderShippedEvent.toCustomerOrder(): CustomerOrder = CustomerOrder(
     instant = occurredAt,
 )
 
+// TODO pwestlin: Byt namn på alla dessa till typ: CustomerOrderSpringDataRepository
 @Repository
 interface SpringDataCustomerOrderRepository : ListCrudRepository<CustomerOrder, Int> {
 

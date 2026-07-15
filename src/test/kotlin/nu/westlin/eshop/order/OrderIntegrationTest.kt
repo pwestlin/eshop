@@ -54,7 +54,9 @@ class OrderIntegrationTest @Autowired constructor(
     private lateinit var catalogService: CatalogService
 
     @Test
-    fun `should process checkout, apply 10 percent discount, store order and publish OrderPlacedEvent`(scenario: Scenario) {
+    fun `should process checkout, apply 10 percent discount, store order and publish OrderPlacedEvent`(
+        scenario: Scenario,
+    ) {
         val checkoutRequest = CheckoutRequest.example()
         val orderId = OrderId(checkoutRequest.orderId)
         val customerId = CustomerId(checkoutRequest.customerId)
