@@ -1,6 +1,7 @@
 package nu.westlin.eshop.customer.internal
 
 import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.OrderShippedEvent
 import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.common.logger
@@ -13,7 +14,6 @@ import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Repository
 import org.springframework.stereotype.Service
 import java.time.Instant
-import java.util.*
 
 @Service
 class CustomerLoyaltyService(private val customerOrderRepository: CustomerOrderRepository) {
@@ -37,7 +37,7 @@ class CustomerLoyaltyService(private val customerOrderRepository: CustomerOrderR
 
 fun OrderShippedEvent.toCustomerOrder(): CustomerOrder = CustomerOrder(
     customerId = customerId,
-    orderId = orderId.value,
+    orderId = orderId,
     totalPrice = totalPrice,
     instant = occurredAt,
 )
@@ -69,8 +69,7 @@ data class CustomerOrder(
     @Id
     val id: Int? = null,
     val customerId: CustomerId,
-    // TODO pwestlin: OrderId isf UUID? Då måste jag ha en konverterare för OrderId även i denna modul.
-    val orderId: UUID,
+    val orderId: OrderId,
     val totalPrice: Int,
     val instant: Instant,
 ) {

@@ -39,7 +39,7 @@ class CustomerLoyaltyServiceIntegrationTest @Autowired constructor(
 
         val expectedCustomerOrder = CustomerOrder(
             customerId = event.customerId,
-            orderId = event.orderId.value,
+            orderId = event.orderId,
             totalPrice = event.totalPrice,
             instant = event.occurredAt,
         )

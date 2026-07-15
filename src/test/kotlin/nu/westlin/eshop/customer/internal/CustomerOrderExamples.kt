@@ -1,13 +1,13 @@
 package nu.westlin.eshop.customer.internal
 
 import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.instantNowTruncated
 import java.time.Instant
-import java.util.UUID
 
 fun CustomerOrder.Companion.example(
     customerId: CustomerId = CustomerId.generate(),
-    orderId: UUID = UUID.randomUUID(),
+    orderId: OrderId = OrderId.generate(),
     totalPrice: Int = 42,
     instant: Instant = instantNowTruncated(),
 ): CustomerOrder = CustomerOrder(
