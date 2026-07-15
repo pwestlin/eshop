@@ -42,7 +42,7 @@ class OrderTest {
         val customerId = CustomerId.generate()
         val orderLineItems = OrderLineItems(List(3) { OrderLineItem.example() }.toSet())
 
-        val order = Order.new(
+        val order = Order.example(
             id = orderId,
             customerId = customerId,
             items = orderLineItems,

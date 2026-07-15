@@ -25,7 +25,6 @@ class CheckoutService(
     @Transactional
     @Suppress("ReturnCount")
     fun processCheckout(customerId: CustomerId, items: OrderLineItems, orderId: OrderId): ProcessCheckoutResult {
-
         if (!customerService.exists(customerId)) {
             return ProcessCheckoutResult.CustomerDoesNotExist(customerId)
         }
@@ -41,10 +40,13 @@ class CheckoutService(
             return ProcessCheckoutResult.ProductsDoesNotExist(notExistingProductIds)
         }
 
+        val discount = customerService.discount(customerId)
+
         val order = Order.new(
             id = orderId,
             customerId = customerId,
             items = items,
+            discount = discount.rate,
         )
         val createdOrder = orderRepository.insert(order)
         println("order = $order")

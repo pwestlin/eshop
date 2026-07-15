@@ -21,7 +21,6 @@ class OrderRepositoryTest @Autowired constructor(private val orderRepository: Or
         val order = Order.example()
         val createdOrder = orderRepository.insert(order)
         assertThat(createdOrder.id).isEqualTo(order.id)
-        println("Alla: ${orderRepository.findAll()}")
         assertThat(orderRepository.findById(order.id)).isEqualTo(createdOrder)
     }
 }

@@ -8,7 +8,9 @@ import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.OrderPlacedEvent
 import nu.westlin.eshop.common.ProductId
 import nu.westlin.eshop.common.example
+import nu.westlin.eshop.customer.CustomerDiscountDto
 import nu.westlin.eshop.customer.CustomerService
+import nu.westlin.eshop.customer.Percentage
 import nu.westlin.eshop.order.internal.checkout.CheckoutRequest
 import nu.westlin.eshop.order.internal.checkout.CheckoutRequest.CheckoutItemRequest
 import nu.westlin.eshop.order.internal.checkout.CheckoutResponse
@@ -52,7 +54,7 @@ class OrderIntegrationTest @Autowired constructor(
     private lateinit var catalogService: CatalogService
 
     @Test
-    fun `should process checkout, store order and publish OrderPlacedEvent`(scenario: Scenario) {
+    fun `should process checkout, apply 10 percent discount, store order and publish OrderPlacedEvent`(scenario: Scenario) {
         val checkoutRequest = CheckoutRequest.example()
         val orderId = OrderId(checkoutRequest.orderId)
         val customerId = CustomerId(checkoutRequest.customerId)
@@ -61,6 +63,11 @@ class OrderIntegrationTest @Autowired constructor(
         checkoutRequest.items.forEach { item ->
             every { catalogService.exists(ProductId(item.productId)) } returns true
         }
+        val customerDiscountDto = CustomerDiscountDto(
+            tier = "42",
+            rate = Percentage(0.1),
+        )
+        every { customerService.discount(customerId) } returns customerDiscountDto
 
         scenario.stimulate {
             client.post()
@@ -81,9 +88,16 @@ class OrderIntegrationTest @Autowired constructor(
             .toArriveAndVerify { orderPlacedEvent ->
                 val storedOrder = orderRepository.findById(orderPlacedEvent.orderId)
 
-                assertThat(storedOrder).isNotNull
-                assertThat(storedOrder?.customerId).isEqualTo(customerId)
-                assertThat(storedOrder?.status).isEqualTo(OrderStatus.Pending)
+                requireNotNull(storedOrder)
+                assertThat(storedOrder.customerId).isEqualTo(customerId)
+                assertThat(storedOrder.status).isEqualTo(OrderStatus.Pending)
+
+                // TODO pwestlin: Kontrollera items
+                val expectedSubTotal = checkoutRequest.items.sumOf { it.price * it.quantity }
+                assertThat(storedOrder.subTotal).isEqualTo(expectedSubTotal)
+                assertThat(storedOrder.discount).isEqualTo(customerDiscountDto.rate)
+                val expectedTotalPrice = (expectedSubTotal * (1.toDouble() - customerDiscountDto.rate.fraction)).toInt()
+                assertThat(storedOrder.totalPrice).isEqualTo(expectedTotalPrice)
             }
     }
 

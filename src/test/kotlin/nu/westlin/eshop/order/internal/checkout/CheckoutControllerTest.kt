@@ -6,6 +6,7 @@ import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.example
 import nu.westlin.eshop.order.internal.domain.Order
+import nu.westlin.eshop.order.internal.domain.example
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -43,11 +44,7 @@ class CheckoutControllerTest(@Autowired private val client: RestTestClient) {
     fun `checkout order - all is good`() {
         val request = CheckoutRequest.example()
 
-        val createdOrder = Order.new(
-            id = OrderId(request.orderId),
-            customerId = CustomerId(request.customerId),
-            items = request.toDomainItems(),
-        )
+        val createdOrder = Order.example()
 
         every {
             checkoutService.processCheckout(

@@ -14,3 +14,16 @@ data class OrderPlacedEvent(
 
     companion object
 }
+
+data class OrderShippedEvent(
+    val orderId: OrderId,
+    val customerId: CustomerId,
+    val totalPrice: Int,
+    val occurredAt: Instant,
+) {
+    data class OrderPlacedItem(val productId: ProductId, val quantity: Int) {
+        companion object
+    }
+
+    companion object
+}

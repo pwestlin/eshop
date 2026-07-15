@@ -3,6 +3,7 @@ package nu.westlin.eshop.order.internal.domain
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.ProductId
+import nu.westlin.eshop.customer.Percentage
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
@@ -15,10 +16,11 @@ data class Order(
     val status: OrderStatus,
     @MappedCollection(idColumn = "order_id")
     val items: OrderLineItems,
+    val discount: Percentage,
+    val subTotal: Int = items.subTotal,
+    val totalPrice: Int = (subTotal * (1.0 - discount.fraction)).toInt(),
 ) {
-
-    val subTotal: Int
-        get() = items.subTotal
+    // TODO pwestlin: Kontroller på att subTotal och totalPrice är korrekta
 
     // Snygg domän-funktion för att byta status (skapar en kopia)
     fun ship(): Order = this.copy(status = OrderStatus.Shipped)
@@ -36,11 +38,12 @@ data class Order(
     override fun hashCode(): Int = id.hashCode()
 
     companion object {
-        fun new(id: OrderId, customerId: CustomerId, items: OrderLineItems): Order = Order(
+        fun new(id: OrderId, customerId: CustomerId, items: OrderLineItems, discount: Percentage): Order = Order(
             id = id,
             customerId = customerId,
             status = OrderStatus.Pending,
             items = items,
+            discount = discount,
         )
     }
 }

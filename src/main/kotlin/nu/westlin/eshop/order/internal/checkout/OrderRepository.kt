@@ -18,7 +18,5 @@ class OrderRepository(
 
     fun findById(id: OrderId): Order? = springDataRepository.findByIdOrNull(id)
 
-    fun findAll(): List<Order> = springDataRepository.findAll()
-
     fun insert(order: Order): Order = entityTemplate.insert(order)
 }
