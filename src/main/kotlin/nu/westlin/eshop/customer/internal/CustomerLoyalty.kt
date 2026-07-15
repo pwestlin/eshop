@@ -42,7 +42,6 @@ fun OrderShippedEvent.toCustomerOrder(): CustomerOrder = CustomerOrder(
     instant = occurredAt,
 )
 
-// TODO pwestlin: Byt namn på alla dessa till typ: CustomerOrderSpringDataRepository
 @Repository
 interface SpringDataCustomerOrderRepository : ListCrudRepository<CustomerOrder, Int> {
 

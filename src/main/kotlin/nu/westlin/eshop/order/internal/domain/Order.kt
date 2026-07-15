@@ -20,7 +20,16 @@ data class Order(
     val subTotal: Int = items.subTotal,
     val totalPrice: Int = (subTotal * (1.0 - discount.fraction)).toInt(),
 ) {
-    // TODO pwestlin: Kontroller på att subTotal och totalPrice är korrekta
+    init {
+        require(
+            subTotal == items.subTotal,
+        ) { "'subTotal' ($subTotal) is not equal to sub total om the items (${items.subTotal})" }
+        require(
+            subTotal == items.subTotal,
+        ) {
+            "'totalPrice' ($totalPrice) is not equal to sub total - 'discount' (${(subTotal * (1.0 - discount.fraction)).toInt()})"
+        }
+    }
 
     // Snygg domän-funktion för att byta status (skapar en kopia)
     fun ship(): Order = this.copy(status = OrderStatus.Shipped)
