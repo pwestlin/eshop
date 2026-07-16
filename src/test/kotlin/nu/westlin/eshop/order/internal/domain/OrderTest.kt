@@ -2,6 +2,7 @@ package nu.westlin.eshop.order.internal.domain
 
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.OrderId
+import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.test.isExactlyInstanceOf
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -60,9 +61,10 @@ class OrderTest {
     @Test
     fun `ship changes status to Shipped`() {
         val order = Order.example(status = OrderStatus.Pending)
-        assertThat(order.ship())
+        val shippedTime = instantNowTruncated()
+        assertThat(order.ship(shippedTime))
             .usingRecursiveComparison()
-            .isEqualTo(order.copy(status = OrderStatus.Shipped))
+            .isEqualTo(order.copy(status = OrderStatus.Shipped, shippedTime = shippedTime))
     }
 
     @Test
@@ -76,7 +78,12 @@ class OrderTest {
     @Test
     fun `applyInventoryAllocationSuccessful throws IllegalStateException when order has the wrong status`() {
         OrderStatus.entries.filter { it != OrderStatus.Pending }.forEach { orderStatus ->
-            val order = Order.example(status = orderStatus)
+            val shippedTime = if (orderStatus == OrderStatus.Shipped) {
+                instantNowTruncated()
+            } else {
+                null
+            }
+            val order = Order.example(status = orderStatus, shippedTime = shippedTime)
             assertThatThrownBy { order.applyInventoryAllocationSuccessful() }
                 .isExactlyInstanceOf<IllegalStateException>()
                 .hasMessage(
@@ -96,7 +103,12 @@ class OrderTest {
     @Test
     fun `applyPaymentSuccessful throws IllegalStateException when order has the wrong status`() {
         OrderStatus.entries.filter { it != OrderStatus.StockReserved }.forEach { orderStatus ->
-            val order = Order.example(status = orderStatus)
+            val shippedTime = if (orderStatus == OrderStatus.Shipped) {
+                instantNowTruncated()
+            } else {
+                null
+            }
+            val order = Order.example(status = orderStatus, shippedTime = shippedTime)
             assertThatThrownBy { order.applyPaymentSuccessful() }
                 .isExactlyInstanceOf<IllegalStateException>()
                 .hasMessage(
@@ -125,5 +137,12 @@ class OrderTest {
             ),
         )
         assertThat(order.subTotal).isEqualTo(19)
+    }
+
+    @Test
+    fun `shippedTime must be provided when status is Shipped`() {
+        assertThatThrownBy { Order.example(status = OrderStatus.Shipped) }
+            .isExactlyInstanceOf<IllegalArgumentException>()
+            .hasMessage("Shipped time (shippedTime) must be provided when status is Shipped")
     }
 }

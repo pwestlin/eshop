@@ -4,14 +4,18 @@ import com.ninjasquad.springmockk.MockkBean
 import nu.westlin.eshop.catalog.CatalogService
 import nu.westlin.eshop.common.InventoryAllocationFailedEvent
 import nu.westlin.eshop.common.InventoryAllocationSuccessfulEvent
+import nu.westlin.eshop.common.OrderCompletedEvent
+import nu.westlin.eshop.common.OrderShippedEvent
 import nu.westlin.eshop.common.PaymentFailedEvent
 import nu.westlin.eshop.common.PaymentSuccessfulEvent
 import nu.westlin.eshop.common.ProductId
+import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.customer.CustomerService
 import nu.westlin.eshop.order.internal.domain.Order
 import nu.westlin.eshop.order.internal.domain.OrderStatus
 import nu.westlin.eshop.order.internal.domain.example
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient
@@ -106,5 +110,42 @@ class OrderStatusChangesServiceIntegrationTest @Autowired constructor(private va
                 { orderRepository.findById(order.id)?.status ?: OrderStatus.StockReserved },
                 { status -> status == OrderStatus.Cancelled },
             )
+    }
+
+    @Test
+    @Suppress("IgnoredReturnValue")
+    fun `handle OrderShippedEvent`(scenario: Scenario) {
+        val order = Order.example(status = OrderStatus.Paid)
+        orderRepository.insert(order)
+        val event = OrderShippedEvent(
+            orderId = order.id,
+            shippedTime = instantNowTruncated(),
+        )
+
+        scenario.publish(event)
+            .andWaitForEventOfType(OrderCompletedEvent::class.java)
+            .matching { event ->
+                event.orderId == order.id
+            }
+            .toArriveAndVerify { event ->
+                assertThat(event)
+                    .usingRecursiveComparison()
+                    .ignoringFields("occurredAt")
+                    .isEqualTo(
+                        OrderCompletedEvent(
+                            orderId = order.id,
+                            customerId = order.customerId,
+                            totalPrice = order.totalPrice,
+                            occurredAt = instantNowTruncated(),
+                        ),
+                    )
+
+                val updatedOrder = orderRepository.findById(order.id)
+                checkNotNull(updatedOrder) { "order with id ${order.id} is null" }
+
+                assertThat(updatedOrder).isNotNull
+                assertThat(updatedOrder.status).isEqualTo(OrderStatus.Shipped)
+                assertThat(updatedOrder.shippedTime).isBeforeOrEqualTo(instantNowTruncated())
+            }
     }
 }

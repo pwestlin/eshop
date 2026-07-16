@@ -1,8 +1,8 @@
 package nu.westlin.eshop.customer.internal
 
 import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.OrderCompletedEvent
 import nu.westlin.eshop.common.OrderId
-import nu.westlin.eshop.common.OrderShippedEvent
 import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.common.logger
 import nu.westlin.eshop.customer.Percentage
@@ -29,13 +29,13 @@ class CustomerLoyaltyService(private val customerOrderRepository: CustomerOrderR
     }
 
     @ApplicationModuleListener
-    fun handleOrderShippedEvent(event: OrderShippedEvent) {
+    fun handleOrderShippedEvent(event: OrderCompletedEvent) {
         logger.info("event: $event")
         customerOrderRepository.insert(event.toCustomerOrder())
     }
 }
 
-fun OrderShippedEvent.toCustomerOrder(): CustomerOrder = CustomerOrder(
+fun OrderCompletedEvent.toCustomerOrder(): CustomerOrder = CustomerOrder(
     customerId = customerId,
     orderId = orderId,
     totalPrice = totalPrice,

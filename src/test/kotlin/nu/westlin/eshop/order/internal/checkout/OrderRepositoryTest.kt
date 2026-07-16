@@ -1,5 +1,6 @@
 package nu.westlin.eshop.order.internal.checkout
 
+import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.order.internal.OrderSpringDataJdbcConfiguration
 import nu.westlin.eshop.order.internal.domain.Order
 import nu.westlin.eshop.order.internal.domain.OrderStatus
@@ -30,7 +31,7 @@ class OrderRepositoryTest @Autowired constructor(private val orderRepository: Or
         val order = Order.example()
         val createdOrder = orderRepository.insert(order)
 
-        val updatedOrder = createdOrder.copy(status = OrderStatus.Shipped)
+        val updatedOrder = createdOrder.copy(status = OrderStatus.Shipped, shippedTime = instantNowTruncated())
         orderRepository.update(updatedOrder)
         assertThat(orderRepository.findById(order.id)).isEqualTo(updatedOrder)
     }

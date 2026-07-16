@@ -7,6 +7,7 @@ import nu.westlin.eshop.customer.Percentage
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
+import java.time.Instant
 
 @Table("orders")
 data class Order(
@@ -19,6 +20,7 @@ data class Order(
     val discount: Percentage,
     val subTotal: Int = items.subTotal,
     val totalPrice: Int = (subTotal * (1.0 - discount.fraction)).toInt(),
+    val shippedTime: Instant? = null,
 ) {
     init {
         require(
@@ -29,10 +31,20 @@ data class Order(
         ) {
             "'totalPrice' ($totalPrice) is not equal to sub total - 'discount' (${(subTotal * (1.0 - discount.fraction)).toInt()})"
         }
+
+        if (status == OrderStatus.Shipped) {
+            requireNotNull(shippedTime) {
+                "Shipped time (shippedTime) must be provided when status is ${OrderStatus.Shipped}"
+            }
+        } else {
+            require(shippedTime == null) {
+                "Shipped time (shippedTime) cannot be set when status is $status"
+            }
+        }
     }
 
     // Snygg domän-funktion för att byta status (skapar en kopia)
-    fun ship(): Order = this.copy(status = OrderStatus.Shipped)
+    fun ship(shippedTime: Instant): Order = this.copy(status = OrderStatus.Shipped, shippedTime = shippedTime)
 
     // equals() and hashCode() are overridden because Order is an entity and not a value object (as of DDD).
     override fun equals(other: Any?): Boolean {

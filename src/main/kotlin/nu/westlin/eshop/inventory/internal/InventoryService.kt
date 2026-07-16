@@ -3,8 +3,10 @@ package nu.westlin.eshop.inventory.internal
 import nu.westlin.eshop.common.InventoryAllocationFailedEvent
 import nu.westlin.eshop.common.InventoryAllocationSuccessfulEvent
 import nu.westlin.eshop.common.OrderPlacedEvent
+import nu.westlin.eshop.common.OrderShippedEvent
 import nu.westlin.eshop.common.PaymentSuccessfulEvent
 import nu.westlin.eshop.common.ProductId
+import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.common.logger
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.modulith.events.ApplicationModuleListener
@@ -44,8 +46,13 @@ class InventoryService(
 
     @ApplicationModuleListener
     fun handlePaymentSuccessfulEvent(paymentSuccessfulEvent: PaymentSuccessfulEvent) {
-        logger.info("Order paid and is available for shipping: $paymentSuccessfulEvent")
-        // TODO pwestlin: Do something fun :)
+        eventPublisher.publishEvent(
+            OrderShippedEvent(
+                orderId = paymentSuccessfulEvent.orderId,
+                shippedTime = instantNowTruncated(),
+            ),
+        )
+        logger.info("Order ${paymentSuccessfulEvent.orderId} shipped")
     }
 
     private fun reserveProducts(orderedItems: Set<OrderPlacedEvent.OrderPlacedItem>): Set<TooFewProducts> {

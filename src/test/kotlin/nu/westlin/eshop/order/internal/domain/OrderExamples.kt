@@ -4,20 +4,24 @@ import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.ProductId
 import nu.westlin.eshop.customer.Percentage
+import java.time.Instant
 import kotlin.random.Random
 
+@Suppress("LongParameterList")
 fun Order.Companion.example(
     id: OrderId = OrderId.generate(),
     customerId: CustomerId = CustomerId.generate(),
     status: OrderStatus = OrderStatus.Pending,
     items: OrderLineItems = OrderLineItems.example(),
     discount: Percentage = Percentage(0.0),
+    shippedTime: Instant? = null,
 ): Order = Order(
     id = id,
     customerId = customerId,
     status = status,
     items = items,
     discount = discount,
+    shippedTime = shippedTime,
 )
 
 fun OrderLineItem.Companion.example(

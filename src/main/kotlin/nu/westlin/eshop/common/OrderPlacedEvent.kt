@@ -26,7 +26,12 @@ data class InventoryAllocationFailedEvent(val orderId: OrderId, val tooFewProduc
     data class TooFewProducts(val productId: ProductId, val orderQuantity: Int, val inventoryQuantity: Int)
 }
 
-data class OrderShippedEvent(
+data class OrderShippedEvent(val orderId: OrderId, val shippedTime: Instant) {
+
+    companion object
+}
+
+data class OrderCompletedEvent(
     val orderId: OrderId,
     val customerId: CustomerId,
     val totalPrice: Int,

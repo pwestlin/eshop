@@ -2,8 +2,11 @@ package nu.westlin.eshop.inventory.internal
 
 import nu.westlin.eshop.common.InventoryAllocationFailedEvent
 import nu.westlin.eshop.common.InventoryAllocationSuccessfulEvent
+import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.OrderPlacedEvent
 import nu.westlin.eshop.common.OrderPlacedEvent.OrderPlacedItem
+import nu.westlin.eshop.common.OrderShippedEvent
+import nu.westlin.eshop.common.PaymentSuccessfulEvent
 import nu.westlin.eshop.common.ProductId
 import nu.westlin.eshop.common.example
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
@@ -137,6 +140,18 @@ class InventoryServiceIntegrationTest @Autowired private constructor(
                         ),
                     ),
                 )
+            }
+            .toArrive()
+    }
+
+    @Test
+    fun `handle PaymentSuccessfulEvent`(scenario: Scenario) {
+        val paymentSuccessfulEvent = PaymentSuccessfulEvent(OrderId.generate())
+
+        scenario.publish(paymentSuccessfulEvent)
+            .andWaitForEventOfType(OrderShippedEvent::class.java)
+            .matching { event: OrderShippedEvent ->
+                event.orderId == paymentSuccessfulEvent.orderId
             }
             .toArrive()
     }

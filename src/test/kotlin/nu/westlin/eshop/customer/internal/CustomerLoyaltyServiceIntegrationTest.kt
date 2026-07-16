@@ -1,8 +1,8 @@
 package nu.westlin.eshop.customer.internal
 
 import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.OrderCompletedEvent
 import nu.westlin.eshop.common.OrderId
-import nu.westlin.eshop.common.OrderShippedEvent
 import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
 import org.assertj.core.api.Assertions.assertThat
@@ -28,7 +28,7 @@ class CustomerLoyaltyServiceIntegrationTest @Autowired constructor(
 
     @Test
     fun `should handle order shipped event`(scenario: Scenario) {
-        val event = OrderShippedEvent(
+        val event = OrderCompletedEvent(
             orderId = OrderId.generate(),
             customerId = CustomerId.generate(),
             totalPrice = 42,
