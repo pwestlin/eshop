@@ -1,3 +1,5 @@
+-- TODO pwestlin: Skapa seeders istället för att använda denna fil.
+
 -- Customers
 insert into customers(id, name, email)
 values ('d9538d50-8976-4dea-9b5f-96ecf5bbafc5', 'Sune Son', 'sune@son.nu')
