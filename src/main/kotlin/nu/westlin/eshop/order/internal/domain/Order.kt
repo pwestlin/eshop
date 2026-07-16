@@ -45,6 +45,7 @@ data class Order(
     }
 
     override fun hashCode(): Int = id.hashCode()
+    fun applyInventoryAllocationSuccessful(): Order = this.copy(status = OrderStatus.StockReserved)
 
     companion object {
         fun new(id: OrderId, customerId: CustomerId, items: OrderLineItems, discount: Percentage): Order = Order(
@@ -73,6 +74,7 @@ enum class OrderStatus {
     Processing,
     Shipped,
     Cancelled,
+    StockReserved,
 }
 
 @JvmInline

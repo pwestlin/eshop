@@ -2,6 +2,7 @@ package nu.westlin.eshop.order.internal.checkout
 
 import nu.westlin.eshop.order.internal.OrderSpringDataJdbcConfiguration
 import nu.westlin.eshop.order.internal.domain.Order
+import nu.westlin.eshop.order.internal.domain.OrderStatus
 import nu.westlin.eshop.order.internal.domain.example
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
 import org.assertj.core.api.Assertions.assertThat
@@ -22,5 +23,15 @@ class OrderRepositoryTest @Autowired constructor(private val orderRepository: Or
         val createdOrder = orderRepository.insert(order)
         assertThat(createdOrder.id).isEqualTo(order.id)
         assertThat(orderRepository.findById(order.id)).isEqualTo(createdOrder)
+    }
+
+    @Test
+    fun `update should update`() {
+        val order = Order.example()
+        val createdOrder = orderRepository.insert(order)
+
+        val updatedOrder = createdOrder.copy(status = OrderStatus.Shipped)
+        orderRepository.update(updatedOrder)
+        assertThat(orderRepository.findById(order.id)).isEqualTo(updatedOrder)
     }
 }

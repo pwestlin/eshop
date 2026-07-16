@@ -1,0 +1,77 @@
+package nu.westlin.eshop.order.internal.checkout
+
+import com.ninjasquad.springmockk.MockkBean
+import nu.westlin.eshop.catalog.CatalogService
+import nu.westlin.eshop.common.InventoryAllocationFailedEvent
+import nu.westlin.eshop.common.InventoryAllocationSuccessfulEvent
+import nu.westlin.eshop.common.ProductId
+import nu.westlin.eshop.customer.CustomerService
+import nu.westlin.eshop.order.internal.domain.Order
+import nu.westlin.eshop.order.internal.domain.OrderStatus
+import nu.westlin.eshop.order.internal.domain.example
+import nu.westlin.eshop.test.SharedTestcontainersConfiguration
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient
+import org.springframework.context.annotation.Import
+import org.springframework.modulith.test.ApplicationModuleTest
+import org.springframework.modulith.test.Scenario
+import org.springframework.test.context.TestPropertySource
+
+// When you run the test with Gradle you get 30 sec timeout after completed test suite and the below is to fix that...
+@TestPropertySource(
+    properties = [
+        "spring.datasource.hikari.connection-timeout=2000",
+        "spring.datasource.hikari.validation-timeout=1000",
+    ],
+)
+@ApplicationModuleTest
+@AutoConfigureRestTestClient
+@Import(SharedTestcontainersConfiguration::class)
+class OrderStateChangesServiceIntegrationTest @Autowired constructor(private val orderRepository: OrderRepository) {
+
+    @Suppress("unused")
+    @MockkBean
+    private lateinit var customerService: CustomerService
+
+    @Suppress("unused")
+    @MockkBean
+    private lateinit var catalogService: CatalogService
+
+    @Test
+    @Suppress("IgnoredReturnValue")
+    fun `handle InventoryAllocationSuccessfulEvent`(scenario: Scenario) {
+        val order = Order.example()
+        orderRepository.insert(order)
+        val event = InventoryAllocationSuccessfulEvent(order.id)
+
+        scenario.publish(event)
+            .andWaitForStateChange(
+                { orderRepository.findById(order.id)?.status ?: OrderStatus.Pending },
+                { status -> status == OrderStatus.StockReserved },
+            )
+    }
+
+    @Test
+    @Suppress("IgnoredReturnValue")
+    fun `handle InventoryAllocationFailedEvent`(scenario: Scenario) {
+        val order = Order.example()
+        orderRepository.insert(order)
+        val event = InventoryAllocationFailedEvent(
+            orderId = order.id,
+            tooFewProducts = setOf(
+                InventoryAllocationFailedEvent.TooFewProducts(
+                    productId = ProductId.generate(),
+                    orderQuantity = 42,
+                    inventoryQuantity = 7,
+                ),
+            ),
+        )
+
+        scenario.publish(event)
+            .andWaitForStateChange(
+                { orderRepository.findById(order.id)?.status ?: OrderStatus.Pending },
+                { status -> status == OrderStatus.Cancelled },
+            )
+    }
+}

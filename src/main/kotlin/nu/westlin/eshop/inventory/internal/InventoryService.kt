@@ -21,10 +21,8 @@ class InventoryService(
         logger.info("Order placed: $orderPlacedEvent")
         val tooFewProducts = reserveProducts(orderPlacedEvent.items)
         if (tooFewProducts.isEmpty()) {
-            // TODO pwestlin: Lyssnare för denna som kontrollerar att statusen ör korrekt innan den applicerar eventet
             eventPublisher.publishEvent(InventoryAllocationSuccessfulEvent(orderPlacedEvent.orderId))
         } else {
-            // TODO pwestlin: Lyssnare för denna som kontrollerar att statusen ör korrekt innan den applicerar eventet
             eventPublisher.publishEvent(
                 InventoryAllocationFailedEvent(
                     orderId = orderPlacedEvent.orderId,

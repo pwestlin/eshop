@@ -42,7 +42,7 @@ import org.springframework.test.web.servlet.client.expectBody
 @ApplicationModuleTest
 @AutoConfigureRestTestClient
 @Import(SharedTestcontainersConfiguration::class)
-class OrderIntegrationTest @Autowired constructor(
+class CheckoutServiceIntegrationTest @Autowired constructor(
     private val orderRepository: OrderRepository,
     private val client: RestTestClient,
 ) {
