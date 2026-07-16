@@ -16,6 +16,18 @@ and [Testcontainers](https://testcontainers.com/).
 * Inventory employee updates the inventory (not yet implemented)
 * Product employee updates the inventory (not yet implemented)
 
+## Modules
+
+| Name      | Description                            |
+|-----------|----------------------------------------|
+| common    | Common stuff like events and ids.      |
+| config    | Configuration for all the application. |
+| security  | Spring Security.                       |
+| order     | "Main module" for the application.     |
+| customer  | Customer information.                  |
+| inventory | Inventory.                             |
+| payment   | Payment.                               |
+
 ## Order statuses
 
 | Status        | Description                                |
@@ -30,28 +42,24 @@ and [Testcontainers](https://testcontainers.com/).
 
 ```mermaid
 flowchart TD
-    %% States
+%% States
     Start([Checkout Initiated]) --> Pending[Pending]
-    
     Pending -->|Inventory Allocation Successful| StockReserved[StockReserved]
     Pending -->|Inventory Allocation Failed| Cancelled[Cancelled]
-    
     StockReserved -->|Payment Successful| Paid[Paid]
     StockReserved -->|Payment Failed| Cancelled
-    
     Paid -->|Order Shipped| Shipped[Shipped]
-    
-    %% Styling
-    classDef default fill:#f9f9f9,stroke:#333,stroke-width:2px;
-    classDef status fill:#e1f5fe,stroke:#0288d1,stroke-width:2px;
-    classDef final fill:#ffe0b2,stroke:#f57c00,stroke-width:2px;
-    classDef error fill:#ffebee,stroke:#c62828,stroke-width:2px;
-    
-    class Pending,StockReserved,Paid,Shipped status;
-    class Shipped final;
-    class Cancelled error;
+%% Styling
+    classDef default fill: #f9f9f9, stroke: #333, stroke-width: 2px;
+    classDef status fill: #e1f5fe, stroke: #0288d1, stroke-width: 2px;
+    classDef final fill: #ffe0b2, stroke: #f57c00, stroke-width: 2px;
+    classDef error fill: #ffebee, stroke: #c62828, stroke-width: 2px;
+class Pending, StockReserved, Paid, Shipped status;
+class Shipped final;
+class Cancelled error;
 ```
 
 ## Test data
+
 The application can be initiated with test data: `-Dspring.profiles.active=testdata`
 See classes named `*DataSeeder`.
