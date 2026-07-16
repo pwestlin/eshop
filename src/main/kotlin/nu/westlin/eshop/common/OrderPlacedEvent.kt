@@ -2,6 +2,8 @@ package nu.westlin.eshop.common
 
 import java.time.Instant
 
+// TODO pwestlin: Lägg alla events i ett sealed interface (Application)Events?
+
 data class OrderPlacedEvent(
     val orderId: OrderId,
     val customerId: CustomerId,
@@ -15,7 +17,6 @@ data class OrderPlacedEvent(
     companion object
 }
 
-// TODO pwestlin: Modulen Payment ska också ta hand om detta (inte bara order)
 data class InventoryAllocationSuccessfulEvent(val orderId: OrderId)
 
 data class InventoryAllocationFailedEvent(val orderId: OrderId, val tooFewProducts: Set<TooFewProducts>) {
@@ -34,3 +35,7 @@ data class OrderShippedEvent(
 
     companion object
 }
+
+data class PaymentSuccessfulEvent(val orderId: OrderId)
+
+data class PaymentFailedEvent(val orderId: OrderId, val reason: String)

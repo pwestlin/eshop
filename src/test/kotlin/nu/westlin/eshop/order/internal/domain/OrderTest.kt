@@ -2,7 +2,9 @@ package nu.westlin.eshop.order.internal.domain
 
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.OrderId
+import nu.westlin.eshop.test.isExactlyInstanceOf
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 
 class OrderTest {
@@ -61,6 +63,54 @@ class OrderTest {
         assertThat(order.ship())
             .usingRecursiveComparison()
             .isEqualTo(order.copy(status = OrderStatus.Shipped))
+    }
+
+    @Test
+    fun `applyInventoryAllocationSuccessful changes status to StockReserved`() {
+        val order = Order.example(status = OrderStatus.Pending)
+        assertThat(order.applyInventoryAllocationSuccessful())
+            .usingRecursiveComparison()
+            .isEqualTo(order.copy(status = OrderStatus.StockReserved))
+    }
+
+    @Test
+    fun `applyInventoryAllocationSuccessful throws IllegalStateException when order has the wrong status`() {
+        OrderStatus.entries.filter { it != OrderStatus.Pending }.forEach { orderStatus ->
+            val order = Order.example(status = orderStatus)
+            assertThatThrownBy { order.applyInventoryAllocationSuccessful() }
+                .isExactlyInstanceOf<IllegalStateException>()
+                .hasMessage(
+                    "Order with id ${order.id} must be in state ${OrderStatus.Pending} but was in state $orderStatus",
+                )
+        }
+    }
+
+    @Test
+    fun `applyPaymentSuccessful changes status to StockReserved`() {
+        val order = Order.example(status = OrderStatus.StockReserved)
+        assertThat(order.applyPaymentSuccessful())
+            .usingRecursiveComparison()
+            .isEqualTo(order.copy(status = OrderStatus.Paid))
+    }
+
+    @Test
+    fun `applyPaymentSuccessful throws IllegalStateException when order has the wrong status`() {
+        OrderStatus.entries.filter { it != OrderStatus.StockReserved }.forEach { orderStatus ->
+            val order = Order.example(status = orderStatus)
+            assertThatThrownBy { order.applyPaymentSuccessful() }
+                .isExactlyInstanceOf<IllegalStateException>()
+                .hasMessage(
+                    "Order with id ${order.id} must be in state ${OrderStatus.StockReserved} but was in state $orderStatus",
+                )
+        }
+    }
+
+    @Test
+    fun `cancel changes status to Cancelled`() {
+        val order = Order.example(status = OrderStatus.Pending)
+        assertThat(order.cancel())
+            .usingRecursiveComparison()
+            .isEqualTo(order.copy(status = OrderStatus.Cancelled))
     }
 
     @Test

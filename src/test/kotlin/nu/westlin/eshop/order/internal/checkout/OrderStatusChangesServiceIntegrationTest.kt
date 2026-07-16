@@ -4,6 +4,8 @@ import com.ninjasquad.springmockk.MockkBean
 import nu.westlin.eshop.catalog.CatalogService
 import nu.westlin.eshop.common.InventoryAllocationFailedEvent
 import nu.westlin.eshop.common.InventoryAllocationSuccessfulEvent
+import nu.westlin.eshop.common.PaymentFailedEvent
+import nu.westlin.eshop.common.PaymentSuccessfulEvent
 import nu.westlin.eshop.common.ProductId
 import nu.westlin.eshop.customer.CustomerService
 import nu.westlin.eshop.order.internal.domain.Order
@@ -28,7 +30,7 @@ import org.springframework.test.context.TestPropertySource
 @ApplicationModuleTest
 @AutoConfigureRestTestClient
 @Import(SharedTestcontainersConfiguration::class)
-class OrderStateChangesServiceIntegrationTest @Autowired constructor(private val orderRepository: OrderRepository) {
+class OrderStatusChangesServiceIntegrationTest @Autowired constructor(private val orderRepository: OrderRepository) {
 
     @Suppress("unused")
     @MockkBean
@@ -71,6 +73,37 @@ class OrderStateChangesServiceIntegrationTest @Autowired constructor(private val
         scenario.publish(event)
             .andWaitForStateChange(
                 { orderRepository.findById(order.id)?.status ?: OrderStatus.Pending },
+                { status -> status == OrderStatus.Cancelled },
+            )
+    }
+
+    @Test
+    @Suppress("IgnoredReturnValue")
+    fun `handle PaymentSuccessfulEvent`(scenario: Scenario) {
+        val order = Order.example(status = OrderStatus.StockReserved)
+        orderRepository.insert(order)
+        val event = PaymentSuccessfulEvent(order.id)
+
+        scenario.publish(event)
+            .andWaitForStateChange(
+                { orderRepository.findById(order.id)?.status ?: OrderStatus.StockReserved },
+                { status -> status == OrderStatus.Paid },
+            )
+    }
+
+    @Test
+    @Suppress("IgnoredReturnValue")
+    fun `handle PaymentFailedEvent`(scenario: Scenario) {
+        val order = Order.example(status = OrderStatus.StockReserved)
+        orderRepository.insert(order)
+        val event = PaymentFailedEvent(
+            orderId = order.id,
+            reason = "You poor bastard",
+        )
+
+        scenario.publish(event)
+            .andWaitForStateChange(
+                { orderRepository.findById(order.id)?.status ?: OrderStatus.StockReserved },
                 { status -> status == OrderStatus.Cancelled },
             )
     }

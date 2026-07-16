@@ -45,7 +45,28 @@ data class Order(
     }
 
     override fun hashCode(): Int = id.hashCode()
-    fun applyInventoryAllocationSuccessful(): Order = this.copy(status = OrderStatus.StockReserved)
+
+    fun applyInventoryAllocationSuccessful(): Order {
+        check(
+            this.status == OrderStatus.Pending,
+        ) {
+            "Order with id $id must be in state ${OrderStatus.Pending} but was in state $status"
+        }
+
+        return this.copy(status = OrderStatus.StockReserved)
+    }
+
+    fun applyPaymentSuccessful(): Order {
+        check(
+            this.status == OrderStatus.StockReserved,
+        ) {
+            "Order with id $id must be in state ${OrderStatus.StockReserved} but was in state $status"
+        }
+
+        return this.copy(status = OrderStatus.Paid)
+    }
+
+    fun cancel(): Order = this.copy(status = OrderStatus.Cancelled)
 
     companion object {
         fun new(id: OrderId, customerId: CustomerId, items: OrderLineItems, discount: Percentage): Order = Order(
@@ -71,10 +92,10 @@ data class OrderLineItem(
 
 enum class OrderStatus {
     Pending,
-    Processing,
+    StockReserved,
+    Paid,
     Shipped,
     Cancelled,
-    StockReserved,
 }
 
 @JvmInline
