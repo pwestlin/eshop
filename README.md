@@ -19,7 +19,7 @@ and [Testcontainers](https://testcontainers.com/).
 ## Modules
 
 | Name      | Description                            |
-|-----------|----------------------------------------|
+|:----------|:---------------------------------------|
 | common    | Common stuff like events and ids.      |
 | config    | Configuration for all the application. |
 | security  | Spring Security.                       |
@@ -31,7 +31,7 @@ and [Testcontainers](https://testcontainers.com/).
 ## Order statuses
 
 | Status        | Description                                |
-|---------------|--------------------------------------------|
+|:--------------|:-------------------------------------------|
 | Pending       | First status when an order is checked out. |
 | StockReserved | Products are reserved in inventory.        |
 | Paid          | Payment is successful.                     |
