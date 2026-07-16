@@ -31,9 +31,6 @@ data class OrderShippedEvent(
     val totalPrice: Int,
     val occurredAt: Instant,
 ) {
-    data class OrderPlacedItem(val productId: ProductId, val quantity: Int) {
-        companion object
-    }
 
     companion object
 }
