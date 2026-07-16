@@ -8,6 +8,13 @@ For testing it
 uses [Spring Modulith test](https://docs.spring.io/spring-modulith/reference/testing.html), [JUnit](https://junit.org/), [AssertJ](https://assertj.github.io/doc/)
 and [Testcontainers](https://testcontainers.com/).
 
+## Features
+
+* Customer checks out an order
+* A user registers as a customer (not yet implemented)
+* Inventory employee updates the inventory (not yet implemented)
+* Product employee updates the inventory (not yet implemented)
+
 ## Order statuses
 
 | Status        | Description                                |
