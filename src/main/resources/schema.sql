@@ -50,5 +50,5 @@ CREATE TABLE IF NOT EXISTS customer_orders
 CREATE TABLE IF NOT EXISTS inventory_items
 (
     product_id INTEGER PRIMARY KEY CHECK (product_id > 0),
-    quantity   INT NOT NULL CHECK (product_id >= 0)
+    quantity   INT NOT NULL CHECK (quantity >= 0)
 );

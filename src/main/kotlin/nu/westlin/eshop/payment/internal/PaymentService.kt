@@ -8,6 +8,7 @@ import nu.westlin.eshop.common.logger
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Service
+import java.time.Duration
 
 @Service
 class PaymentService(
@@ -39,6 +40,7 @@ class PaymentProcessorService {
     @Suppress("unused")
     fun processPayment(orderId: OrderId) {
         // TODO pwestlin: Do something fun to simulate an payment :)
+        Thread.sleep(Duration.ofSeconds(2))
         logger.info("Payment for order $orderId is accepted")
     }
 }

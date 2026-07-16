@@ -20,3 +20,10 @@ ON CONFLICT (id) DO NOTHING;
 insert into products(id,name,description,price)
 values(3,'Tyre', 'A really nice tyre!',69)
 ON CONFLICT (id) DO NOTHING;
+
+insert into inventory_items(product_id,quantity) values(1,50)
+ON CONFLICT (product_id) DO NOTHING;
+insert into inventory_items(product_id,quantity) values(2,30)
+ON CONFLICT (product_id) DO NOTHING;
+insert into inventory_items(product_id,quantity) values(3,69)
+ON CONFLICT (product_id) DO NOTHING;

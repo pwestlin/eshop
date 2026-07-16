@@ -3,6 +3,7 @@ package nu.westlin.eshop.inventory.internal
 import nu.westlin.eshop.common.InventoryAllocationFailedEvent
 import nu.westlin.eshop.common.InventoryAllocationSuccessfulEvent
 import nu.westlin.eshop.common.OrderPlacedEvent
+import nu.westlin.eshop.common.PaymentSuccessfulEvent
 import nu.westlin.eshop.common.ProductId
 import nu.westlin.eshop.common.logger
 import org.springframework.context.ApplicationEventPublisher
@@ -39,6 +40,12 @@ class InventoryService(
         }
 
         // TODO pwestlin: Vad göra om det kastas ett exception?
+    }
+
+    @ApplicationModuleListener
+    fun handlePaymentSuccessfulEvent(paymentSuccessfulEvent: PaymentSuccessfulEvent) {
+        logger.info("Order paid and is available for shipping: $paymentSuccessfulEvent")
+        // TODO pwestlin: Do something fun :)
     }
 
     private fun reserveProducts(orderedItems: Set<OrderPlacedEvent.OrderPlacedItem>): Set<TooFewProducts> {
