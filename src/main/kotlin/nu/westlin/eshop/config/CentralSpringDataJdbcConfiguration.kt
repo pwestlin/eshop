@@ -1,4 +1,4 @@
-package nu.westlin.eshop
+package nu.westlin.eshop.config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.convert.converter.Converter

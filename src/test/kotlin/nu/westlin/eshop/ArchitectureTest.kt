@@ -23,7 +23,6 @@ class ArchitectureTest {
     @Test
     fun `create module documentation`() {
         Documenter(modules)
-            .writeModulesAsPlantUml()
-            .writeIndividualModulesAsPlantUml()
+            .writeDocumentation()
     }
 }

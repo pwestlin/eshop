@@ -2,8 +2,10 @@ package nu.westlin.eshop
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.modulith.Modulithic
 
 @SpringBootApplication
+@Modulithic(sharedModules = [Modules.CONFIG])
 class Application
 
 @Suppress("SpreadOperator")

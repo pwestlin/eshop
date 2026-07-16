@@ -8,4 +8,5 @@ object Modules {
     const val INVENTORY = "inventory"
     const val ORDER = "order"
     const val PAYMENT = "payment"
+    const val CONFIG = "config"
 }
