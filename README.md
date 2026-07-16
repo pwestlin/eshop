@@ -1,5 +1,7 @@
 # E-shop
-Backend for an E-shop implemented in [Kotlin](https://kotlinlang.org/), [Spring Boot](https://spring.io/projects/spring-boot), [Spring Data JDBC](https://spring.io/projects/spring-data-jdbc), [Spring Modulith](https://spring.io/projects/spring-modulith), [Spring Security](https://spring.io/projects/spring-security) and [Postgres](https://www.postgresql.org/). 
+Backend for an E-shop implemented in [Kotlin](https://kotlinlang.org/), [Spring Boot](https://spring.io/projects/spring-boot), [Spring Data JDBC](https://spring.io/projects/spring-data-jdbc), [Spring Modulith](https://spring.io/projects/spring-modulith), [Spring Security](https://spring.io/projects/spring-security) and [Postgres](https://www.postgresql.org/).
+
+For testing it uses [Spring Modulith test](https://docs.spring.io/spring-modulith/reference/testing.html), [JUnit](https://junit.org/), [AssertJ](https://assertj.github.io/doc/) and [Testcontainers](https://testcontainers.com/).
 
 TODO pwestlin: Doc modules
 
@@ -8,7 +10,7 @@ TODO pwestlin: Fixa flödet nedan så den stämmer med koden.
 ```mermaid
 flowchart TD
     %% States
-    Start([Checkout Initiated]) --> PENDING[PENDING]
+    Start([Checkout Initiated]) --> Pending[Pending]
     
     PENDING -->|Inventory Allocation Successful| STOCK_RESERVED[STOCK_RESERVED]
     PENDING -->|Inventory Allocation Failed| FAILED[FAILED]
