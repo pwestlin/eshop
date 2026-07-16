@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS order_line_items
     id         BIGSERIAL PRIMARY KEY,
     order_id   UUID    NOT NULL,
     product_id INTEGER NOT NULL CHECK (id > 0),
-    quantity   INT     NOT NULL,
+    quantity   INT     NOT NULL CHECK (product_id > 0),
     price      INT     NOT NULL,
 
     CONSTRAINT fk_order_line_items_orders
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS products
     id          INTEGER     NOT NULL CHECK (id > 0) PRIMARY KEY,
     name        VARCHAR(20) NOT NULL,
     description VARCHAR(40) NOT NULL,
-    price       INT         NOT NULL
+    price       INT         NOT NULL CHECK (price > 0)
 );
 
 CREATE TABLE IF NOT EXISTS customer_orders
@@ -45,4 +45,10 @@ CREATE TABLE IF NOT EXISTS customer_orders
     total_price INTEGER     NOT NULL,
     instant     TIMESTAMPTZ NOT NULL,
     CONSTRAINT uq_customer_order_customer_order UNIQUE (customer_id, order_id)
+);
+
+CREATE TABLE IF NOT EXISTS inventory_items
+(
+    product_id INTEGER PRIMARY KEY CHECK (product_id > 0),
+    quantity   INT NOT NULL CHECK (product_id >= 0)
 );

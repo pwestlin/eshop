@@ -1,4 +1,4 @@
-package nu.westlin.eshop.catalog.internal
+package nu.westlin.eshop.config
 
 import nu.westlin.eshop.common.ProductId
 import org.springframework.context.annotation.Bean

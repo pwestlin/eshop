@@ -1,20 +1,18 @@
-package nu.westlin.eshop.catalog.internal
+package nu.westlin.eshop.inventory.internal
 
 import nu.westlin.eshop.common.ProductId
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 
-@Table("products")
-data class Product(
+@Table("inventory_items")
+data class InventoryItem(
     @Id
-    val id: ProductId,
-    val name: String,
-    val description: String,
-    val price: Int,
+    val productId: ProductId,
+    val quantity: Int,
 ) {
 
     init {
-        require(price > 0) { "price must be > 0 byt was $price" }
+        require(quantity >= 0) { "quantity must be >= 0 but was $quantity" }
     }
 
     // equals() and hashCode() are overridden because Order is an entity and not a value object (as of DDD).
@@ -22,12 +20,12 @@ data class Product(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Product
+        other as InventoryItem
 
-        return id == other.id
+        return productId == other.productId
     }
 
-    override fun hashCode(): Int = id.hashCode()
+    override fun hashCode(): Int = productId.hashCode()
 
     companion object
 }

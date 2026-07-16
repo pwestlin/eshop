@@ -1,0 +1,63 @@
+package nu.westlin.eshop.inventory.internal
+
+import nu.westlin.eshop.common.InventoryAllocationFailedEvent
+import nu.westlin.eshop.common.InventoryAllocationSuccessfulEvent
+import nu.westlin.eshop.common.OrderPlacedEvent
+import nu.westlin.eshop.common.ProductId
+import nu.westlin.eshop.common.logger
+import org.springframework.context.ApplicationEventPublisher
+import org.springframework.modulith.events.ApplicationModuleListener
+import org.springframework.stereotype.Service
+
+@Service
+class InventoryService(
+    private val inventoryItemRepository: InventoryItemRepository,
+    private val eventPublisher: ApplicationEventPublisher,
+) {
+    private val logger = logger()
+
+    @ApplicationModuleListener
+    fun handleOrderPlacedEvent(orderPlacedEvent: OrderPlacedEvent) {
+        logger.info("Order placed: $orderPlacedEvent")
+        val tooFewProducts = reserveProducts(orderPlacedEvent.items)
+        if (tooFewProducts.isEmpty()) {
+            // TODO pwestlin: Lyssnare för denna som kontrollerar att statusen ör korrekt innan den applicerar eventet
+            eventPublisher.publishEvent(InventoryAllocationSuccessfulEvent(orderPlacedEvent.orderId))
+        } else {
+            // TODO pwestlin: Lyssnare för denna som kontrollerar att statusen ör korrekt innan den applicerar eventet
+            eventPublisher.publishEvent(
+                InventoryAllocationFailedEvent(
+                    orderId = orderPlacedEvent.orderId,
+                    tooFewProducts = tooFewProducts.map { domain ->
+                        InventoryAllocationFailedEvent.TooFewProducts(
+                            productId = domain.productId,
+                            orderQuantity = domain.orderQuantity,
+                            inventoryQuantity = domain.inventoryQuantity,
+
+                        )
+                    }.toSet(),
+                ),
+            )
+        }
+
+        // TODO pwestlin: Vad göra om det kastas ett exception?
+    }
+
+    private fun reserveProducts(orderedItems: Set<OrderPlacedEvent.OrderPlacedItem>): Set<TooFewProducts> {
+        // TODO pwestlin: Lägg till i en lista av reserverade produkter
+        return orderedItems.mapNotNull { orderedItem ->
+            val inventoryItem = inventoryItemRepository.getById(orderedItem.productId)
+            if (inventoryItem.quantity >= orderedItem.quantity) {
+                null
+            } else {
+                TooFewProducts(
+                    productId = orderedItem.productId,
+                    orderQuantity = orderedItem.quantity,
+                    inventoryQuantity = inventoryItem.quantity,
+                )
+            }
+        }.toSet()
+    }
+
+    private data class TooFewProducts(val productId: ProductId, val orderQuantity: Int, val inventoryQuantity: Int)
+}

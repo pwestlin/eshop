@@ -15,6 +15,12 @@ data class OrderPlacedEvent(
     companion object
 }
 
+data class InventoryAllocationSuccessfulEvent(val orderId: OrderId)
+
+data class InventoryAllocationFailedEvent(val orderId: OrderId, val tooFewProducts: Set<TooFewProducts>) {
+    data class TooFewProducts(val productId: ProductId, val orderQuantity: Int, val inventoryQuantity: Int)
+}
+
 data class OrderShippedEvent(
     val orderId: OrderId,
     val customerId: CustomerId,

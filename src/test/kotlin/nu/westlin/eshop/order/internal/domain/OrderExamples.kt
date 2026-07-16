@@ -23,8 +23,8 @@ fun Order.Companion.example(
 fun OrderLineItem.Companion.example(
     id: Long = Random.nextLong(1, Long.MAX_VALUE - 1),
     productId: ProductId = ProductId.generate(),
-    quantity: Int = 42,
-    price: Int = 5,
+    quantity: Int = Random.nextInt(1, 50),
+    price: Int = Random.nextInt(10, 2_000),
 ): OrderLineItem = OrderLineItem(
     id = id,
     productId = productId,

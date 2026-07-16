@@ -1,5 +1,6 @@
 package nu.westlin.eshop.catalog.internal
 
+import nu.westlin.eshop.config.ProductSpringDataJdbcConfiguration
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
 import nu.westlin.eshop.test.isExactlyInstanceOf
 import org.assertj.core.api.Assertions.assertThat
