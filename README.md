@@ -51,3 +51,7 @@ flowchart TD
     class Shipped final;
     class Cancelled error;
 ```
+
+## Test data
+The application can be initiated with test data: `-Dspring.profiles.active=testdata`
+See classes named `*DataSeeder`.
