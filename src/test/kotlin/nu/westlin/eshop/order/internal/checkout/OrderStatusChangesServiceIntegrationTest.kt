@@ -18,7 +18,6 @@ import nu.westlin.eshop.test.SharedTestcontainersConfiguration
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient
 import org.springframework.context.annotation.Import
 import org.springframework.modulith.test.ApplicationModuleTest
 import org.springframework.modulith.test.Scenario
@@ -32,7 +31,6 @@ import org.springframework.test.context.TestPropertySource
     ],
 )
 @ApplicationModuleTest
-@AutoConfigureRestTestClient
 @Import(SharedTestcontainersConfiguration::class)
 class OrderStatusChangesServiceIntegrationTest @Autowired constructor(private val orderRepository: OrderRepository) {
 

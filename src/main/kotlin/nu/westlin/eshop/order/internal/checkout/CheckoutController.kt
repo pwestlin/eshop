@@ -11,6 +11,7 @@ import nu.westlin.eshop.order.internal.domain.OrderLineItem
 import nu.westlin.eshop.order.internal.domain.OrderLineItems
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -21,12 +22,14 @@ import java.net.URI
 import java.util.*
 
 @RestController
+@PreAuthorize("hasRole('CUSTOMER')")
 @RequestMapping("/orders")
 class CheckoutController(private val checkoutService: CheckoutService) {
 
     @GetMapping("/id/create", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun createOrderId(): UUID = OrderId.generate().value
 
+    // TODO pwestlin: Fixa konstanter för roller
     @PostMapping("", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun checkout(@RequestBody request: CheckoutRequest): ResponseEntity<Any> {
         // TODO pwestlin: Kolla om OrderId redan finns (idempotens)?

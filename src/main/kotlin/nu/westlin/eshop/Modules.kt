@@ -1,5 +1,6 @@
 package nu.westlin.eshop
 
+@Suppress("unused")
 object Modules {
 
     const val CATALOG = "catalog"
@@ -9,4 +10,5 @@ object Modules {
     const val ORDER = "order"
     const val PAYMENT = "payment"
     const val CONFIG = "config"
+    const val SECURITY = "security"
 }

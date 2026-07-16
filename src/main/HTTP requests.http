@@ -1,6 +1,7 @@
 ### Skapa order bec7defb-1cfe-4af2-ba4a-74c438ce7eb1
 POST http://localhost:8080/orders
 Content-Type: application/json
+Authorization: Basic cGV0ZXI6cGV0ZXI=
 
 {
   "orderId": "bec7defb-1cfe-4af2-ba4a-74c438ce7eb1",

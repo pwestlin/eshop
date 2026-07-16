@@ -22,12 +22,14 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.modulith.test.ApplicationModuleTest
 import org.springframework.modulith.test.AssertablePublishedEvents
 import org.springframework.modulith.test.Scenario
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.web.servlet.client.RestTestClient
 import org.springframework.test.web.servlet.client.expectBody
@@ -41,6 +43,8 @@ import org.springframework.test.web.servlet.client.expectBody
 )
 @ApplicationModuleTest
 @AutoConfigureRestTestClient
+@AutoConfigureMockMvc(addFilters = false)
+@WithMockUser(username = "customer", roles = ["CUSTOMER"])
 @Import(SharedTestcontainersConfiguration::class)
 class CheckoutServiceIntegrationTest @Autowired constructor(
     private val orderRepository: OrderRepository,

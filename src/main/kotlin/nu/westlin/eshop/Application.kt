@@ -5,7 +5,7 @@ import org.springframework.boot.runApplication
 import org.springframework.modulith.Modulithic
 
 @SpringBootApplication
-@Modulithic(sharedModules = [Modules.CONFIG])
+@Modulithic(sharedModules = [Modules.CONFIG, Modules.SECURITY])
 class Application
 
 @Suppress("SpreadOperator")

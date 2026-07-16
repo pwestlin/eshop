@@ -53,3 +53,10 @@ CREATE TABLE IF NOT EXISTS inventory_items
     product_id INTEGER PRIMARY KEY CHECK (product_id > 0),
     quantity   INT NOT NULL CHECK (quantity >= 0)
 );
+
+CREATE TABLE IF NOT EXISTS app_user
+(
+    username VARCHAR(25) PRIMARY KEY,
+    password VARCHAR(25)  NOT NULL,
+    roles    VARCHAR(255) NOT NULL
+);

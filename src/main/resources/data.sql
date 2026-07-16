@@ -23,6 +23,8 @@ insert into products(id, name, description, price)
 values (3, 'Tyre', 'A really nice tyre!', 69)
 ON CONFLICT (id) DO NOTHING;
 
+-- Inventory items
+
 insert into inventory_items(product_id, quantity)
 values (1, 50)
 ON CONFLICT (product_id) DO NOTHING;
@@ -32,3 +34,14 @@ ON CONFLICT (product_id) DO NOTHING;
 insert into inventory_items(product_id, quantity)
 values (3, 69)
 ON CONFLICT (product_id) DO NOTHING;
+
+-- App users
+insert into app_user(username, password, roles)
+values('peter','peter','CUSTOMER,ADMIN')
+ON CONFLICT (username) DO NOTHING;
+insert into app_user(username, password, roles)
+values('customer','customer','CUSTOMER')
+ON CONFLICT (username) DO NOTHING;
+insert into app_user(username, password, roles)
+values('admin','admin','ADMIN')
+ON CONFLICT (username) DO NOTHING;
