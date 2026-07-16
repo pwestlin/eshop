@@ -3,27 +3,8 @@ Backend for an E-shop implemented in [Kotlin](https://kotlinlang.org/), [Spring 
 
 TODO pwestlin: Doc modules
 
-```mermaid
-graph TD
-    A([Användare: Klickar på 'Köp']) -->|"POST /checkout"| B(PENDING)
-    B -->|"Lyckat betalningsevent / Lager reserverat"| C(PAID / PROCESSING)
-    B -->|"Betalning misslyckad / Slut i lager"| D(FAILED)
-    B -->|"Manuell avbrytning före skickning"| E(CANCELLED)
-    C -->|"ship() metod anropas"| F(SHIPPED)
-    C -->|"Manuell avbrytning före skickning"| E
-    F -->|"Levererad till kund"| G(COMPLETED)
 
-    classDef initial fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef state fill:#ccf,stroke:#333,stroke-width:1px;
-    classDef final fill:#8f8,stroke:#333,stroke-width:1px;
-    classDef error fill:#f88,stroke:#333,stroke-width:1px;
-
-    class A initial;
-    class B,C,F,E state;
-    class G final;
-    class D error;
-```
-
+TODO pwestlin: Fixa flödet nedan så den stämmer med koden.
 ```mermaid
 flowchart TD
     %% States
