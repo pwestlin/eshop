@@ -23,6 +23,7 @@ data class InventoryAllocationFailedEvent(val orderId: OrderId, val tooFewProduc
     init {
         require(tooFewProducts.isNotEmpty()) { "tooFewProducts can not be empty" }
     }
+
     data class TooFewProducts(val productId: ProductId, val orderQuantity: Int, val inventoryQuantity: Int)
 }
 

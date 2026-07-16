@@ -58,7 +58,6 @@ class CheckoutService(
                     OrderPlacedEvent.OrderPlacedItem(
                         productId = item.productId,
                         quantity = item.quantity,
-
                     )
                 }.toSet(),
                 occurredAt = instantNowTruncated(),

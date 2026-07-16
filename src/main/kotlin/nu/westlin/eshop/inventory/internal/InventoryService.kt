@@ -34,7 +34,6 @@ class InventoryService(
                             productId = domain.productId,
                             orderQuantity = domain.orderQuantity,
                             inventoryQuantity = domain.inventoryQuantity,
-
                         )
                     }.toSet(),
                 ),
