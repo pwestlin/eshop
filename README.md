@@ -23,3 +23,30 @@ graph TD
     class G final;
     class D error;
 ```
+
+```mermaid
+flowchart TD
+    %% States
+    Start([Checkout Initiated]) --> PENDING[PENDING]
+    
+    PENDING -->|Inventory Allocation Successful| STOCK_RESERVED[STOCK_RESERVED]
+    PENDING -->|Inventory Allocation Failed| FAILED[FAILED]
+    
+    STOCK_RESERVED -->|Payment Confirmed| PAID[PAID / PROCESSING]
+    STOCK_RESERVED -->|Payment Failed| FAILED
+    
+    PAID -->|Order Shipped| SHIPPED[SHIPPED]
+    SHIPPED -->|Order Delivered| COMPLETED[COMPLETED]
+    
+    COMPLETED -->|Customer Return / Refund| REFUNDED[REFUNDED]
+
+    %% Styling
+    classDef default fill:#f9f9f9,stroke:#333,stroke-width:2px;
+    classDef status fill:#e1f5fe,stroke:#0288d1,stroke-width:2px;
+    classDef final fill:#ffe0b2,stroke:#f57c00,stroke-width:2px;
+    classDef error fill:#ffebee,stroke:#c62828,stroke-width:2px;
+    
+    class PENDING,STOCK_RESERVED,PAID,SHIPPED status;
+    class COMPLETED,REFUNDED final;
+    class FAILED error;
+```
