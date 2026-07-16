@@ -1,12 +1,25 @@
 # E-shop
-Backend for an E-shop implemented in [Kotlin](https://kotlinlang.org/), [Spring Boot](https://spring.io/projects/spring-boot), [Spring Data JDBC](https://spring.io/projects/spring-data-jdbc), [Spring Modulith](https://spring.io/projects/spring-modulith), [Spring Security](https://spring.io/projects/spring-security) and [Postgres](https://www.postgresql.org/).
 
-For testing it uses [Spring Modulith test](https://docs.spring.io/spring-modulith/reference/testing.html), [JUnit](https://junit.org/), [AssertJ](https://assertj.github.io/doc/) and [Testcontainers](https://testcontainers.com/).
+Backend for an E-shop implemented
+in [Kotlin](https://kotlinlang.org/), [Spring Boot](https://spring.io/projects/spring-boot), [Spring Data JDBC](https://spring.io/projects/spring-data-jdbc), [Spring Modulith](https://spring.io/projects/spring-modulith), [Spring Security](https://spring.io/projects/spring-security)
+and [Postgres](https://www.postgresql.org/).
 
-TODO pwestlin: Doc modules
+For testing it
+uses [Spring Modulith test](https://docs.spring.io/spring-modulith/reference/testing.html), [JUnit](https://junit.org/), [AssertJ](https://assertj.github.io/doc/)
+and [Testcontainers](https://testcontainers.com/).
 
+## Order statuses
 
-TODO pwestlin: Fixa flödet nedan så den stämmer med koden.
+| Status        | Description                                |
+|---------------|--------------------------------------------|
+| Pending       | First status when an order is checked out. |
+| StockReserved | Products are reserved in inventory.        |
+| Paid          | Payment is successful.                     |
+| Shipped       | Order is shipped to customer.              |
+| Cancelled     | Order is cancelled.                        |
+
+## Order flow
+
 ```mermaid
 flowchart TD
     %% States
