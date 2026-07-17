@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS orders
 (
     id           UUID PRIMARY KEY,
+    version      INTEGER          NOT NULL CHECK (version > 0),
     created_at   TIMESTAMPTZ      NOT NULL,
     updated_at   TIMESTAMPTZ      NOT NULL,
     customer_id  UUID             NOT NULL,

@@ -6,6 +6,7 @@ import nu.westlin.eshop.common.ProductId
 import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.customer.Percentage
 import org.springframework.data.annotation.Id
+import org.springframework.data.annotation.Version
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
@@ -14,6 +15,8 @@ import java.time.Instant
 data class Order(
     @Id
     val id: OrderId,
+    @Version
+    val version: Int = 0,
     val createdAt: Instant,
     val updatedAt: Instant,
     val customerId: CustomerId,

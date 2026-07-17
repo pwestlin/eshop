@@ -34,7 +34,10 @@ class OrderRepositoryTest @Autowired constructor(private val orderRepository: Or
 
         val updatedOrder = createdOrder.copy(status = OrderStatus.Shipped, shippedTime = instantNowTruncated())
         orderRepository.update(updatedOrder)
-        assertThat(orderRepository.findById(order.id)).isEqualTo(updatedOrder)
+        val actual = orderRepository.findById(order.id)
+        assertThat(actual)
+            .usingRecursiveComparison()
+            .isEqualTo(updatedOrder.copy(version = 2))
     }
 
     @Test
