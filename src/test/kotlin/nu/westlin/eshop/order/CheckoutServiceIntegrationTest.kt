@@ -34,6 +34,7 @@ import org.springframework.test.context.TestPropertySource
 import org.springframework.test.web.servlet.client.RestTestClient
 import org.springframework.test.web.servlet.client.expectBody
 
+// TODO pwestlin: Skapa en annotering som gör mycket av dessa nedan
 // When you run the test with Gradle you get 30 sec timeout after completed test suite and the below is to fix that...
 @TestPropertySource(
     properties = [

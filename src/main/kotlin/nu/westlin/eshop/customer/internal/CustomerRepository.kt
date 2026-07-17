@@ -7,7 +7,9 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
 @Repository
-interface SpringDataCustomerRepository : ListCrudRepository<Customer, CustomerId>
+interface SpringDataCustomerRepository : ListCrudRepository<Customer, CustomerId> {
+    fun findByEmail(email: Email): Customer?
+}
 
 @Repository
 class CustomerRepository(
@@ -24,5 +26,7 @@ class CustomerRepository(
         id,
     ) ?: throw IllegalArgumentException("Customer with id $id does not exist")
 
-    fun findAll(): List<Customer> = springDataRepository.findAll()
+    fun findByIdOrNull(id: CustomerId): Customer? = springDataRepository.findByIdOrNull(id)
+
+    fun findByEmail(email: Email): Customer? = springDataRepository.findByEmail(email)
 }

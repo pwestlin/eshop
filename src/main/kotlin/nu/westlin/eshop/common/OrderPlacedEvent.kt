@@ -45,3 +45,13 @@ data class OrderCompletedEvent(
 data class PaymentSuccessfulEvent(val orderId: OrderId)
 
 data class PaymentFailedEvent(val orderId: OrderId, val reason: String)
+
+data class NewCustomerRegisteredEvent(
+    val customerId: CustomerId,
+    val name: String,
+    val email: String,
+    val username: String,
+    val password: String,
+) {
+    companion object
+}

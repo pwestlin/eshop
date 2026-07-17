@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS inventory_items
     quantity   INT NOT NULL CHECK (quantity >= 0)
 );
 
-CREATE TABLE IF NOT EXISTS app_user
+CREATE TABLE IF NOT EXISTS app_users
 (
     username VARCHAR(25) PRIMARY KEY,
     password VARCHAR(25)  NOT NULL,

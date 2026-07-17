@@ -3,7 +3,7 @@ package nu.westlin.eshop.security.internal
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 
-@Table("app_user")
+@Table("app_users")
 data class AppUser(
     @Id val username: String,
     val password: String,
