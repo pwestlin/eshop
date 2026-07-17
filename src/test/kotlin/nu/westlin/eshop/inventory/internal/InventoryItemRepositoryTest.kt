@@ -21,18 +21,19 @@ class InventoryItemRepositoryTest @Autowired constructor(private val repository:
     @Test
     fun `insert should be found by findById`() {
         val item = InventoryItem.example()
-        repository.insert(item)
-        assertThat(repository.getById(item.productId)).isEqualTo(item)
+        val inserted = repository.insert(item)
+        assertThat(inserted).isEqualTo(item.copy(version = inserted.version))
+        assertThat(repository.getById(item.productId)).isEqualTo(item.copy(version = inserted.version))
     }
 
     @Test
     fun `update should update quantity`() {
         val item = InventoryItem.example()
-        repository.insert(item)
-        assertThat(repository.getById(item.productId)).isEqualTo(item)
+        val inserted = repository.insert(item)
+        assertThat(repository.getById(item.productId)).isEqualTo(item.copy(version = inserted.version))
 
-        val updatedItem = item.copy(quantity = item.quantity + 1)
+        val updatedItem = inserted.copy(quantity = inserted.quantity + 1)
         repository.update(updatedItem)
-        assertThat(repository.getById(item.productId)).isEqualTo(updatedItem)
+        assertThat(repository.getById(item.productId)).isEqualTo(updatedItem.copy(version = inserted.version + 1))
     }
 }

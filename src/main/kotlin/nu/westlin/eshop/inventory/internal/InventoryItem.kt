@@ -2,12 +2,15 @@ package nu.westlin.eshop.inventory.internal
 
 import nu.westlin.eshop.common.ProductId
 import org.springframework.data.annotation.Id
+import org.springframework.data.annotation.Version
 import org.springframework.data.relational.core.mapping.Table
 
 @Table("inventory_items")
 data class InventoryItem(
     @Id
     val productId: ProductId,
+    @Version
+    val version: Int = 0,
     val quantity: Int,
 ) {
 

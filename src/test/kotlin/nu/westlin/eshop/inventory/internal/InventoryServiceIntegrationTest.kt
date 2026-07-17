@@ -53,8 +53,8 @@ class InventoryServiceIntegrationTest @Autowired private constructor(
     }
 
     @Test
-    fun `handle OrderPlacedEvent - product not found`(@Suppress("UnusedParameter") scenario: Scenario) {
-        // TODO pwestlin: Jag vet itne hur jag ska lösa detta fall än.
+    fun `handle OrderPlacedEvent - product not found`(@Suppress("UnusedParameter", "unused") scenario: Scenario) {
+        // TODO pwestlin: Jag vet inte hur jag ska lösa detta fall än.
         assertThat(true).isTrue
         /*
                 val orderPlacedEvent = OrderPlacedEvent(

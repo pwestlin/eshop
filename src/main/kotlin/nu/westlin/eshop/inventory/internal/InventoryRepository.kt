@@ -14,13 +14,9 @@ class InventoryItemRepository(
     private val springDataRepository: SpringDataInventoryItemRepository,
     private val entityTemplate: JdbcAggregateTemplate,
 ) {
-    fun insert(inventoryItem: InventoryItem) {
-        entityTemplate.insert(inventoryItem)
-    }
+    fun insert(inventoryItem: InventoryItem): InventoryItem = entityTemplate.insert(inventoryItem)
 
-    fun update(inventoryItem: InventoryItem) {
-        entityTemplate.update(inventoryItem)
-    }
+    fun update(inventoryItem: InventoryItem): InventoryItem = entityTemplate.update(inventoryItem)
 
     /**
      * @throws IllegalArgumentException if [productId] can't be found.
