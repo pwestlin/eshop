@@ -3,6 +3,7 @@ package nu.westlin.eshop.order.internal.domain
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.ProductId
+import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.customer.Percentage
 import java.time.Instant
 import kotlin.random.Random
@@ -10,6 +11,7 @@ import kotlin.random.Random
 @Suppress("LongParameterList")
 fun Order.Companion.example(
     id: OrderId = OrderId.generate(),
+    createdAt: Instant = instantNowTruncated(),
     customerId: CustomerId = CustomerId.generate(),
     status: OrderStatus = OrderStatus.Pending,
     items: OrderLineItems = OrderLineItems.example(),
@@ -17,6 +19,7 @@ fun Order.Companion.example(
     shippedTime: Instant? = null,
 ): Order = Order(
     id = id,
+    createdAt = createdAt,
     customerId = customerId,
     status = status,
     items = items,

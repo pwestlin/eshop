@@ -15,6 +15,23 @@ Authorization: Basic cGV0ZXI6cGV0ZXI=
   ]
 }
 
+### Skapa order f4fc20ba-336f-4214-98e2-693de6796e26
+POST http://localhost:8080/orders
+Content-Type: application/json
+Authorization: Basic cGV0ZXI6cGV0ZXI=
+
+{
+  "orderId": "f4fc20ba-336f-4214-98e2-693de6796e26",
+  "customerId": "d9538d50-8976-4dea-9b5f-96ecf5bbafc5",
+  "items": [
+    {
+      "productId": 1,
+      "quantity": 22,
+      "price": 7
+    }
+  ]
+}
+
 ### List all customer orders
 GET http://localhost:8080/orders/customer/d9538d50-8976-4dea-9b5f-96ecf5bbafc5
 Content-Type: application/json
