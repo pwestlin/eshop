@@ -29,25 +29,20 @@ class OrderController(private val orderRepository: OrderRepository) {
         }
     }
 
-    @GetMapping("/{customerId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getOrdersByCustomerId(@PathVariable customerId: UUID): GetOrdersByCustomerIdResponse {
+    @GetMapping("/customer/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getOrdersByCustomerId(@PathVariable("id") customerId: UUID): GetOrdersByCustomerIdResponse {
         val orders = orderRepository.findByCustomerId(CustomerId(customerId))
         return GetOrdersByCustomerIdResponse(orders.map { it.toDto() })
     }
 }
 
-data class OrderDTO(
-    val orderid: UUID,
-    val status: OrderStatus,
-    val totalPrice: Int,
-    val shippedTime: Instant? = null
-)
+data class OrderDTO(val orderid: UUID, val status: OrderStatus, val totalPrice: Int, val shippedTime: Instant? = null)
 
 fun Order.toDto(): OrderDTO = OrderDTO(
     orderid = this.id.value,
     status = this.status,
     totalPrice = this.totalPrice,
-    shippedTime = this.shippedTime
+    shippedTime = this.shippedTime,
 )
 
 data class GetOrdersByCustomerIdResponse(val orders: List<OrderDTO>)

@@ -14,3 +14,8 @@ Authorization: Basic cGV0ZXI6cGV0ZXI=
     }
   ]
 }
+
+### List all customer orders
+GET http://localhost:8080/orders/customer/d9538d50-8976-4dea-9b5f-96ecf5bbafc5
+Content-Type: application/json
+Authorization: Basic cGV0ZXI6cGV0ZXI=
