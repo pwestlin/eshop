@@ -11,7 +11,7 @@ and [Testcontainers](https://testcontainers.com/).
 ## Features
 
 * Customer checks out an order
-* A user registers as a customer (not yet implemented)
+* A user registers as a customer
 * A customer lists all its orders (not yet implemented)
 * Inventory employee updates the inventory (not yet implemented)
 * Product employee updates the inventory (not yet implemented)
