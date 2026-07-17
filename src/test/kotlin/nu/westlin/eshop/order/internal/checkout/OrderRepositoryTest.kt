@@ -1,5 +1,6 @@
 package nu.westlin.eshop.order.internal.checkout
 
+import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.order.internal.OrderSpringDataJdbcConfiguration
 import nu.westlin.eshop.order.internal.domain.Order
@@ -34,5 +35,27 @@ class OrderRepositoryTest @Autowired constructor(private val orderRepository: Or
         val updatedOrder = createdOrder.copy(status = OrderStatus.Shipped, shippedTime = instantNowTruncated())
         orderRepository.update(updatedOrder)
         assertThat(orderRepository.findById(order.id)).isEqualTo(updatedOrder)
+    }
+
+    @Test
+    fun `findByCustomerId should return none`() {
+        repeat(3) {
+            orderRepository.insert(Order.example())
+        }
+        assertThat(orderRepository.findByCustomerId(CustomerId.generate())).isEmpty()
+    }
+
+    @Test
+    fun `findByCustomerId should return two`() {
+        repeat(3) {
+            orderRepository.insert(Order.example())
+        }
+        val customerId = CustomerId.generate()
+        val orders = List(2) {
+            Order.example(customerId = customerId)
+        }
+        orders.forEach { orderRepository.insert(it) }
+
+        assertThat(orderRepository.findByCustomerId(customerId)).containsExactlyInAnyOrderElementsOf(orders)
     }
 }

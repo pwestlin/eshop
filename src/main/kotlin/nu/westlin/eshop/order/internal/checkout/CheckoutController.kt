@@ -29,8 +29,6 @@ class CheckoutController(private val checkoutService: CheckoutService) {
     @GetMapping("/id/create", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun createOrderId(): UUID = OrderId.generate().value
 
-    // TODO pwestlin: Skriv endpoint för /{id}
-
     // TODO pwestlin: Fixa konstanter för roller
     @PostMapping("", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun checkout(@RequestBody request: CheckoutRequest): ResponseEntity<Any> {

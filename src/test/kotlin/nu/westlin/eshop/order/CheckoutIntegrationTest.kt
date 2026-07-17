@@ -47,7 +47,7 @@ import org.springframework.test.web.servlet.client.expectBody
 @AutoConfigureMockMvc(addFilters = false)
 @WithMockUser(username = "customer", roles = ["CUSTOMER"])
 @Import(SharedTestcontainersConfiguration::class)
-class CheckoutServiceIntegrationTest @Autowired constructor(
+class CheckoutIntegrationTest @Autowired constructor(
     private val orderRepository: OrderRepository,
     private val client: RestTestClient,
 ) {
