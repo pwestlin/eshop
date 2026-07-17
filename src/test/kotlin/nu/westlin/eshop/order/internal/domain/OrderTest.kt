@@ -64,6 +64,7 @@ class OrderTest {
         val shippedTime = instantNowTruncated()
         assertThat(order.ship(shippedTime))
             .usingRecursiveComparison()
+            .ignoringFields("updatedAt")
             .isEqualTo(order.copy(status = OrderStatus.Shipped, shippedTime = shippedTime))
     }
 
@@ -72,6 +73,7 @@ class OrderTest {
         val order = Order.example(status = OrderStatus.Pending)
         assertThat(order.applyInventoryAllocationSuccessful())
             .usingRecursiveComparison()
+            .ignoringFields("updatedAt")
             .isEqualTo(order.copy(status = OrderStatus.StockReserved))
     }
 
@@ -97,6 +99,7 @@ class OrderTest {
         val order = Order.example(status = OrderStatus.StockReserved)
         assertThat(order.applyPaymentSuccessful())
             .usingRecursiveComparison()
+            .ignoringFields("updatedAt")
             .isEqualTo(order.copy(status = OrderStatus.Paid))
     }
 
@@ -122,6 +125,7 @@ class OrderTest {
         val order = Order.example(status = OrderStatus.Pending)
         assertThat(order.cancel())
             .usingRecursiveComparison()
+            .ignoringFields("updatedAt")
             .isEqualTo(order.copy(status = OrderStatus.Cancelled))
     }
 

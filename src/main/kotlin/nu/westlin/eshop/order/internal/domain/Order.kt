@@ -15,6 +15,7 @@ data class Order(
     @Id
     val id: OrderId,
     val createdAt: Instant,
+    val updatedAt: Instant,
     val customerId: CustomerId,
     val status: OrderStatus,
     @MappedCollection(idColumn = "order_id")
@@ -43,10 +44,20 @@ data class Order(
                 "Shipped time (shippedTime) cannot be set when status is $status"
             }
         }
+
+        if (status == OrderStatus.Pending) {
+            require(createdAt == updatedAt) {
+                "updatedAt must be equal to createdAt for status ${OrderStatus.Pending}"
+            }
+        }
     }
 
     // Snygg domän-funktion för att byta status (skapar en kopia)
-    fun ship(shippedTime: Instant): Order = this.copy(status = OrderStatus.Shipped, shippedTime = shippedTime)
+    fun ship(shippedTime: Instant): Order = this.copy(
+        status = OrderStatus.Shipped,
+        updatedAt = instantNowTruncated(),
+        shippedTime = shippedTime,
+    )
 
     // equals() and hashCode() are overridden because Order is an entity and not a value object (as of DDD).
     override fun equals(other: Any?): Boolean {
@@ -67,7 +78,7 @@ data class Order(
             "Order with id $id must be in state ${OrderStatus.Pending} but was in state $status"
         }
 
-        return this.copy(status = OrderStatus.StockReserved)
+        return this.copy(status = OrderStatus.StockReserved, updatedAt = instantNowTruncated())
     }
 
     fun applyPaymentSuccessful(): Order {
@@ -77,20 +88,24 @@ data class Order(
             "Order with id $id must be in state ${OrderStatus.StockReserved} but was in state $status"
         }
 
-        return this.copy(status = OrderStatus.Paid)
+        return this.copy(status = OrderStatus.Paid, updatedAt = instantNowTruncated())
     }
 
-    fun cancel(): Order = this.copy(status = OrderStatus.Cancelled)
+    fun cancel(): Order = this.copy(status = OrderStatus.Cancelled, updatedAt = instantNowTruncated())
 
     companion object {
-        fun new(id: OrderId, customerId: CustomerId, items: OrderLineItems, discount: Percentage): Order = Order(
-            id = id,
-            createdAt = instantNowTruncated(),
-            customerId = customerId,
-            status = OrderStatus.Pending,
-            items = items,
-            discount = discount,
-        )
+        fun new(id: OrderId, customerId: CustomerId, items: OrderLineItems, discount: Percentage): Order {
+            val now = instantNowTruncated()
+            return Order(
+                id = id,
+                createdAt = now,
+                updatedAt = now,
+                customerId = customerId,
+                status = OrderStatus.Pending,
+                items = items,
+                discount = discount,
+            )
+        }
     }
 }
 

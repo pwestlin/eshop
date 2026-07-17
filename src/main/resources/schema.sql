@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS orders
 (
     id           UUID PRIMARY KEY,
     created_at   TIMESTAMPTZ      NOT NULL,
+    updated_at   TIMESTAMPTZ      NOT NULL,
     customer_id  UUID             NOT NULL,
     status       VARCHAR(20)      NOT NULL,
     discount     DOUBLE PRECISION NOT NULL CHECK (discount >= 0),

@@ -41,6 +41,7 @@ class OrderController(private val orderRepository: OrderRepository) {
 data class OrderDTO(
     val orderid: UUID,
     val createdAt: Instant,
+    val updatedAt: Instant,
     val status: OrderStatus,
     val totalPrice: Int,
     val shippedTime: Instant? = null,
@@ -49,6 +50,7 @@ data class OrderDTO(
 fun Order.toDto(): OrderDTO = OrderDTO(
     orderid = this.id.value,
     createdAt = this.createdAt,
+    updatedAt = this.updatedAt,
     status = this.status,
     totalPrice = this.totalPrice,
     shippedTime = this.shippedTime,

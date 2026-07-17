@@ -12,6 +12,7 @@ import kotlin.random.Random
 fun Order.Companion.example(
     id: OrderId = OrderId.generate(),
     createdAt: Instant = instantNowTruncated(),
+    updatedAt: Instant = createdAt,
     customerId: CustomerId = CustomerId.generate(),
     status: OrderStatus = OrderStatus.Pending,
     items: OrderLineItems = OrderLineItems.example(),
@@ -20,6 +21,7 @@ fun Order.Companion.example(
 ): Order = Order(
     id = id,
     createdAt = createdAt,
+    updatedAt = updatedAt,
     customerId = customerId,
     status = status,
     items = items,
