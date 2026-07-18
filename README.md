@@ -32,6 +32,8 @@ Yes, I did cut corners here and there beacuse this is not a production-ready sys
 | inventory | Inventory.                             |
 | payment   | Payment.                               |
 
+![img.png](img.png)
+
 ## Order statuses
 
 | Status        | Description                                |
