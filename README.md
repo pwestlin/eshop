@@ -8,6 +8,10 @@ For testing it
 uses [Spring Modulith test](https://docs.spring.io/spring-modulith/reference/testing.html), [JUnit](https://junit.org/), [AssertJ](https://assertj.github.io/doc/)
 and [Testcontainers](https://testcontainers.com/).
 
+## Architecture
+Modular Monolith, Event-Driven Architecture (EDA), and, two some extent, package by feature.  
+Yes, I did cut corners here and there beacuse this is not a production-ready system. 😀
+
 ## Features
 
 * Customer checks out an order
