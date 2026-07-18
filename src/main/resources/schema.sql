@@ -58,6 +58,14 @@ CREATE TABLE IF NOT EXISTS inventory_items
     quantity   INT     NOT NULL CHECK (quantity >= 0)
 );
 
+CREATE TABLE IF NOT EXISTS reserved_inventory_items
+(
+    product_id INTEGER CHECK (product_id > 0),
+    order_id   UUID    NOT NULL,
+    quantity   INT     NOT NULL CHECK (quantity >= 0),
+    CONSTRAINT pk_reserved_inventory_items PRIMARY KEY (product_id, order_id)
+);
+
 CREATE TABLE IF NOT EXISTS app_users
 (
     username VARCHAR(25) PRIMARY KEY,

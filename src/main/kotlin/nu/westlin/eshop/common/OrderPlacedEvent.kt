@@ -55,3 +55,5 @@ data class NewCustomerRegisteredEvent(
 ) {
     companion object
 }
+
+data class OrderCancelledEvent(val orderId: OrderId)

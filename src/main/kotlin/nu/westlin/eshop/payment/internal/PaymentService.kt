@@ -18,7 +18,6 @@ class PaymentService(
 
     @ApplicationModuleListener
     fun handleInventoryAllocationSuccessfulEvent(event: InventoryAllocationSuccessfulEvent) {
-        // TODO pwestlin: Listeners for these events, in order and inventory
         runCatching { paymentProcessorService.processPayment(event.orderId) }.fold(
             { eventPublisher.publishEvent(PaymentSuccessfulEvent(event.orderId)) },
             { exception ->
@@ -39,7 +38,7 @@ class PaymentProcessorService {
 
     @Suppress("unused")
     fun processPayment(orderId: OrderId) {
-        // TODO pwestlin: Do something fun to simulate an payment :)
+        // Do something !fun to simulate an payment :)
         Thread.sleep(Duration.ofSeconds(2))
         logger.info("Payment for order $orderId is accepted")
     }

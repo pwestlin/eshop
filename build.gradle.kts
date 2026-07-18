@@ -1,4 +1,5 @@
 plugins {
+    // TODO pwestlin: 2.4.10 när Detekt får stöd för det.
     kotlin("jvm") version "2.4.0"
     kotlin("plugin.spring") version "2.4.0"
     id("org.springframework.boot") version "4.1.0"

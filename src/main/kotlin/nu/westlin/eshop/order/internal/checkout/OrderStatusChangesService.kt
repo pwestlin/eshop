@@ -2,6 +2,7 @@ package nu.westlin.eshop.order.internal.checkout
 
 import nu.westlin.eshop.common.InventoryAllocationFailedEvent
 import nu.westlin.eshop.common.InventoryAllocationSuccessfulEvent
+import nu.westlin.eshop.common.OrderCancelledEvent
 import nu.westlin.eshop.common.OrderCompletedEvent
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.OrderShippedEvent
@@ -25,6 +26,7 @@ class OrderStatusChangesService(
         orderRepository.update(order.applyInventoryAllocationSuccessful())
     }
 
+    // TODO pwestlin: testa
     @ApplicationModuleListener
     fun handleInventoryAllocationFailedEvent(event: InventoryAllocationFailedEvent) {
         val order = getOrder(event.orderId)
@@ -34,6 +36,7 @@ class OrderStatusChangesService(
             "Order with id ${event.orderId} must be in state ${OrderStatus.Pending} when handling event $event but was in state ${order.status}"
         }
         orderRepository.update(order.cancel())
+        eventPublisher.publishEvent(OrderCancelledEvent(event.orderId))
     }
 
     @ApplicationModuleListener
@@ -42,6 +45,7 @@ class OrderStatusChangesService(
         orderRepository.update(order.applyPaymentSuccessful())
     }
 
+    // TODO pwestlin: testa
     @ApplicationModuleListener
     fun handlePaymentFailedEvent(event: PaymentFailedEvent) {
         val order = getOrder(event.orderId)
@@ -51,6 +55,7 @@ class OrderStatusChangesService(
             "Order with id ${event.orderId} must be in state ${OrderStatus.StockReserved} when handling event $event but was in state ${order.status}"
         }
         orderRepository.update(order.cancel())
+        eventPublisher.publishEvent(OrderCancelledEvent(event.orderId))
     }
 
     @ApplicationModuleListener

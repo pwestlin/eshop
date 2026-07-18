@@ -86,8 +86,9 @@ class InventoryServiceIntegrationTest @Autowired private constructor(
          */
     }
 
+    // TODO pwestlin: testa med reserverade
     @Test
-    fun `handle OrderPlacedEvent - two of three products does not have enough quantity in inventory`(
+    fun `handle OrderPlacedEvent - none is reserved - two of three products does not have enough quantity in inventory`(
         scenario: Scenario,
     ) {
         val item1 = OrderPlacedItem(
