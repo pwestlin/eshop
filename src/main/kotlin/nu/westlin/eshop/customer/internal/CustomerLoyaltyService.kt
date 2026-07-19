@@ -1,0 +1,40 @@
+package nu.westlin.eshop.customer.internal
+
+import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.OrderId
+import nu.westlin.eshop.common.instantNowTruncated
+import nu.westlin.eshop.common.logger
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
+
+// TODO pwestlin: Allt i denna behöver inte vara pubikt för MODULEN (ex loyaltyDiscount).
+@Service
+class CustomerLoyaltyService(private val customerOrderRepository: CustomerOrderRepository) {
+    private val logger = logger()
+
+    fun loyaltyDiscount(customerId: CustomerId): DiscountTier {
+        val orders = customerOrderRepository.findAllByCustomerIdAndInstantGreaterThanEqual(
+            customerId,
+            instantNowTruncated(),
+        )
+        val ordersTotalSum = orders.sumOf { it.totalPrice }
+        return DiscountTier.fromTotalSum(ordersTotalSum)
+    }
+
+    @Transactional
+    fun store(
+        customerId: CustomerId,
+        orderId: OrderId,
+        totalPrice: Int,
+        instant: Instant,
+    ) {
+        val customerOrder = CustomerOrder(
+            customerId = customerId,
+            orderId = orderId,
+            totalPrice = totalPrice,
+            instant = instant
+        )
+        customerOrderRepository.insert(customerOrder)
+    }
+}

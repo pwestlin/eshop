@@ -2,21 +2,15 @@ package nu.westlin.eshop.order
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
-import nu.westlin.eshop.catalog.CatalogService
+import nu.westlin.eshop.catalog.CatalogFacade
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.OrderId
-import nu.westlin.eshop.common.OrderPlacedEvent
 import nu.westlin.eshop.common.ProductId
-import nu.westlin.eshop.common.example
-import nu.westlin.eshop.customer.CustomerDiscountDto
-import nu.westlin.eshop.customer.CustomerService
+import nu.westlin.eshop.customer.CustomerDiscount
 import nu.westlin.eshop.customer.Percentage
-import nu.westlin.eshop.order.internal.checkout.CheckoutRequest
-import nu.westlin.eshop.order.internal.checkout.CheckoutRequest.CheckoutItemRequest
-import nu.westlin.eshop.order.internal.checkout.CheckoutResponse
 import nu.westlin.eshop.order.internal.checkout.OrderRepository
-import nu.westlin.eshop.order.internal.checkout.ProcessCheckoutResult
 import nu.westlin.eshop.order.internal.domain.OrderStatus
+import nu.westlin.eshop.orderprocess.internal.order.example
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -32,7 +26,6 @@ import org.springframework.modulith.test.Scenario
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.web.servlet.client.RestTestClient
-import org.springframework.test.web.servlet.client.expectBody
 
 // TODO pwestlin: Skapa en annotering som gör mycket av dessa nedan
 // When you run the test with Gradle you get 30 sec timeout after completed test suite and the below is to fix that...
@@ -51,12 +44,12 @@ class CheckoutIntegrationTest @Autowired constructor(
     private val orderRepository: OrderRepository,
     private val client: RestTestClient,
 ) {
-
+/*
     @MockkBean
     private lateinit var customerService: CustomerService
 
     @MockkBean
-    private lateinit var catalogService: CatalogService
+    private lateinit var catalogfacade: CatalogFacade
 
     @Test
     fun `should process checkout, apply 10 percent discount, store order and publish OrderPlacedEvent`(
@@ -68,13 +61,13 @@ class CheckoutIntegrationTest @Autowired constructor(
 
         every { customerService.exists(customerId) } returns true
         checkoutRequest.items.forEach { item ->
-            every { catalogService.exists(ProductId(item.productId)) } returns true
+            every { catalogfacade.exists(ProductId(item.productId)) } returns true
         }
-        val customerDiscountDto = CustomerDiscountDto(
+        val customerDiscount = CustomerDiscount(
             tier = "42",
             rate = Percentage(0.1),
         )
-        every { customerService.discount(customerId) } returns customerDiscountDto
+        every { customerService.discount(customerId) } returns customerDiscount
 
         scenario.stimulate {
             client.post()
@@ -97,13 +90,13 @@ class CheckoutIntegrationTest @Autowired constructor(
 
                 requireNotNull(storedOrder)
                 assertThat(storedOrder.customerId).isEqualTo(customerId)
-                assertThat(storedOrder.status).isEqualTo(OrderStatus.Pending)
+                assertThat(storedOrder.status).isEqualTo(OrderStatus.PENDING)
 
                 // TODO pwestlin: Kontrollera items
                 val expectedSubTotal = checkoutRequest.items.sumOf { it.price * it.quantity }
                 assertThat(storedOrder.subTotal).isEqualTo(expectedSubTotal)
-                assertThat(storedOrder.discount).isEqualTo(customerDiscountDto.rate)
-                val expectedTotalPrice = (expectedSubTotal * (1.toDouble() - customerDiscountDto.rate.fraction)).toInt()
+                assertThat(storedOrder.discount).isEqualTo(customerDiscount.rate)
+                val expectedTotalPrice = (expectedSubTotal * (1.toDouble() - customerDiscount.rate.fraction)).toInt()
                 assertThat(storedOrder.totalPrice).isEqualTo(expectedTotalPrice)
             }
     }
@@ -170,9 +163,9 @@ class CheckoutIntegrationTest @Autowired constructor(
 
         every { customerService.exists(customerId) } returns true
 
-        every { catalogService.exists(ProductId(productId1)) } returns true
-        every { catalogService.exists(ProductId(productId2)) } returns false
-        every { catalogService.exists(ProductId(productId3)) } returns false
+        every { catalogfacade.exists(ProductId(productId1)) } returns true
+        every { catalogfacade.exists(ProductId(productId2)) } returns false
+        every { catalogfacade.exists(ProductId(productId3)) } returns false
 
         scenario.stimulate {
             client.post()
@@ -199,5 +192,10 @@ class CheckoutIntegrationTest @Autowired constructor(
         assertThat(orderRepository.findById(orderId)).isNull()
 
         assertThat(events.ofType(OrderPlacedEvent::class.java)).isEmpty()
+    }*/
+
+    @Test
+    fun `dghgdh gjs`() {
+        TODO()
     }
 }

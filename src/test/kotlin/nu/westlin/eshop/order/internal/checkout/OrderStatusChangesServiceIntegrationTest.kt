@@ -1,16 +1,14 @@
 package nu.westlin.eshop.order.internal.checkout
 
 import com.ninjasquad.springmockk.MockkBean
-import nu.westlin.eshop.catalog.CatalogService
-import nu.westlin.eshop.common.InventoryAllocationFailedEvent
-import nu.westlin.eshop.common.InventoryAllocationSuccessfulEvent
-import nu.westlin.eshop.common.OrderCompletedEvent
-import nu.westlin.eshop.common.OrderShippedEvent
-import nu.westlin.eshop.common.PaymentFailedEvent
-import nu.westlin.eshop.common.PaymentSuccessfulEvent
+import nu.westlin.eshop.catalog.CatalogFacade
+import nu.westlin.eshop.inventory.InventoryAllocationFailedEvent
+import nu.westlin.eshop.inventory.InventoryAllocationSuccessfulEvent
+import nu.westlin.eshop.inventory.OrderShippedEvent
+import nu.westlin.eshop.payment.PaymentFailedEvent
+import nu.westlin.eshop.payment.PaymentSuccessfulEvent
 import nu.westlin.eshop.common.ProductId
 import nu.westlin.eshop.common.instantNowTruncated
-import nu.westlin.eshop.customer.CustomerService
 import nu.westlin.eshop.order.internal.domain.Order
 import nu.westlin.eshop.order.internal.domain.OrderStatus
 import nu.westlin.eshop.order.internal.domain.example
@@ -34,13 +32,13 @@ import org.springframework.test.context.TestPropertySource
 @Import(SharedTestcontainersConfiguration::class)
 class OrderStatusChangesServiceIntegrationTest @Autowired constructor(private val orderRepository: OrderRepository) {
 
-    @Suppress("unused")
+/*    @Suppress("unused")
     @MockkBean
     private lateinit var customerService: CustomerService
 
     @Suppress("unused")
     @MockkBean
-    private lateinit var catalogService: CatalogService
+    private lateinit var catalogfacade: CatalogFacade
 
     @Test
     @Suppress("IgnoredReturnValue")
@@ -51,8 +49,8 @@ class OrderStatusChangesServiceIntegrationTest @Autowired constructor(private va
 
         scenario.publish(event)
             .andWaitForStateChange(
-                { orderRepository.findById(order.id)?.status ?: OrderStatus.Pending },
-                { status -> status == OrderStatus.StockReserved },
+                { orderRepository.findById(order.id)?.status ?: OrderStatus.PENDING },
+                { status -> status == OrderStatus.STOCKRESERVED },
             )
     }
 
@@ -74,29 +72,29 @@ class OrderStatusChangesServiceIntegrationTest @Autowired constructor(private va
 
         scenario.publish(event)
             .andWaitForStateChange(
-                { orderRepository.findById(order.id)?.status ?: OrderStatus.Pending },
-                { status -> status == OrderStatus.Cancelled },
+                { orderRepository.findById(order.id)?.status ?: OrderStatus.PENDING },
+                { status -> status == OrderStatus.CANCELLED },
             )
     }
 
     @Test
     @Suppress("IgnoredReturnValue")
     fun `handle PaymentSuccessfulEvent`(scenario: Scenario) {
-        val order = Order.example(status = OrderStatus.StockReserved)
+        val order = Order.example(status = OrderStatus.STOCKRESERVED)
         orderRepository.insert(order)
         val event = PaymentSuccessfulEvent(order.id)
 
         scenario.publish(event)
             .andWaitForStateChange(
-                { orderRepository.findById(order.id)?.status ?: OrderStatus.StockReserved },
-                { status -> status == OrderStatus.Paid },
+                { orderRepository.findById(order.id)?.status ?: OrderStatus.STOCKRESERVED },
+                { status -> status == OrderStatus.PAID },
             )
     }
 
     @Test
     @Suppress("IgnoredReturnValue")
     fun `handle PaymentFailedEvent`(scenario: Scenario) {
-        val order = Order.example(status = OrderStatus.StockReserved)
+        val order = Order.example(status = OrderStatus.STOCKRESERVED)
         orderRepository.insert(order)
         val event = PaymentFailedEvent(
             orderId = order.id,
@@ -105,15 +103,15 @@ class OrderStatusChangesServiceIntegrationTest @Autowired constructor(private va
 
         scenario.publish(event)
             .andWaitForStateChange(
-                { orderRepository.findById(order.id)?.status ?: OrderStatus.StockReserved },
-                { status -> status == OrderStatus.Cancelled },
+                { orderRepository.findById(order.id)?.status ?: OrderStatus.STOCKRESERVED },
+                { status -> status == OrderStatus.CANCELLED },
             )
     }
 
     @Test
     @Suppress("IgnoredReturnValue")
     fun `handle OrderShippedEvent`(scenario: Scenario) {
-        val order = Order.example(status = OrderStatus.Paid)
+        val order = Order.example(status = OrderStatus.PAID)
         orderRepository.insert(order)
         val event = OrderShippedEvent(
             orderId = order.id,
@@ -142,8 +140,14 @@ class OrderStatusChangesServiceIntegrationTest @Autowired constructor(private va
                 checkNotNull(updatedOrder) { "order with id ${order.id} is null" }
 
                 assertThat(updatedOrder).isNotNull
-                assertThat(updatedOrder.status).isEqualTo(OrderStatus.Shipped)
+                assertThat(updatedOrder.status).isEqualTo(OrderStatus.SHIPPED)
                 assertThat(updatedOrder.shippedTime).isBeforeOrEqualTo(instantNowTruncated())
             }
+    }*/
+
+    @Test
+    fun `dghgdh gjs`() {
+        TODO()
     }
+
 }

@@ -25,6 +25,7 @@ data class Order(
     val items: OrderLineItems,
     val discount: Percentage,
     val subTotal: Int = items.subTotal,
+    // TODO pwestlin: totalPrice -> totalAmount?
     val totalPrice: Int = (subTotal * (1.0 - discount.fraction)).toInt(),
     val shippedTime: Instant? = null,
 ) {
@@ -38,9 +39,9 @@ data class Order(
             "'totalPrice' ($totalPrice) is not equal to sub total - 'discount' (${(subTotal * (1.0 - discount.fraction)).toInt()})"
         }
 
-        if (status == OrderStatus.Shipped) {
+        if (status == OrderStatus.SHIPPED) {
             requireNotNull(shippedTime) {
-                "Shipped time (shippedTime) must be provided when status is ${OrderStatus.Shipped}"
+                "Shipped time (shippedTime) must be provided when status is ${OrderStatus.SHIPPED}"
             }
         } else {
             require(shippedTime == null) {
@@ -48,16 +49,16 @@ data class Order(
             }
         }
 
-        if (status == OrderStatus.Pending) {
+        if (status == OrderStatus.PENDING) {
             require(createdAt == updatedAt) {
-                "updatedAt must be equal to createdAt for status ${OrderStatus.Pending}"
+                "updatedAt must be equal to createdAt for status ${OrderStatus.PENDING}"
             }
         }
     }
 
     // Snygg domän-funktion för att byta status (skapar en kopia)
     fun ship(shippedTime: Instant): Order = this.copy(
-        status = OrderStatus.Shipped,
+        status = OrderStatus.SHIPPED,
         updatedAt = instantNowTruncated(),
         shippedTime = shippedTime,
     )
@@ -76,25 +77,25 @@ data class Order(
 
     fun applyInventoryAllocationSuccessful(): Order {
         check(
-            this.status == OrderStatus.Pending,
+            this.status == OrderStatus.PENDING,
         ) {
-            "Order with id $id must be in state ${OrderStatus.Pending} but was in state $status"
+            "Order with id $id must be in state ${OrderStatus.PENDING} but was in state $status"
         }
 
-        return this.copy(status = OrderStatus.StockReserved, updatedAt = instantNowTruncated())
+        return this.copy(status = OrderStatus.STOCKRESERVED, updatedAt = instantNowTruncated())
     }
 
     fun applyPaymentSuccessful(): Order {
         check(
-            this.status == OrderStatus.StockReserved,
+            this.status == OrderStatus.STOCKRESERVED,
         ) {
-            "Order with id $id must be in state ${OrderStatus.StockReserved} but was in state $status"
+            "Order with id $id must be in state ${OrderStatus.STOCKRESERVED} but was in state $status"
         }
 
-        return this.copy(status = OrderStatus.Paid, updatedAt = instantNowTruncated())
+        return this.copy(status = OrderStatus.PAID, updatedAt = instantNowTruncated())
     }
 
-    fun cancel(): Order = this.copy(status = OrderStatus.Cancelled, updatedAt = instantNowTruncated())
+    fun cancel(): Order = this.copy(status = OrderStatus.CANCELLED, updatedAt = instantNowTruncated())
 
     companion object {
         fun new(id: OrderId, customerId: CustomerId, items: OrderLineItems, discount: Percentage): Order {
@@ -104,7 +105,7 @@ data class Order(
                 createdAt = now,
                 updatedAt = now,
                 customerId = customerId,
-                status = OrderStatus.Pending,
+                status = OrderStatus.PENDING,
                 items = items,
                 discount = discount,
             )
@@ -124,11 +125,11 @@ data class OrderLineItem(
 }
 
 enum class OrderStatus {
-    Pending,
-    StockReserved,
-    Paid,
-    Shipped,
-    Cancelled,
+    PENDING,
+    STOCKRESERVED,
+    PAID,
+    SHIPPED,
+    CANCELLED,
 }
 
 @JvmInline

@@ -32,7 +32,7 @@ class OrderRepositoryTest @Autowired constructor(private val orderRepository: Or
         val order = Order.example()
         val createdOrder = orderRepository.insert(order)
 
-        val updatedOrder = createdOrder.copy(status = OrderStatus.Shipped, shippedTime = instantNowTruncated())
+        val updatedOrder = createdOrder.copy(status = OrderStatus.SHIPPED, shippedTime = instantNowTruncated())
         orderRepository.update(updatedOrder)
         val actual = orderRepository.findById(order.id)
         assertThat(actual)

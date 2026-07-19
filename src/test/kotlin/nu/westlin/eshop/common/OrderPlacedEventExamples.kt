@@ -1,6 +1,7 @@
 package nu.westlin.eshop.common
 
-import nu.westlin.eshop.common.OrderPlacedEvent.OrderPlacedItem
+import nu.westlin.eshop.order.OrderPlacedEvent
+import nu.westlin.eshop.order.OrderPlacedEvent.OrderPlacedItem
 import java.time.Instant
 import kotlin.random.Random
 

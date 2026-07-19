@@ -26,4 +26,7 @@ class ArchitectureTest {
         Documenter(modules)
             .writeDocumentation()
     }
+
+    // TODO pwestlin: Skapa regel som kontrollerar att inga klasser som ligger i det publika API:et för en modul heter *Service och/eller är annoterad med @Service.
+    //  I så fall ska de ska heta *Facade och vara annoterade med @Component.
 }

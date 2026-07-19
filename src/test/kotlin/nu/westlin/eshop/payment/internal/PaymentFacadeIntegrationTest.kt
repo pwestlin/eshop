@@ -4,10 +4,10 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.just
 import io.mockk.runs
-import nu.westlin.eshop.common.InventoryAllocationSuccessfulEvent
+import nu.westlin.eshop.inventory.InventoryAllocationSuccessfulEvent
 import nu.westlin.eshop.common.OrderId
-import nu.westlin.eshop.common.PaymentFailedEvent
-import nu.westlin.eshop.common.PaymentSuccessfulEvent
+import nu.westlin.eshop.payment.PaymentFailedEvent
+import nu.westlin.eshop.payment.PaymentSuccessfulEvent
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
 import org.junit.jupiter.api.Test
 import org.springframework.context.annotation.Import
@@ -23,7 +23,7 @@ import org.springframework.test.context.TestPropertySource
 )
 @ApplicationModuleTest
 @Import(SharedTestcontainersConfiguration::class)
-class PaymentServiceIntegrationTest {
+class PaymentFacadeIntegrationTest {
 
     @MockkBean
     private lateinit var paymentProcessorService: PaymentProcessorService

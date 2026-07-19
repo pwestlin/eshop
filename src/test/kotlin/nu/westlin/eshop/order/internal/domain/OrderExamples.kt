@@ -14,7 +14,7 @@ fun Order.Companion.example(
     createdAt: Instant = instantNowTruncated(),
     updatedAt: Instant = createdAt,
     customerId: CustomerId = CustomerId.generate(),
-    status: OrderStatus = OrderStatus.Pending,
+    status: OrderStatus = OrderStatus.PENDING,
     items: OrderLineItems = OrderLineItems.example(),
     discount: Percentage = Percentage(0.0),
     shippedTime: Instant? = null,

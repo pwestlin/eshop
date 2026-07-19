@@ -1,7 +1,6 @@
 package nu.westlin.eshop.customer.internal
 
 import nu.westlin.eshop.common.CustomerId
-import nu.westlin.eshop.common.OrderCompletedEvent
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
@@ -25,9 +24,10 @@ import org.springframework.test.context.TestPropertySource
 class CustomerLoyaltyServiceIntegrationTest @Autowired constructor(
     private val customerOrderSpringDataRepository: SpringDataCustomerOrderRepository,
 ) {
-
     @Test
     fun `should handle order shipped event`(scenario: Scenario) {
+        TODO()
+/*
         val event = OrderCompletedEvent(
             orderId = OrderId.generate(),
             customerId = CustomerId.generate(),
@@ -56,5 +56,6 @@ class CustomerLoyaltyServiceIntegrationTest @Autowired constructor(
                     .ignoringCollectionOrder()
                     .isEqualTo(listOf(expectedCustomerOrder))
             }
+*/
     }
 }

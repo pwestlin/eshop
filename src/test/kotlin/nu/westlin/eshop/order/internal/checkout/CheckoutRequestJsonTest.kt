@@ -1,6 +1,7 @@
 package nu.westlin.eshop.order.internal.checkout
 
-import nu.westlin.eshop.common.example
+import nu.westlin.eshop.orderprocess.internal.order.CheckoutRequest
+import nu.westlin.eshop.orderprocess.internal.order.example
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,7 +17,6 @@ class CheckoutRequestJsonTest(@Autowired private val jsonMapper: JsonMapper) {
         val request = CheckoutRequest.example()
 
         val json = jsonMapper.writeValueAsString(request)
-        println(json)
         assertThat(jsonMapper.readValue<CheckoutRequest>(json)).isEqualTo(request)
     }
 }

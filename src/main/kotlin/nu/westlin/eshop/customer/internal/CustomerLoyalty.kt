@@ -1,46 +1,14 @@
 package nu.westlin.eshop.customer.internal
 
 import nu.westlin.eshop.common.CustomerId
-import nu.westlin.eshop.common.OrderCompletedEvent
 import nu.westlin.eshop.common.OrderId
-import nu.westlin.eshop.common.instantNowTruncated
-import nu.westlin.eshop.common.logger
 import nu.westlin.eshop.customer.Percentage
 import org.springframework.data.annotation.Id
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate
 import org.springframework.data.relational.core.mapping.Table
 import org.springframework.data.repository.ListCrudRepository
-import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Repository
-import org.springframework.stereotype.Service
 import java.time.Instant
-
-@Service
-class CustomerLoyaltyService(private val customerOrderRepository: CustomerOrderRepository) {
-    private val logger = logger()
-
-    fun loyaltyDiscount(customerId: CustomerId): DiscountTier {
-        val orders = customerOrderRepository.findAllByCustomerIdAndInstantGreaterThanEqual(
-            customerId,
-            instantNowTruncated(),
-        )
-        val ordersTotalSum = orders.sumOf { it.totalPrice }
-        return DiscountTier.fromTotalSum(ordersTotalSum)
-    }
-
-    @ApplicationModuleListener
-    fun handleOrderShippedEvent(event: OrderCompletedEvent) {
-        logger.info("event: $event")
-        customerOrderRepository.insert(event.toCustomerOrder())
-    }
-}
-
-fun OrderCompletedEvent.toCustomerOrder(): CustomerOrder = CustomerOrder(
-    customerId = customerId,
-    orderId = orderId,
-    totalPrice = totalPrice,
-    instant = occurredAt,
-)
 
 @Repository
 interface SpringDataCustomerOrderRepository : ListCrudRepository<CustomerOrder, Int> {
@@ -77,14 +45,14 @@ data class CustomerOrder(
 
 @Suppress("MagicNumber")
 enum class DiscountTier(val threshold: Int, val rate: Percentage) {
-    None(0, Percentage(0.0)),
-    Bronze(10_000, Percentage(0.05)),
-    Silver(25_000, Percentage(0.10)),
-    Gold(100_000, Percentage(0.20)),
+    NONE(0, Percentage(0.0)),
+    BRONZE(10_000, Percentage(0.05)),
+    SILVER(25_000, Percentage(0.10)),
+    GOLD(100_000, Percentage(0.20)),
     ;
 
     companion object {
         fun fromTotalSum(totalSum: Int): DiscountTier =
-            entries.sortedByDescending { it.threshold }.firstOrNull { totalSum >= it.threshold } ?: None
+            entries.sortedByDescending { it.threshold }.firstOrNull { totalSum >= it.threshold } ?: NONE
     }
 }

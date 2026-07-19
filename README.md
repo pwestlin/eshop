@@ -1,16 +1,15 @@
 # E-shop
 
-Backend for an E-shop implemented
-in [Kotlin](https://kotlinlang.org/), [Spring Boot](https://spring.io/projects/spring-boot), [Spring Data JDBC](https://spring.io/projects/spring-data-jdbc), [Spring Modulith](https://spring.io/projects/spring-modulith), [Spring Security](https://spring.io/projects/spring-security)
+TODO pwestlin: Doka enligt nytt flöde (orderprocess)
+
+Backend for an E-shop implemented in [Kotlin](https://kotlinlang.org/), [Spring Boot](https://spring.io/projects/spring-boot), [Spring Data JDBC](https://spring.io/projects/spring-data-jdbc), [Spring Modulith](https://spring.io/projects/spring-modulith), [Spring Security](https://spring.io/projects/spring-security)
 and [Postgres](https://www.postgresql.org/).
 
-For testing it
-uses [Spring Modulith test](https://docs.spring.io/spring-modulith/reference/testing.html), [JUnit](https://junit.org/), [AssertJ](https://assertj.github.io/doc/)
-and [Testcontainers](https://testcontainers.com/).
+For testing it uses [Spring Modulith test](https://docs.spring.io/spring-modulith/reference/testing.html), [JUnit](https://junit.org/), [AssertJ](https://assertj.github.io/doc/) and [Testcontainers](https://testcontainers.com/).
 
 ## Architecture
-Modular Monolith, Event-Driven Architecture (EDA), and, two some extent, package by feature.  
-Yes, I did cut corners here and there beacuse this is not a production-ready system. 😀
+Modular Monolith, Event-Driven Architecture (EDA) and, to some extent, package-by-feature.  
+Yes, I did cut some corners here and there beacuse this is not a production-ready system. 😀
 
 ## Features
 

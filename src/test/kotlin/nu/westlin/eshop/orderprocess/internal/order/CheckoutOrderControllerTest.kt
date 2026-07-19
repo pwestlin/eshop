@@ -1,12 +1,9 @@
-package nu.westlin.eshop.order.internal.checkout
+package nu.westlin.eshop.orderprocess.internal.order
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.OrderId
-import nu.westlin.eshop.common.example
-import nu.westlin.eshop.order.internal.domain.Order
-import nu.westlin.eshop.order.internal.domain.example
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,45 +13,26 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.client.RestTestClient
 import org.springframework.test.web.servlet.client.expectBody
-import java.util.*
 
-@WebMvcTest(CheckoutController::class)
+@WebMvcTest(CheckoutOrderController::class)
 @AutoConfigureRestTestClient
 @AutoConfigureMockMvc(addFilters = false)
-class CheckoutControllerTest(@Autowired private val client: RestTestClient) {
+class CheckoutOrderControllerTest(@Autowired private val client: RestTestClient) {
 
     @MockkBean
-    private lateinit var checkoutService: CheckoutService
-
-    @Test
-    fun `create order id`() {
-        client
-            .get()
-            .uri("/orders/id/create")
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-            .expectStatus().isOk
-            .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .expectBody<UUID>()
-            .value { uuid ->
-                // Här är 'uuid' automatiskt en icke-nullable UUID (smart castad av AssertJ-blocket)
-                assertThat(uuid).isNotNull()
-            }
-    }
+    private lateinit var checkoutOrderService: CheckoutOrderService
 
     @Test
     fun `checkout order - all is good`() {
         val request = CheckoutRequest.example()
 
-        val createdOrder = Order.example()
-
         every {
-            checkoutService.processCheckout(
+            checkoutOrderService.processCheckout(
                 orderId = OrderId(request.orderId),
                 customerId = CustomerId(request.customerId),
-                items = request.toDomainItems(),
+                items = request.items,
             )
-        } returns ProcessCheckoutResult.Ok(createdOrder)
+        } returns CheckoutResult.Success
 
         client
             .post()
@@ -65,10 +43,10 @@ class CheckoutControllerTest(@Autowired private val client: RestTestClient) {
             .exchange()
             .expectStatus().isCreated
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .expectHeader().location("http://localhost/orders/${createdOrder.id.value}")
+            .expectHeader().location("http://localhost/orders/${request.orderId}")
             .expectBody<CheckoutResponse>()
             .value { response ->
-                assertThat(response).isEqualTo(CheckoutResponse(createdOrder.id.value))
+                assertThat(response).isEqualTo(CheckoutResponse(request.orderId))
             }
     }
 }

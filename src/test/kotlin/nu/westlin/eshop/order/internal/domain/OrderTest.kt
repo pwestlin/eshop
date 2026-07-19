@@ -54,33 +54,33 @@ class OrderTest {
             assertThat(this.id).isEqualTo(orderId)
             assertThat(this.customerId).isEqualTo(customerId)
             assertThat(this.items).isEqualTo(orderLineItems)
-            assertThat(this.status).isEqualTo(OrderStatus.Pending)
+            assertThat(this.status).isEqualTo(OrderStatus.PENDING)
         }
     }
 
     @Test
     fun `ship changes status to Shipped`() {
-        val order = Order.example(status = OrderStatus.Pending)
+        val order = Order.example(status = OrderStatus.PENDING)
         val shippedTime = instantNowTruncated()
         assertThat(order.ship(shippedTime))
             .usingRecursiveComparison()
             .ignoringFields("updatedAt")
-            .isEqualTo(order.copy(status = OrderStatus.Shipped, shippedTime = shippedTime))
+            .isEqualTo(order.copy(status = OrderStatus.SHIPPED, shippedTime = shippedTime))
     }
 
     @Test
     fun `applyInventoryAllocationSuccessful changes status to StockReserved`() {
-        val order = Order.example(status = OrderStatus.Pending)
+        val order = Order.example(status = OrderStatus.PENDING)
         assertThat(order.applyInventoryAllocationSuccessful())
             .usingRecursiveComparison()
             .ignoringFields("updatedAt")
-            .isEqualTo(order.copy(status = OrderStatus.StockReserved))
+            .isEqualTo(order.copy(status = OrderStatus.STOCKRESERVED))
     }
 
     @Test
     fun `applyInventoryAllocationSuccessful throws IllegalStateException when order has the wrong status`() {
-        OrderStatus.entries.filter { it != OrderStatus.Pending }.forEach { orderStatus ->
-            val shippedTime = if (orderStatus == OrderStatus.Shipped) {
+        OrderStatus.entries.filter { it != OrderStatus.PENDING }.forEach { orderStatus ->
+            val shippedTime = if (orderStatus == OrderStatus.SHIPPED) {
                 instantNowTruncated()
             } else {
                 null
@@ -89,24 +89,24 @@ class OrderTest {
             assertThatThrownBy { order.applyInventoryAllocationSuccessful() }
                 .isExactlyInstanceOf<IllegalStateException>()
                 .hasMessage(
-                    "Order with id ${order.id} must be in state ${OrderStatus.Pending} but was in state $orderStatus",
+                    "Order with id ${order.id} must be in state ${OrderStatus.PENDING} but was in state $orderStatus",
                 )
         }
     }
 
     @Test
     fun `applyPaymentSuccessful changes status to StockReserved`() {
-        val order = Order.example(status = OrderStatus.StockReserved)
+        val order = Order.example(status = OrderStatus.STOCKRESERVED)
         assertThat(order.applyPaymentSuccessful())
             .usingRecursiveComparison()
             .ignoringFields("updatedAt")
-            .isEqualTo(order.copy(status = OrderStatus.Paid))
+            .isEqualTo(order.copy(status = OrderStatus.PAID))
     }
 
     @Test
     fun `applyPaymentSuccessful throws IllegalStateException when order has the wrong status`() {
-        OrderStatus.entries.filter { it != OrderStatus.StockReserved }.forEach { orderStatus ->
-            val shippedTime = if (orderStatus == OrderStatus.Shipped) {
+        OrderStatus.entries.filter { it != OrderStatus.STOCKRESERVED }.forEach { orderStatus ->
+            val shippedTime = if (orderStatus == OrderStatus.SHIPPED) {
                 instantNowTruncated()
             } else {
                 null
@@ -115,18 +115,18 @@ class OrderTest {
             assertThatThrownBy { order.applyPaymentSuccessful() }
                 .isExactlyInstanceOf<IllegalStateException>()
                 .hasMessage(
-                    "Order with id ${order.id} must be in state ${OrderStatus.StockReserved} but was in state $orderStatus",
+                    "Order with id ${order.id} must be in state ${OrderStatus.STOCKRESERVED} but was in state $orderStatus",
                 )
         }
     }
 
     @Test
     fun `cancel changes status to Cancelled`() {
-        val order = Order.example(status = OrderStatus.Pending)
+        val order = Order.example(status = OrderStatus.PENDING)
         assertThat(order.cancel())
             .usingRecursiveComparison()
             .ignoringFields("updatedAt")
-            .isEqualTo(order.copy(status = OrderStatus.Cancelled))
+            .isEqualTo(order.copy(status = OrderStatus.CANCELLED))
     }
 
     @Test
@@ -145,7 +145,7 @@ class OrderTest {
 
     @Test
     fun `shippedTime must be provided when status is Shipped`() {
-        assertThatThrownBy { Order.example(status = OrderStatus.Shipped) }
+        assertThatThrownBy { Order.example(status = OrderStatus.SHIPPED) }
             .isExactlyInstanceOf<IllegalArgumentException>()
             .hasMessage("Shipped time (shippedTime) must be provided when status is Shipped")
     }
