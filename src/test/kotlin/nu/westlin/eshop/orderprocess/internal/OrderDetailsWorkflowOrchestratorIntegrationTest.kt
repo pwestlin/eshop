@@ -14,6 +14,7 @@ import nu.westlin.eshop.common.ProductId
 import nu.westlin.eshop.common.example
 import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.customer.CustomerFacade
+import nu.westlin.eshop.customer.internal.CustomerOrder
 import nu.westlin.eshop.inventory.InventoryAllocationFailedEvent
 import nu.westlin.eshop.inventory.InventoryAllocationFailedEvent.TooFewProducts
 import nu.westlin.eshop.inventory.InventoryAllocationSuccessfulEvent
@@ -25,17 +26,14 @@ import nu.westlin.eshop.order.PaymentDetails
 import nu.westlin.eshop.payment.PaymentFacade
 import nu.westlin.eshop.payment.PaymentFailedEvent
 import nu.westlin.eshop.payment.PaymentSuccessfulEvent
-import nu.westlin.eshop.test.SharedTestcontainersConfiguration
+import nu.westlin.eshop.test.ModulithIntegrationTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.context.annotation.Import
-import org.springframework.modulith.test.ApplicationModuleTest
 import org.springframework.modulith.test.Scenario
 
 @Suppress("IgnoredReturnValue")
-@ApplicationModuleTest
-@Import(SharedTestcontainersConfiguration::class)
-class OrderDetailsWorkflowOrchestratorTest {
+@ModulithIntegrationTest
+class OrderDetailsWorkflowOrchestratorIntegrationTest {
 
     @MockkBean
     private lateinit var inventoryFacade: InventoryFacade
@@ -153,6 +151,12 @@ class OrderDetailsWorkflowOrchestratorTest {
         val paymentDetails = PaymentDetails(CustomerId.generate(), 47)
         every { orderFacade.getPaymentDetails(event.orderId) } returns paymentDetails
 
+        val expectedCustomerOrder = CustomerOrder.new(
+            customerId = paymentDetails.customerId,
+            orderId = orderId,
+            totalPrice = paymentDetails.totalAmount,
+            instant = event.shippedTime,
+        )
         var stored = false
         every {
             customerFacade.storeCustomerOrderHistory(
@@ -163,6 +167,7 @@ class OrderDetailsWorkflowOrchestratorTest {
             )
         } answers {
             stored = true
+            expectedCustomerOrder
         }
         scenario.publish(event)
             .andWaitForStateChange {

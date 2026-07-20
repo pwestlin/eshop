@@ -5,6 +5,7 @@ import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.instantNowTruncated
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.Duration
 import java.time.Instant
 
 // TODO pwestlin: Allt i denna behöver inte vara pubikt för MODULEN (ex loyaltyDiscount).
@@ -14,7 +15,8 @@ class CustomerLoyaltyService(private val customerOrderRepository: CustomerOrderR
     fun loyaltyDiscount(customerId: CustomerId): DiscountTier {
         val orders = customerOrderRepository.findAllByCustomerIdAndInstantGreaterThanEqual(
             customerId,
-            instantNowTruncated(),
+            // TODO pwestlin: Read Duration from application.yml
+            instantNowTruncated().minus(Duration.ofDays(365)),
         )
         val ordersTotalSum = orders.sumOf { it.totalPrice }
         return DiscountTier.fromTotalSum(ordersTotalSum)

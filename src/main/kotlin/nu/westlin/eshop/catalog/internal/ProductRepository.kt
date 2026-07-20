@@ -18,6 +18,4 @@ class ProductRepository(
     }
 
     fun exists(id: ProductId): Boolean = springDataRepository.existsById(id)
-
-    fun findAll(): List<Product> = springDataRepository.findAll()
 }

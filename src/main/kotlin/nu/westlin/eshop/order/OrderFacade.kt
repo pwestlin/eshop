@@ -2,8 +2,8 @@ package nu.westlin.eshop.order
 
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.OrderId
+import nu.westlin.eshop.common.Percentage
 import nu.westlin.eshop.common.ProductId
-import nu.westlin.eshop.customer.Percentage
 import nu.westlin.eshop.order.internal.checkout.OrderRepository
 import nu.westlin.eshop.order.internal.domain.Order
 import nu.westlin.eshop.order.internal.domain.OrderLineItem

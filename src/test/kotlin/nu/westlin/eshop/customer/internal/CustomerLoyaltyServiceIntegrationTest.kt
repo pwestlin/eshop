@@ -23,35 +23,35 @@ class CustomerLoyaltyServiceIntegrationTest @Autowired constructor(
     @Test
     fun `should handle order shipped event`(scenario: Scenario) {
         TODO()
-/*
-        val event = OrderCompletedEvent(
-            orderId = OrderId.generate(),
-            customerId = CustomerId.generate(),
-            totalPrice = 42,
-            occurredAt = instantNowTruncated(),
-        )
-
-        val expectedCustomerOrder = CustomerOrder(
-            customerId = event.customerId,
-            orderId = event.orderId,
-            totalPrice = event.totalPrice,
-            instant = event.occurredAt,
-        )
-
-        scenario.publish(event)
-            .andWaitForStateChange {
-                customerOrderSpringDataRepository.findAllByCustomerIdAndInstantGreaterThanEqual(
-                    event.customerId,
-                    instantNowTruncated().minusSeconds(60),
+        /*
+                val event = OrderCompletedEvent(
+                    orderId = OrderId.generate(),
+                    customerId = CustomerId.generate(),
+                    totalPrice = 42,
+                    occurredAt = instantNowTruncated(),
                 )
-            }
-            .andVerify { customerOrders ->
-                assertThat(customerOrders)
-                    .usingRecursiveComparison()
-                    .ignoringFields("id")
-                    .ignoringCollectionOrder()
-                    .isEqualTo(listOf(expectedCustomerOrder))
-            }
-*/
+
+                val expectedCustomerOrder = CustomerOrder(
+                    customerId = event.customerId,
+                    orderId = event.orderId,
+                    totalPrice = event.totalPrice,
+                    instant = event.occurredAt,
+                )
+
+                scenario.publish(event)
+                    .andWaitForStateChange {
+                        customerOrderSpringDataRepository.findAllByCustomerIdAndInstantGreaterThanEqual(
+                            event.customerId,
+                            instantNowTruncated().minusSeconds(60),
+                        )
+                    }
+                    .andVerify { customerOrders ->
+                        assertThat(customerOrders)
+                            .usingRecursiveComparison()
+                            .ignoringFields("id")
+                            .ignoringCollectionOrder()
+                            .isEqualTo(listOf(expectedCustomerOrder))
+                    }
+        */
     }
 }

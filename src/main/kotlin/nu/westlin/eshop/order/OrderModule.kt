@@ -1,7 +1,6 @@
 package nu.westlin.eshop.order
 
-import nu.westlin.eshop.Modules
 import org.springframework.modulith.ApplicationModule
 
-@ApplicationModule(allowedDependencies = [Modules.COMMON, Modules.CUSTOMER, Modules.CATALOG])
+@ApplicationModule(allowedDependencies = [])
 object OrderModule

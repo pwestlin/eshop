@@ -2,7 +2,7 @@ package nu.westlin.eshop.customer.internal
 
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.OrderId
-import nu.westlin.eshop.customer.Percentage
+import nu.westlin.eshop.common.Percentage
 import org.springframework.data.annotation.Id
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate
 import org.springframework.data.relational.core.mapping.Table
@@ -40,7 +40,19 @@ data class CustomerOrder(
     val totalPrice: Int,
     val instant: Instant,
 ) {
-    companion object
+    companion object {
+        fun new(
+            customerId: CustomerId,
+            orderId: OrderId,
+            totalPrice: Int,
+            instant: Instant,
+        ): CustomerOrder = CustomerOrder(
+            customerId = customerId,
+            orderId = orderId,
+            totalPrice = totalPrice,
+            instant = instant
+        )
+    }
 }
 
 @Suppress("MagicNumber")

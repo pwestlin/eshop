@@ -2,9 +2,9 @@ package nu.westlin.eshop.order.internal.domain
 
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.OrderId
+import nu.westlin.eshop.common.Percentage
 import nu.westlin.eshop.common.ProductId
 import nu.westlin.eshop.common.instantNowTruncated
-import nu.westlin.eshop.customer.Percentage
 import java.time.Instant
 import kotlin.random.Random
 

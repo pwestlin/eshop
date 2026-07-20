@@ -104,7 +104,7 @@ class ArchitectureTest {
 
                     if (!isAllowed) {
                         val message = "The class ${javaClass.name} is located in the package '$pkg'. " +
-                            "The only allowed subpackage directly under the module root ($base) is 'internal'."
+                                "The only allowed subpackage directly under the module root ($base) is 'internal'."
                         events.add(SimpleConditionEvent.violated(javaClass, message))
                     }
                 }

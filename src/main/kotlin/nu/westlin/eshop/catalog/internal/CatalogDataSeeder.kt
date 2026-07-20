@@ -24,7 +24,7 @@ class CatalogDataSeeder(private val entityTemplate: JdbcAggregateTemplate) : Com
                 description = "A really nice muffler!",
                 price = 5,
 
-            ),
+                ),
         )
 
         entityTemplate.insert(
@@ -34,7 +34,7 @@ class CatalogDataSeeder(private val entityTemplate: JdbcAggregateTemplate) : Com
                 description = "A really nice brake caliper!",
                 price = 42,
 
-            ),
+                ),
         )
 
         entityTemplate.insert(
