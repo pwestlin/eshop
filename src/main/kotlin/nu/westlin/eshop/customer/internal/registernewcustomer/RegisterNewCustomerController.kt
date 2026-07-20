@@ -39,7 +39,7 @@ class RegisterNewCustomerController(
             }
         }
 
-    // TODO pwestlin: Borde nog ligga i en annan klass
+    // TODO pwestlin: Borde nog ligga i en annan klass. Behövs den ens?
     @GetMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getCustomer(@PathVariable id: CustomerId): ResponseEntity<GetCustomerResponse> {
         val customer = customerRepository.findByIdOrNull(id)
