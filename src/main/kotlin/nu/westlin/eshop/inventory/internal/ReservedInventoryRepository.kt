@@ -27,6 +27,7 @@ class ReservedInventoryItemRepository(
     fun findByProductId(productId: ProductId): List<ReservedInventoryItem> = springDataRepository.findByIdProductId(
         productId,
     )
+
     fun delete(reservedItem: ReservedInventoryItem) {
         springDataRepository.delete(reservedItem)
     }

@@ -32,6 +32,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.modulith.test.ApplicationModuleTest
 import org.springframework.modulith.test.Scenario
 
+@Suppress("IgnoredReturnValue")
 @ApplicationModuleTest
 @Import(SharedTestcontainersConfiguration::class)
 class OrderDetailsWorkflowOrchestratorTest {
@@ -86,7 +87,7 @@ class OrderDetailsWorkflowOrchestratorTest {
 
         val paymentDetails = PaymentDetails(
             customerId = CustomerId.generate(),
-            totalAmount = 42
+            totalAmount = 42,
         )
         every { orderFacade.getPaymentDetails(event.orderId) } returns paymentDetails
 
@@ -95,7 +96,7 @@ class OrderDetailsWorkflowOrchestratorTest {
             paymentFacade.processPayment(
                 event.orderId,
                 paymentDetails.customerId,
-                paymentDetails.totalAmount
+                paymentDetails.totalAmount,
             )
         } answers {
             paymentProcessed = true
@@ -123,7 +124,6 @@ class OrderDetailsWorkflowOrchestratorTest {
         every { orderFacade.markOrderAsPaid(event.orderId) } just runs
         every { inventoryFacade.completeReservation(event.orderId) } just runs
 
-
         var releasedForShipping = false
         every { inventoryFacade.releaseForShipping(event.orderId) } answers {
             releasedForShipping = true
@@ -150,7 +150,6 @@ class OrderDetailsWorkflowOrchestratorTest {
 
         every { orderFacade.completeOrder(event.orderId, event.shippedTime) } just runs
 
-
         val paymentDetails = PaymentDetails(CustomerId.generate(), 47)
         every { orderFacade.getPaymentDetails(event.orderId) } returns paymentDetails
 
@@ -160,7 +159,7 @@ class OrderDetailsWorkflowOrchestratorTest {
                 customerId = paymentDetails.customerId,
                 orderId = event.orderId,
                 totalPrice = paymentDetails.totalAmount,
-                instant = event.shippedTime
+                instant = event.shippedTime,
             )
         } answers {
             stored = true
@@ -177,7 +176,7 @@ class OrderDetailsWorkflowOrchestratorTest {
                 customerId = paymentDetails.customerId,
                 orderId = event.orderId,
                 totalPrice = paymentDetails.totalAmount,
-                instant = event.shippedTime
+                instant = event.shippedTime,
             )
         }
 
@@ -187,13 +186,16 @@ class OrderDetailsWorkflowOrchestratorTest {
     @Test
     fun `on InventoryAllocationFailedEvent`(scenario: Scenario) {
         val orderId = OrderId.generate()
-        val event = InventoryAllocationFailedEvent(orderId, setOf(
-            TooFewProducts(
-                productId = ProductId.generate(),
-                orderQuantity = 42,
-                inventoryQuantity = 6
-            )
-        ))
+        val event = InventoryAllocationFailedEvent(
+            orderId,
+            setOf(
+                TooFewProducts(
+                    productId = ProductId.generate(),
+                    orderQuantity = 42,
+                    inventoryQuantity = 6,
+                ),
+            ),
+        )
 
         every { inventoryFacade.cancelReservation(event.orderId) } just runs
 

@@ -11,4 +11,5 @@ object Modules {
     const val PAYMENT = "payment"
     const val CONFIG = "config"
     const val SECURITY = "security"
+    const val ORDER_PROCESSOR = "orderprocessor"
 }

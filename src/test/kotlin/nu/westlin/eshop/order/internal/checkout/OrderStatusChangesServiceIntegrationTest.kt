@@ -1,24 +1,10 @@
 package nu.westlin.eshop.order.internal.checkout
 
-import com.ninjasquad.springmockk.MockkBean
-import nu.westlin.eshop.catalog.CatalogFacade
-import nu.westlin.eshop.inventory.InventoryAllocationFailedEvent
-import nu.westlin.eshop.inventory.InventoryAllocationSuccessfulEvent
-import nu.westlin.eshop.inventory.OrderShippedEvent
-import nu.westlin.eshop.payment.PaymentFailedEvent
-import nu.westlin.eshop.payment.PaymentSuccessfulEvent
-import nu.westlin.eshop.common.ProductId
-import nu.westlin.eshop.common.instantNowTruncated
-import nu.westlin.eshop.order.internal.domain.Order
-import nu.westlin.eshop.order.internal.domain.OrderStatus
-import nu.westlin.eshop.order.internal.domain.example
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Import
 import org.springframework.modulith.test.ApplicationModuleTest
-import org.springframework.modulith.test.Scenario
 import org.springframework.test.context.TestPropertySource
 
 // When you run the test with Gradle you get 30 sec timeout after completed test suite and the below is to fix that...
@@ -149,5 +135,4 @@ class OrderStatusChangesServiceIntegrationTest @Autowired constructor(private va
     fun `dghgdh gjs`() {
         TODO()
     }
-
 }

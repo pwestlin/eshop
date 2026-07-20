@@ -1,11 +1,8 @@
-package nu.westlin.eshop.inventory
+package nu.westlin.eshop.inventory.internal
 
 import nu.westlin.eshop.common.OrderId
-import nu.westlin.eshop.inventory.internal.InventoryItemRepository
-import nu.westlin.eshop.inventory.internal.ReservedInventoryItem
-import nu.westlin.eshop.inventory.internal.ReservedInventoryItemId
-import nu.westlin.eshop.inventory.internal.ReservedInventoryItemRepository
-import nu.westlin.eshop.order.OrderPlacedEvent
+import nu.westlin.eshop.inventory.ProductsReservation
+import nu.westlin.eshop.inventory.TooFewProducts
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

@@ -11,7 +11,7 @@ class CatalogFacade(private val productRepository: ProductRepository) {
 
     fun allProductsExist(productIds: List<ProductId>): AllProductsExistResponse {
         val notExistingProductIds: List<ProductId> = productIds.filterNot { productRepository.exists(it) }
-        return if(notExistingProductIds.isEmpty()) {
+        return if (notExistingProductIds.isEmpty()) {
             AllProductsExistResponse.AllExist
         } else {
             AllProductsExistResponse.MissingProducts(notExistingProductIds)

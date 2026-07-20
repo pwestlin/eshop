@@ -10,14 +10,11 @@ import nu.westlin.eshop.order.internal.domain.OrderLineItem
 import nu.westlin.eshop.order.internal.domain.OrderLineItems
 import nu.westlin.eshop.order.internal.domain.OrderStatus
 import org.springframework.stereotype.Component
-import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 
 @Component
-class OrderFacade(
-    private val orderRepository: OrderRepository,
-) {
+class OrderFacade(private val orderRepository: OrderRepository) {
     fun isOrderIdUnique(orderId: OrderId): Boolean = !orderRepository.exists(orderId)
 
     @Transactional
@@ -25,14 +22,16 @@ class OrderFacade(
         val order = Order.new(
             id = command.orderId,
             customerId = command.customerId,
-            items = OrderLineItems(command.items.map { item ->
-                OrderLineItem(
-                    productId = item.productId,
-                    quantity = item.quantity,
-                    price = item.price
-                )
-            }.toSet()),
-            discount = Percentage(command.discount.value / 100.0)
+            items = OrderLineItems(
+                command.items.map { item ->
+                    OrderLineItem(
+                        productId = item.productId,
+                        quantity = item.quantity,
+                        price = item.price,
+                    )
+                }.toSet(),
+            ),
+            discount = Percentage(command.discount.value / 100.0),
         )
         orderRepository.insert(order)
     }
@@ -47,7 +46,7 @@ class OrderFacade(
         val order = getOrder(orderId)
         return PaymentDetails(
             customerId = order.customerId,
-            totalAmount = order.totalPrice
+            totalAmount = order.totalPrice,
         )
     }
 
@@ -79,14 +78,13 @@ class OrderFacade(
         checkNotNull(order) { "Order with id $orderId does not exist" }
         return order
     }
-
 }
 
 data class OrderCreationCommand(
     val orderId: OrderId,
     val customerId: CustomerId,
     val items: Set<Item>,
-    val discount: OrderDiscountInput
+    val discount: OrderDiscountInput,
 ) {
 
     // TODO pwestlin: Typa price till Money med kontroll value > 0.

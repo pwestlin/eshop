@@ -63,7 +63,7 @@ class OrderDetailsWorkflowOrchestrator(
             customerId = details.customerId,
             orderId = event.orderId,
             totalPrice = details.totalAmount,
-            instant = event.shippedTime
+            instant = event.shippedTime,
         )
     }
 
@@ -89,7 +89,7 @@ fun OrderPlacedEvent.toProductsReservation(): ProductsReservation = ProductsRese
     items = items.map { item ->
         ProductsReservation.Item(
             productId = item.productId,
-            quantity = item.quantity
+            quantity = item.quantity,
         )
-    }.toSet()
+    }.toSet(),
 )

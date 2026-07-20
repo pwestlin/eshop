@@ -1,21 +1,10 @@
 package nu.westlin.eshop.inventory.internal
 
-import nu.westlin.eshop.inventory.InventoryAllocationFailedEvent
-import nu.westlin.eshop.inventory.InventoryAllocationSuccessfulEvent
-import nu.westlin.eshop.common.OrderId
-import nu.westlin.eshop.order.OrderPlacedEvent
-import nu.westlin.eshop.order.OrderPlacedEvent.OrderPlacedItem
-import nu.westlin.eshop.inventory.OrderShippedEvent
-import nu.westlin.eshop.payment.PaymentSuccessfulEvent
-import nu.westlin.eshop.common.ProductId
-import nu.westlin.eshop.orderprocess.internal.order.example
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Import
 import org.springframework.modulith.test.ApplicationModuleTest
-import org.springframework.modulith.test.Scenario
 import org.springframework.test.context.TestPropertySource
 
 @TestPropertySource(
@@ -56,7 +45,8 @@ class InventoryServiceIntegrationTest @Autowired private constructor(
     fun `handle OrderPlacedEvent - product not found`(@Suppress("UnusedParameter", "unused") scenario: Scenario) {
         // TODO pwestlin: Jag vet inte hur jag ska lösa detta fall än.
         assertThat(true).isTrue
-        *//*
+ */
+/*
                 val orderPlacedEvent = OrderPlacedEvent(
                     orderId = OrderId.generate(),
                     customerId = CustomerId.generate(),
@@ -83,7 +73,8 @@ class InventoryServiceIntegrationTest @Autowired private constructor(
                                 val hasFooEvent = outstanding.any { it.event is FooEvent }
                                 assertThat(hasFooEvent).isTrue()
                             }
-         *//*
+ */
+/*
     }
 
     // TODO pwestlin: testa med reserverade

@@ -20,14 +20,13 @@ class CheckoutOrderService(
     private val catalogFacade: CatalogFacade,
 ) {
 
-    // TODO pwestlin: Kolla att alla funktioner som ska ha det har @Transactional
     @Transactional
     @Suppress("ReturnCount")
     fun processCheckout(
         orderId: OrderId,
         customerId: CustomerId,
         // TODO pwestlin: Lite fult att använda CheckoutRequest.Item men jag orkar inte skapa en ny typ just nu
-        items: Set<CheckoutRequest.Item>
+        items: Set<CheckoutRequest.Item>,
     ): CheckoutResult {
         if (!orderFacade.isOrderIdUnique(orderId)) {
             return CheckoutResult.OrderAlreadyExist(orderId)
@@ -40,7 +39,10 @@ class CheckoutOrderService(
         catalogFacade.allProductsExist(items.map { ProductId(it.productId) }).let { response ->
             when (response) {
                 AllProductsExistResponse.AllExist -> Unit
-                is AllProductsExistResponse.MissingProducts -> return CheckoutResult.ProductsDoesNotExist(response.productIds)
+
+                is AllProductsExistResponse.MissingProducts -> return CheckoutResult.ProductsDoesNotExist(
+                    response.productIds,
+                )
             }
         }
 
@@ -52,8 +54,8 @@ class CheckoutOrderService(
             discount = OrderDiscountInput(
                 code = customerDiscount.tier,
                 type = OrderDiscountInput.DiscountType.PERCENTAGE,
-                value = (customerDiscount.rate.fraction * 100).toInt()
-            )
+                value = (customerDiscount.rate.fraction * 100).toInt(),
+            ),
         )
         orderFacade.createOrder(orderCreationCommand)
 
@@ -61,15 +63,13 @@ class CheckoutOrderService(
     }
 }
 
-private fun Set<CheckoutRequest.Item>.toOrderCreationCommandItems(): Set<OrderCreationCommand.Item> {
-    return this.map { item ->
-        OrderCreationCommand.Item(
-            productId = ProductId(item.productId),
-            quantity = item.quantity,
-            price = item.price
-        )
-    }.toSet()
-}
+private fun Set<CheckoutRequest.Item>.toOrderCreationCommandItems(): Set<OrderCreationCommand.Item> = this.map { item ->
+    OrderCreationCommand.Item(
+        productId = ProductId(item.productId),
+        quantity = item.quantity,
+        price = item.price,
+    )
+}.toSet()
 
 sealed interface CheckoutResult {
 

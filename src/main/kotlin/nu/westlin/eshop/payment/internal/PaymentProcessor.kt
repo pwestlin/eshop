@@ -2,11 +2,10 @@ package nu.westlin.eshop.payment.internal
 
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.logger
-import org.springframework.stereotype.Service
-import java.time.Duration
+import org.springframework.stereotype.Component
 
-@Service
-class PaymentProcessorService {
+@Component
+class PaymentProcessor {
     private val logger = logger()
 
     @Suppress("unused")

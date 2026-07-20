@@ -1,10 +1,6 @@
 package nu.westlin.eshop.customer.internal
 
-import nu.westlin.eshop.common.CustomerId
-import nu.westlin.eshop.common.OrderId
-import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Import

@@ -3,12 +3,10 @@ package nu.westlin.eshop.inventory
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.ProductId
 import nu.westlin.eshop.common.instantNowTruncated
-import nu.westlin.eshop.order.OrderPlacedEvent.OrderPlacedItem
+import nu.westlin.eshop.inventory.internal.ReserveProductsService
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
-import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import kotlin.Int
 
 @Component
 class InventoryFacade(
@@ -57,10 +55,7 @@ class InventoryFacade(
     }
 }
 
-data class ProductsReservation(
-    val orderId: OrderId,
-    val items: Set<Item>
-) {
+data class ProductsReservation(val orderId: OrderId, val items: Set<Item>) {
 
     data class Item(val productId: ProductId, val quantity: Int) {
         companion object

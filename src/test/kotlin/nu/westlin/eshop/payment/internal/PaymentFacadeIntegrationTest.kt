@@ -4,8 +4,8 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.just
 import io.mockk.runs
-import nu.westlin.eshop.inventory.InventoryAllocationSuccessfulEvent
 import nu.westlin.eshop.common.OrderId
+import nu.westlin.eshop.inventory.InventoryAllocationSuccessfulEvent
 import nu.westlin.eshop.payment.PaymentFailedEvent
 import nu.westlin.eshop.payment.PaymentSuccessfulEvent
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
@@ -26,12 +26,12 @@ import org.springframework.test.context.TestPropertySource
 class PaymentFacadeIntegrationTest {
 
     @MockkBean
-    private lateinit var paymentProcessorService: PaymentProcessorService
+    private lateinit var paymentProcessor: PaymentProcessor
 
     @Test
     fun `handle InventoryAllocationSuccessfulEvent - ok`(scenario: Scenario) {
         val orderId = OrderId.generate()
-        every { paymentProcessorService.processPayment(orderId) } just runs
+        every { paymentProcessor.processPayment(orderId) } just runs
 
         val orderInventoryAllocationSuccessfulEvent = InventoryAllocationSuccessfulEvent(orderId)
         val paymentSuccessfulEvent = PaymentSuccessfulEvent(orderId)
@@ -48,7 +48,7 @@ class PaymentFacadeIntegrationTest {
     fun `handle InventoryAllocationSuccessfulEvent - process fails`(scenario: Scenario) {
         val orderId = OrderId.generate()
         val exception = RuntimeException("Not enough funds")
-        every { paymentProcessorService.processPayment(orderId) } throws exception
+        every { paymentProcessor.processPayment(orderId) } throws exception
 
         val orderInventoryAllocationSuccessfulEvent = InventoryAllocationSuccessfulEvent(orderId)
         val paymentFailedEvent = PaymentFailedEvent(orderId, exception.message!!)

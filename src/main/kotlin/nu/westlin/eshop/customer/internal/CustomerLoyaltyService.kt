@@ -3,7 +3,6 @@ package nu.westlin.eshop.customer.internal
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.instantNowTruncated
-import nu.westlin.eshop.common.logger
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
@@ -11,7 +10,6 @@ import java.time.Instant
 // TODO pwestlin: Allt i denna behöver inte vara pubikt för MODULEN (ex loyaltyDiscount).
 @Service
 class CustomerLoyaltyService(private val customerOrderRepository: CustomerOrderRepository) {
-    private val logger = logger()
 
     fun loyaltyDiscount(customerId: CustomerId): DiscountTier {
         val orders = customerOrderRepository.findAllByCustomerIdAndInstantGreaterThanEqual(
@@ -23,17 +21,12 @@ class CustomerLoyaltyService(private val customerOrderRepository: CustomerOrderR
     }
 
     @Transactional
-    fun store(
-        customerId: CustomerId,
-        orderId: OrderId,
-        totalPrice: Int,
-        instant: Instant,
-    ) {
+    fun store(customerId: CustomerId, orderId: OrderId, totalPrice: Int, instant: Instant) {
         val customerOrder = CustomerOrder(
             customerId = customerId,
             orderId = orderId,
             totalPrice = totalPrice,
-            instant = instant
+            instant = instant,
         )
         customerOrderRepository.insert(customerOrder)
     }
