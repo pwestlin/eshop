@@ -31,3 +31,7 @@ logging:
     root: warn
 
 customer.loyalty.duration: 365d
+
+events:
+  minAge: 1m
+  maxAttempts: 5

@@ -25,7 +25,8 @@ class OrderDetailsWorkflowOrchestrator(
 ) {
     private val logger = logger()
 
-    // TODO pwestlin: Vad göra om det kastas ett exception? Se https://gemini.google.com/app/2b23518ae7605bfa.
+    // TODO pwestlin: Vad göra om det kastas ett exception?
+    //  I funktioner annoterade med @ApplicationModuleListener används Transactional Outbox Pattern vilket innebär att de ligger kvar.
 
     @ApplicationModuleListener
     fun on(event: OrderPlacedEvent) {
