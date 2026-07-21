@@ -54,7 +54,6 @@ data class CustomerOrder(
     }
 }
 
-// TODO pwestlin: Testa
 @Suppress("MagicNumber")
 enum class DiscountTier(val threshold: Money, val rate: Percentage) {
     NONE(Money.sek(0), Percentage(0.0)),

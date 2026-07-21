@@ -12,6 +12,34 @@ import org.junit.jupiter.api.Test
 class OrderTest {
 
     @Test
+    fun `subTotal must match total of items (items_subTotal)`() {
+        val order = Order.example()
+        val newSubTotal = order.subTotal + Money.sek(5)
+        assertThatThrownBy {
+            @Suppress("UnusedDataClassCopyResult")
+            order.copy(subTotal = newSubTotal)
+        }
+            .isExactlyInstanceOf<IllegalArgumentException>()
+            .hasMessage("'subTotal' ($newSubTotal) does not match total of items (${order.items.subTotal})")
+    }
+
+    @Test
+    fun `grandTotal must match subTotal minus discount`() {
+        val order = Order.example()
+        val newGrandTotal = order.grandTotal - Money.sek(5)
+        assertThatThrownBy {
+            @Suppress("UnusedDataClassCopyResult")
+            order.copy(grandTotal = newGrandTotal)
+        }
+            .isExactlyInstanceOf<IllegalArgumentException>()
+            .hasMessage(
+                "'grandTotal' ($newGrandTotal) is not equal to sub total after discount (${order.subTotal.applyDiscount(
+                    order.discount,
+                )})",
+            )
+    }
+
+    @Test
     fun `equals is overridden and only check id`() {
         val originalOrder = Order.example()
         assertThat(originalOrder).isEqualTo(originalOrder)

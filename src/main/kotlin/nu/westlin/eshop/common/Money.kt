@@ -4,11 +4,13 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
 
-// TODO pwestlin: Testa
-data class Money(val amount: BigDecimal, val currency: Currency) : Comparable<Money> {
+data class Money(
+    val amount: BigDecimal,
+    val currency: Currency
+) : Comparable<Money> {
 
     init {
-        require(amount.scale() <= 2) { "Monetary amount scale cannot exceed 2 decimal places" }
+        require(amount.scale() <= 2) { "Monetary amount scale cannot exceed 2 decimal places: amount: $amount, scale: ${amount.scale()}" }
     }
 
     operator fun plus(other: Money): Money {
@@ -48,12 +50,14 @@ data class Money(val amount: BigDecimal, val currency: Currency) : Comparable<Mo
     companion object {
         fun sek(amount: BigDecimal): Money = Money(
             amount.setScale(2, RoundingMode.HALF_UP),
-            Currency.getInstance("SEK"),
+            SEK,
         )
 
         fun sek(amount: Long): Money = sek(BigDecimal.valueOf(amount))
 
-        fun zero(currency: Currency = Currency.getInstance("SEK")): Money =
+        fun zero(currency: Currency = SEK): Money =
             Money(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP), currency)
     }
 }
+
+val SEK: Currency = Currency.getInstance("SEK")

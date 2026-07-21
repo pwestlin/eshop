@@ -33,12 +33,10 @@ data class Order(
     val shippedTime: Instant? = null,
 ) {
     init {
-        // TODO pwestlin: Testa
         require(subTotal == items.subTotal) {
             "'subTotal' ($subTotal) does not match total of items (${items.subTotal})"
         }
 
-        // TODO pwestlin: Testa
         val expectedGrandTotal = subTotal.applyDiscount(discount)
         require(grandTotal == expectedGrandTotal) {
             "'grandTotal' ($grandTotal) is not equal to sub total after discount ($expectedGrandTotal)"
