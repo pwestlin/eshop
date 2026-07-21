@@ -1,6 +1,7 @@
-package nu.westlin.eshop.common
+package nu.westlin.eshop.customer
 
-// TODO pwestlin: Vem ska hantera detta och var ska det ligga?
+import nu.westlin.eshop.common.CustomerId
+
 data class NewCustomerRegisteredEvent(
     val customerId: CustomerId,
     val name: String,

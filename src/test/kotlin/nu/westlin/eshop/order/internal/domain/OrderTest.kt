@@ -147,6 +147,6 @@ class OrderTest {
     fun `shippedTime must be provided when status is Shipped`() {
         assertThatThrownBy { Order.example(status = OrderStatus.SHIPPED) }
             .isExactlyInstanceOf<IllegalArgumentException>()
-            .hasMessage("Shipped time (shippedTime) must be provided when status is Shipped")
+            .hasMessage("Shipped time (shippedTime) must be provided when status is SHIPPED")
     }
 }

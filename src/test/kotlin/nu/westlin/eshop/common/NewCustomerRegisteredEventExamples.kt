@@ -1,5 +1,6 @@
 package nu.westlin.eshop.common
 
+import nu.westlin.eshop.customer.NewCustomerRegisteredEvent
 import nu.westlin.eshop.test.EmailGenerator
 import org.apache.commons.lang3.RandomStringUtils
 

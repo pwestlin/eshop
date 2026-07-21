@@ -26,7 +26,7 @@ class CustomerModuleIntegrationTest @Autowired constructor(
     private val customerFacade: CustomerFacade,
     private val customerRepository: CustomerRepository,
     private val springDataCustomerOrderRepository: SpringDataCustomerOrderRepository,
-    private val entityTemplate: JdbcAggregateTemplate
+    private val entityTemplate: JdbcAggregateTemplate,
 ) {
 
     @Test
@@ -52,13 +52,13 @@ class CustomerModuleIntegrationTest @Autowired constructor(
             customerId = customerId,
             orderId = orderId,
             totalPrice = totalPrice,
-            instant = instant
+            instant = instant,
         )
         val inserted = customerFacade.storeCustomerOrderHistory(
             customerId = customerId,
             orderId = orderId,
             totalPrice = totalPrice,
-            instant = instant
+            instant = instant,
         )
         assertThat(inserted)
             .usingRecursiveComparison()
@@ -77,15 +77,15 @@ class CustomerModuleIntegrationTest @Autowired constructor(
         assertThat(discount).isEqualTo(
             CustomerDiscount(
                 tier = "NONE",
-                rate = Percentage(0.0)
-            )
+                rate = Percentage(0.0),
+            ),
         )
     }
 
     @Test
     fun `getActiveDiscountFor Customer - no discount for customer`() {
         val customerOrder = CustomerOrder.example(
-            instant = Instant.now().minus(Duration.ofDays(1_000))
+            instant = Instant.now().minus(Duration.ofDays(1_000)),
         )
         entityTemplate.insert(customerOrder)
 
@@ -93,8 +93,8 @@ class CustomerModuleIntegrationTest @Autowired constructor(
         assertThat(discount).isEqualTo(
             CustomerDiscount(
                 tier = "NONE",
-                rate = Percentage(0.0)
-            )
+                rate = Percentage(0.0),
+            ),
         )
     }
 
@@ -102,7 +102,7 @@ class CustomerModuleIntegrationTest @Autowired constructor(
     fun `getActiveDiscountFor Customer - bronze`() {
         val customerOrder = CustomerOrder.example(
             totalPrice = 15_000,
-            instant = Instant.now().minus(Duration.ofDays(69))
+            instant = Instant.now().minus(Duration.ofDays(69)),
         )
         entityTemplate.insert(customerOrder)
 
@@ -110,8 +110,8 @@ class CustomerModuleIntegrationTest @Autowired constructor(
         assertThat(discount).isEqualTo(
             CustomerDiscount(
                 tier = "BRONZE",
-                rate = Percentage(0.05)
-            )
+                rate = Percentage(0.05),
+            ),
         )
     }
 }

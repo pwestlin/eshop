@@ -1,7 +1,7 @@
 package nu.westlin.eshop.security.internal
 
-import nu.westlin.eshop.common.NewCustomerRegisteredEvent
 import nu.westlin.eshop.common.example
+import nu.westlin.eshop.customer.NewCustomerRegisteredEvent
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

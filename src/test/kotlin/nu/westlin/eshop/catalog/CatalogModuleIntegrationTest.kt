@@ -4,7 +4,6 @@ import nu.westlin.eshop.catalog.internal.Product
 import nu.westlin.eshop.catalog.internal.SpringDataProductRepository
 import nu.westlin.eshop.catalog.internal.example
 import nu.westlin.eshop.common.ProductId
-import nu.westlin.eshop.config.CentralSpringDataJdbcConfiguration
 import nu.westlin.eshop.config.ProductSpringDataJdbcConfiguration
 import nu.westlin.eshop.test.ModulithIntegrationTest
 import org.assertj.core.api.Assertions.assertThat

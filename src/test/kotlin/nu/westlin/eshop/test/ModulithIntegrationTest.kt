@@ -1,7 +1,6 @@
 package nu.westlin.eshop.test
 
 import nu.westlin.eshop.config.CentralSpringDataJdbcConfiguration
-import nu.westlin.eshop.config.ProductSpringDataJdbcConfiguration
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.context.annotation.Import

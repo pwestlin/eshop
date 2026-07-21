@@ -1,7 +1,7 @@
 package nu.westlin.eshop.customer.internal.registernewcustomer
 
 import nu.westlin.eshop.common.CustomerId
-import nu.westlin.eshop.common.NewCustomerRegisteredEvent
+import nu.westlin.eshop.customer.NewCustomerRegisteredEvent
 import nu.westlin.eshop.customer.internal.Customer
 import nu.westlin.eshop.customer.internal.CustomerRepository
 import nu.westlin.eshop.customer.internal.Email

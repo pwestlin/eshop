@@ -41,17 +41,13 @@ data class CustomerOrder(
     val instant: Instant,
 ) {
     companion object {
-        fun new(
-            customerId: CustomerId,
-            orderId: OrderId,
-            totalPrice: Int,
-            instant: Instant,
-        ): CustomerOrder = CustomerOrder(
-            customerId = customerId,
-            orderId = orderId,
-            totalPrice = totalPrice,
-            instant = instant
-        )
+        fun new(customerId: CustomerId, orderId: OrderId, totalPrice: Int, instant: Instant): CustomerOrder =
+            CustomerOrder(
+                customerId = customerId,
+                orderId = orderId,
+                totalPrice = totalPrice,
+                instant = instant,
+            )
     }
 }
 

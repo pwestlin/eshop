@@ -1,4 +1,7 @@
 package nu.westlin.eshop.security
 
-// @ApplicationModule(allowedDependencies = [Modules.COMMON])
+import nu.westlin.eshop.Modules
+import org.springframework.modulith.ApplicationModule
+
+@ApplicationModule(allowedDependencies = [Modules.CUSTOMER])
 object SecurityModule

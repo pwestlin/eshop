@@ -1,6 +1,6 @@
 package nu.westlin.eshop.security.internal
 
-import nu.westlin.eshop.common.NewCustomerRegisteredEvent
+import nu.westlin.eshop.customer.NewCustomerRegisteredEvent
 import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Service
 

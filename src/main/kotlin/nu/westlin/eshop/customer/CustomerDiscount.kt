@@ -6,4 +6,3 @@ data class CustomerDiscount(
     val tier: String, // T.ex. "GOLD", "SILVER", "BRONZE" eller "NEW"
     val rate: Percentage,
 )
-

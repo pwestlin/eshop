@@ -28,7 +28,12 @@ class CustomerFacade(
     fun customerExists(customerId: CustomerId): Boolean = customerRepository.exists(customerId)
 
     @Transactional
-    fun storeCustomerOrderHistory(customerId: CustomerId, orderId: OrderId, totalPrice: Int, instant: Instant): CustomerOrder {
+    fun storeCustomerOrderHistory(
+        customerId: CustomerId,
+        orderId: OrderId,
+        totalPrice: Int,
+        instant: Instant,
+    ): CustomerOrder {
         val customerOrder = CustomerOrder(
             customerId = customerId,
             orderId = orderId,
