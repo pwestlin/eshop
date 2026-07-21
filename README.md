@@ -1,14 +1,16 @@
 # E-shop
 
-TODO pwestlin: Doka enligt nytt flöde (orderprocess)
-
-Backend for an E-shop implemented in [Kotlin](https://kotlinlang.org/), [Spring Boot](https://spring.io/projects/spring-boot), [Spring Data JDBC](https://spring.io/projects/spring-data-jdbc), [Spring Modulith](https://spring.io/projects/spring-modulith), [Spring Security](https://spring.io/projects/spring-security)
+Backend for an E-shop implemented
+in [Kotlin](https://kotlinlang.org/), [Spring Boot](https://spring.io/projects/spring-boot), [Spring Data JDBC](https://spring.io/projects/spring-data-jdbc), [Spring Modulith](https://spring.io/projects/spring-modulith), [Spring Security](https://spring.io/projects/spring-security)
 and [Postgres](https://www.postgresql.org/).
 
-For testing it uses [Spring Modulith test](https://docs.spring.io/spring-modulith/reference/testing.html), [JUnit](https://junit.org/), [AssertJ](https://assertj.github.io/doc/) and [Testcontainers](https://testcontainers.com/).
+For testing it
+uses [Spring Modulith test](https://docs.spring.io/spring-modulith/reference/testing.html), [JUnit](https://junit.org/), [AssertJ](https://assertj.github.io/doc/)
+and [Testcontainers](https://testcontainers.com/).
 
 ## Architecture
-Modular Monolith, Event-Driven Architecture (EDA) and, to some extent, package-by-feature.  
+
+Modular Monolith and Event-Driven Architecture (EDA).  
 Yes, I did cut some corners here and there beacuse this is not a production-ready system. 😀
 
 ## Features
@@ -21,15 +23,16 @@ Yes, I did cut some corners here and there beacuse this is not a production-read
 
 ## Modules
 
-| Name      | Description                            |
-|:----------|:---------------------------------------|
-| common    | Common stuff like events and ids.      |
-| config    | Configuration for all the application. |
-| security  | Spring Security.                       |
-| order     | "Main module" for the application.     |
-| customer  | Customer information.                  |
-| inventory | Inventory.                             |
-| payment   | Payment.                               |
+| Name         | Description                               |
+|:-------------|:------------------------------------------|
+| orderprocess | Orchestrates registration of a new order. |
+| common       | Common stuff like events and ids.         |
+| config       | Configuration for all the application.    |
+| security     | Spring Security.                          |
+| order        | "Main module" for the application.        |
+| customer     | Customer information.                     |
+| inventory    | Inventory.                                |
+| payment      | Payment.                                  |
 
 ![modules.png](modules.png)
 
