@@ -26,8 +26,6 @@ Yes, I did cut some corners here and there beacuse this is not a production-read
 | Name         | Description                               |
 |:-------------|:------------------------------------------|
 | orderprocess | Orchestrates registration of a new order. |
-| common       | Common stuff like events and ids.         |
-| config       | Configuration for all the application.    |
 | security     | Spring Security.                          |
 | order        | "Main module" for the application.        |
 | customer     | Customer information.                     |
