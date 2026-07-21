@@ -88,8 +88,6 @@ data class OrderCreationCommand(
     val discount: OrderDiscountInput,
 ) {
 
-    // TODO pwestlin: Typa price till Money med kontroll value > 0.
-    // TODO pwestlin: Typa quantity till Quantity med kontroll value >=0.
     data class Item(val productId: ProductId, val quantity: Int, val price: Money) {
         companion object
     }
