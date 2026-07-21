@@ -1,5 +1,6 @@
 package nu.westlin.eshop.inventory.internal
 
+import nu.westlin.eshop.common.CurrencySpringDataJdbcConfiguration
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.ProductId
 import nu.westlin.eshop.config.ProductSpringDataJdbcConfiguration
@@ -19,6 +20,7 @@ import org.springframework.data.jdbc.core.findById
     SharedTestcontainersConfiguration::class,
     ReservedInventoryItemRepository::class,
     ProductSpringDataJdbcConfiguration::class,
+    CurrencySpringDataJdbcConfiguration::class,
 )
 class ReservedInventoryItemRepositoryTest @Autowired constructor(
     private val repository: ReservedInventoryItemRepository,

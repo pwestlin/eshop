@@ -1,12 +1,14 @@
 package nu.westlin.eshop.order.internal.domain
 
 import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.Money
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.Percentage
 import nu.westlin.eshop.common.ProductId
 import nu.westlin.eshop.common.instantNowTruncated
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.Version
+import org.springframework.data.relational.core.mapping.Embedded
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
@@ -24,18 +26,22 @@ data class Order(
     @MappedCollection(idColumn = "order_id")
     val items: OrderLineItems,
     val discount: Percentage,
-    val subTotal: Int = items.subTotal,
-    val grandTotal: Int = (subTotal * (1.0 - discount.fraction)).toInt(),
+    @Embedded.Nullable(prefix = "sub_total_")
+    val subTotal: Money = items.subTotal,
+    @Embedded.Nullable(prefix = "grand_total_")
+    val grandTotal: Money = subTotal.applyDiscount(discount),
     val shippedTime: Instant? = null,
 ) {
     init {
-        require(
-            subTotal == items.subTotal,
-        ) { "'subTotal' ($subTotal) is not equal to sub total om the items (${items.subTotal})" }
-        require(
-            subTotal == items.subTotal,
-        ) {
-            "'grandTotal' ($grandTotal) is not equal to sub total - 'discount' (${(subTotal * (1.0 - discount.fraction)).toInt()})"
+        // TODO pwestlin: Testa
+        require(subTotal == items.subTotal) {
+            "'subTotal' ($subTotal) does not match total of items (${items.subTotal})"
+        }
+
+        // TODO pwestlin: Testa
+        val expectedGrandTotal = subTotal.applyDiscount(discount)
+        require(grandTotal == expectedGrandTotal) {
+            "'grandTotal' ($grandTotal) is not equal to sub total after discount ($expectedGrandTotal)"
         }
 
         if (status == OrderStatus.SHIPPED) {
@@ -118,7 +124,8 @@ data class OrderLineItem(
     val id: Long? = null,
     val productId: ProductId,
     val quantity: Int,
-    val price: Int,
+    @Embedded.Nullable(prefix = "price_")
+    val price: Money,
 ) {
     companion object
 }
@@ -137,8 +144,10 @@ value class OrderLineItems(val value: Set<OrderLineItem>) {
         require(value.isNotEmpty()) { "value can't be empty" }
     }
 
-    val subTotal: Int
-        get() = value.sumOf { it.price * it.quantity }
+    val subTotal: Money
+        get() = value
+            .map { it.price * it.quantity }
+            .reduce { acc, money -> acc + money }
 
     companion object
 }

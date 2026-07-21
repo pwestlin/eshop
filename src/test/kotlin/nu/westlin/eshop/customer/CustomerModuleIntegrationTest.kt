@@ -1,6 +1,7 @@
 package nu.westlin.eshop.customer
 
 import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.Money
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.Percentage
 import nu.westlin.eshop.common.instantNowTruncated
@@ -46,7 +47,7 @@ class CustomerModuleIntegrationTest @Autowired constructor(
     fun `store Customer Order History`() {
         val customerId = CustomerId.generate()
         val orderId = OrderId.generate()
-        val grandTotal = 46
+        val grandTotal = Money.sek(46)
         val instant = instantNowTruncated()
         val expected = CustomerOrder(
             customerId = customerId,
@@ -101,7 +102,7 @@ class CustomerModuleIntegrationTest @Autowired constructor(
     @Test
     fun `getActiveDiscountFor Customer - bronze`() {
         val customerOrder = CustomerOrder.example(
-            grandTotal = 15_000,
+            grandTotal = Money.sek(15_000),
             instant = Instant.now().minus(Duration.ofDays(69)),
         )
         entityTemplate.insert(customerOrder)

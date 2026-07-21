@@ -1,5 +1,6 @@
 package nu.westlin.eshop.customer.internal
 
+import nu.westlin.eshop.common.CurrencySpringDataJdbcConfiguration
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
@@ -17,6 +18,7 @@ import org.springframework.data.repository.findByIdOrNull
     SharedTestcontainersConfiguration::class,
     CustomerOrderRepository::class,
     CustomerSpringDataJdbcConfiguration::class,
+    CurrencySpringDataJdbcConfiguration::class,
 )
 class CustomerOrderRepositoryTest @Autowired constructor(
     private val repository: CustomerOrderRepository,

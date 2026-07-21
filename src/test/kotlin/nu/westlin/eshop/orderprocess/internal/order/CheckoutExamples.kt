@@ -1,5 +1,6 @@
 package nu.westlin.eshop.orderprocess.internal.order
 
+import nu.westlin.eshop.common.Money
 import java.util.*
 import kotlin.random.Random
 
@@ -10,7 +11,7 @@ fun CheckoutRequest.Companion.example(
         CheckoutRequest.Item(
             productId = Random.nextInt(1, Int.MAX_VALUE - 1),
             quantity = 42,
-            price = 7,
+            price = Money.sek(7),
         ),
     ),
 ): CheckoutRequest = CheckoutRequest(

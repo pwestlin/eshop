@@ -1,6 +1,7 @@
 package nu.westlin.eshop.payment
 
 import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.Money
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.payment.internal.PaymentProcessor
 import org.springframework.context.ApplicationEventPublisher
@@ -15,7 +16,7 @@ class PaymentFacade(
 
     @Suppress("unused")
     @Transactional
-    fun processPayment(orderId: OrderId, customerId: CustomerId, totalAmount: Int) {
+    fun processPayment(orderId: OrderId, customerId: CustomerId, totalAmount: Money) {
         runCatching { paymentProcessor.processPayment(orderId) }.fold(
             { eventPublisher.publishEvent(PaymentSuccessfulEvent(orderId)) },
             { exception ->

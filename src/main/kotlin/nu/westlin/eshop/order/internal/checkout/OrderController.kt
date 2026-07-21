@@ -1,6 +1,7 @@
 package nu.westlin.eshop.order.internal.checkout
 
 import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.Money
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.order.internal.domain.Order
 import nu.westlin.eshop.order.internal.domain.OrderStatus
@@ -43,7 +44,7 @@ data class OrderDTO(
     val createdAt: Instant,
     val updatedAt: Instant,
     val status: OrderStatus,
-    val grandTotal: Int,
+    val grandTotal: Money,
     val shippedTime: Instant? = null,
 )
 

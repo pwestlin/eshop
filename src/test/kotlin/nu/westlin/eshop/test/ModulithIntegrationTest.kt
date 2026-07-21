@@ -1,5 +1,6 @@
 package nu.westlin.eshop.test
 
+import nu.westlin.eshop.common.CurrencySpringDataJdbcConfiguration
 import nu.westlin.eshop.config.CentralSpringDataJdbcConfiguration
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
@@ -15,7 +16,11 @@ import org.springframework.test.context.TestPropertySource
     ],
 )
 @ApplicationModuleTest
-@Import(SharedTestcontainersConfiguration::class, CentralSpringDataJdbcConfiguration::class)
+@Import(
+    SharedTestcontainersConfiguration::class,
+    CentralSpringDataJdbcConfiguration::class,
+    CurrencySpringDataJdbcConfiguration::class,
+)
 annotation class ModulithIntegrationTest
 
 @ModulithIntegrationTest

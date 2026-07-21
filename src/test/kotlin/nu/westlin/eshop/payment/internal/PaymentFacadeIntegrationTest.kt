@@ -1,6 +1,7 @@
 package nu.westlin.eshop.payment.internal
 
 import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.Money
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.payment.PaymentFacade
 import nu.westlin.eshop.payment.PaymentSuccessfulEvent
@@ -31,7 +32,7 @@ class PaymentFacadeIntegrationTest @Autowired constructor(private val paymentFac
                 paymentFacade.processPayment(
                     orderId = orderId,
                     customerId = CustomerId.generate(),
-                    totalAmount = 667,
+                    totalAmount = Money.sek(667),
                 )
             }
             .andWaitForEventOfType(PaymentSuccessfulEvent::class.java)

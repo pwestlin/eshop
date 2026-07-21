@@ -1,5 +1,6 @@
 package nu.westlin.eshop.order.internal.checkout
 
+import nu.westlin.eshop.common.CurrencySpringDataJdbcConfiguration
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.order.internal.OrderSpringDataJdbcConfiguration
@@ -16,11 +17,16 @@ import org.springframework.context.annotation.Import
 
 @DataJdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(SharedTestcontainersConfiguration::class, OrderRepository::class, OrderSpringDataJdbcConfiguration::class)
+@Import(
+    SharedTestcontainersConfiguration::class,
+    OrderRepository::class,
+    OrderSpringDataJdbcConfiguration::class,
+    CurrencySpringDataJdbcConfiguration::class,
+)
 class OrderRepositoryTest @Autowired constructor(private val orderRepository: OrderRepository) {
 
     @Test
-    fun `find by id ska returnera en`() {
+    fun `find by id should return one`() {
         val order = Order.example()
         val createdOrder = orderRepository.insert(order)
         assertThat(createdOrder.id).isEqualTo(order.id)

@@ -1,6 +1,7 @@
 package nu.westlin.eshop.order
 
 import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.Money
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.Percentage
 import nu.westlin.eshop.common.ProductId
@@ -89,7 +90,7 @@ data class OrderCreationCommand(
 
     // TODO pwestlin: Typa price till Money med kontroll value > 0.
     // TODO pwestlin: Typa quantity till Quantity med kontroll value >=0.
-    data class Item(val productId: ProductId, val quantity: Int, val price: Int) {
+    data class Item(val productId: ProductId, val quantity: Int, val price: Money) {
         companion object
     }
 

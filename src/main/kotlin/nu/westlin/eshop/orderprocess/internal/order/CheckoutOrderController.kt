@@ -1,6 +1,7 @@
 package nu.westlin.eshop.orderprocess.internal.order
 
 import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.Money
 import nu.westlin.eshop.common.OrderId
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -49,7 +50,7 @@ class CheckoutOrderController(private val checkoutOrderService: CheckoutOrderSer
 
 data class CheckoutRequest(val orderId: UUID, val customerId: UUID, val items: Set<Item>) {
 
-    data class Item(val productId: Int, val quantity: Int, val price: Int) {
+    data class Item(val productId: Int, val quantity: Int, val price: Money) {
         companion object
     }
 

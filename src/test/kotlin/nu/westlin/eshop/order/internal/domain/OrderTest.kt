@@ -1,6 +1,7 @@
 package nu.westlin.eshop.order.internal.domain
 
 import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.Money
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.test.isExactlyInstanceOf
@@ -134,13 +135,13 @@ class OrderTest {
         val order = Order.example(
             items = OrderLineItems(
                 setOf(
-                    OrderLineItem.example(price = 1, quantity = 5),
-                    OrderLineItem.example(price = 3, quantity = 3),
-                    OrderLineItem.example(price = 5, quantity = 1),
+                    OrderLineItem.example(price = Money.sek(1), quantity = 5),
+                    OrderLineItem.example(price = Money.sek(3), quantity = 3),
+                    OrderLineItem.example(price = Money.sek(5), quantity = 1),
                 ),
             ),
         )
-        assertThat(order.subTotal).isEqualTo(19)
+        assertThat(order.subTotal).isEqualTo(Money.sek(19))
     }
 
     @Test

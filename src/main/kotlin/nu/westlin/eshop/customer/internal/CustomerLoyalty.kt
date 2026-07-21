@@ -1,10 +1,12 @@
 package nu.westlin.eshop.customer.internal
 
 import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.Money
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.Percentage
 import org.springframework.data.annotation.Id
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate
+import org.springframework.data.relational.core.mapping.Embedded
 import org.springframework.data.relational.core.mapping.Table
 import org.springframework.data.repository.ListCrudRepository
 import org.springframework.stereotype.Repository
@@ -37,11 +39,12 @@ data class CustomerOrder(
     val id: Int? = null,
     val customerId: CustomerId,
     val orderId: OrderId,
-    val grandTotal: Int,
+    @Embedded.Nullable(prefix = "grand_total_")
+    val grandTotal: Money,
     val instant: Instant,
 ) {
     companion object {
-        fun new(customerId: CustomerId, orderId: OrderId, grandTotal: Int, instant: Instant): CustomerOrder =
+        fun new(customerId: CustomerId, orderId: OrderId, grandTotal: Money, instant: Instant): CustomerOrder =
             CustomerOrder(
                 customerId = customerId,
                 orderId = orderId,
@@ -51,16 +54,16 @@ data class CustomerOrder(
     }
 }
 
+// TODO pwestlin: Testa
 @Suppress("MagicNumber")
-enum class DiscountTier(val threshold: Int, val rate: Percentage) {
-    NONE(0, Percentage(0.0)),
-    BRONZE(10_000, Percentage(0.05)),
-    SILVER(25_000, Percentage(0.10)),
-    GOLD(100_000, Percentage(0.20)),
+enum class DiscountTier(val threshold: Money, val rate: Percentage) {
+    NONE(Money.sek(0), Percentage(0.0)),
+    BRONZE(Money.sek(10_000), Percentage(0.05)),
+    SILVER(Money.sek(25_000), Percentage(0.10)),
+    GOLD(Money.sek(100_000), Percentage(0.20)),
     ;
 
     companion object {
-        fun fromTotalSum(totalSum: Int): DiscountTier =
-            entries.sortedByDescending { it.threshold }.firstOrNull { totalSum >= it.threshold } ?: NONE
+        fun fromTotalSum(totalSum: Money): DiscountTier = entries.lastOrNull { totalSum >= it.threshold } ?: NONE
     }
 }

@@ -1,5 +1,6 @@
 package nu.westlin.eshop.inventory.internal
 
+import nu.westlin.eshop.common.CurrencySpringDataJdbcConfiguration
 import nu.westlin.eshop.config.ProductSpringDataJdbcConfiguration
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
 import org.assertj.core.api.Assertions.assertThat
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Import
     SharedTestcontainersConfiguration::class,
     InventoryItemRepository::class,
     ProductSpringDataJdbcConfiguration::class,
+    CurrencySpringDataJdbcConfiguration::class,
 )
 class InventoryItemRepositoryTest @Autowired constructor(private val repository: InventoryItemRepository) {
 

@@ -1,6 +1,7 @@
 package nu.westlin.eshop.customer
 
 import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.Money
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.customer.internal.CustomerLoyaltyService
 import nu.westlin.eshop.customer.internal.CustomerOrder
@@ -31,7 +32,7 @@ class CustomerFacade(
     fun storeCustomerOrderHistory(
         customerId: CustomerId,
         orderId: OrderId,
-        grandTotal: Int,
+        grandTotal: Money,
         instant: Instant,
     ): CustomerOrder {
         val customerOrder = CustomerOrder(

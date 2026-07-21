@@ -1,5 +1,6 @@
 package nu.westlin.eshop.catalog.internal
 
+import nu.westlin.eshop.common.CurrencySpringDataJdbcConfiguration
 import nu.westlin.eshop.config.ProductSpringDataJdbcConfiguration
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
 import nu.westlin.eshop.test.isExactlyInstanceOf
@@ -14,7 +15,12 @@ import org.springframework.dao.DuplicateKeyException
 
 @DataJdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(SharedTestcontainersConfiguration::class, ProductRepository::class, ProductSpringDataJdbcConfiguration::class)
+@Import(
+    SharedTestcontainersConfiguration::class,
+    ProductRepository::class,
+    ProductSpringDataJdbcConfiguration::class,
+    CurrencySpringDataJdbcConfiguration::class,
+)
 class ProductRepositoryTest @Autowired constructor(private val repository: ProductRepository) {
 
     @Test

@@ -1,5 +1,6 @@
 package nu.westlin.eshop.customer.internal
 
+import nu.westlin.eshop.common.CurrencySpringDataJdbcConfiguration
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
 import nu.westlin.eshop.test.isExactlyInstanceOf
@@ -13,7 +14,12 @@ import org.springframework.context.annotation.Import
 
 @DataJdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(SharedTestcontainersConfiguration::class, CustomerRepository::class, CustomerSpringDataJdbcConfiguration::class)
+@Import(
+    SharedTestcontainersConfiguration::class,
+    CustomerRepository::class,
+    CustomerSpringDataJdbcConfiguration::class,
+    CurrencySpringDataJdbcConfiguration::class,
+)
 class CustomerRepositoryTest @Autowired constructor(private val repository: CustomerRepository) {
 
     @Test

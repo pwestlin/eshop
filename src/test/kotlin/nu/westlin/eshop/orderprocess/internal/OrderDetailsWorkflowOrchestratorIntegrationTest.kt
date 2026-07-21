@@ -9,6 +9,7 @@ import io.mockk.verify
 import io.mockk.verifySequence
 import nu.westlin.eshop.catalog.CatalogFacade
 import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.Money
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.ProductId
 import nu.westlin.eshop.common.example
@@ -85,7 +86,7 @@ class OrderDetailsWorkflowOrchestratorIntegrationTest {
 
         val paymentDetails = PaymentDetails(
             customerId = CustomerId.generate(),
-            totalAmount = 42,
+            totalAmount = Money.sek(42),
         )
         every { orderFacade.getPaymentDetails(event.orderId) } returns paymentDetails
 
@@ -148,7 +149,7 @@ class OrderDetailsWorkflowOrchestratorIntegrationTest {
 
         every { orderFacade.completeOrder(event.orderId, event.shippedTime) } just runs
 
-        val paymentDetails = PaymentDetails(CustomerId.generate(), 47)
+        val paymentDetails = PaymentDetails(CustomerId.generate(), Money.sek(47))
         every { orderFacade.getPaymentDetails(event.orderId) } returns paymentDetails
 
         val expectedCustomerOrder = CustomerOrder.new(

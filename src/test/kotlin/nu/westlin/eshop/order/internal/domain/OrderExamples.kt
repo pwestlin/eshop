@@ -1,6 +1,7 @@
 package nu.westlin.eshop.order.internal.domain
 
 import nu.westlin.eshop.common.CustomerId
+import nu.westlin.eshop.common.Money
 import nu.westlin.eshop.common.OrderId
 import nu.westlin.eshop.common.Percentage
 import nu.westlin.eshop.common.ProductId
@@ -33,7 +34,7 @@ fun OrderLineItem.Companion.example(
     id: Long = Random.nextLong(1, Long.MAX_VALUE - 1),
     productId: ProductId = ProductId.generate(),
     quantity: Int = Random.nextInt(1, 50),
-    price: Int = Random.nextInt(10, 2_000),
+    price: Money = Money.sek(Random.nextLong(1, 10_000)),
 ): OrderLineItem = OrderLineItem(
     id = id,
     productId = productId,
