@@ -85,20 +85,21 @@ data class Order(
             "Order with id $id must be in state ${OrderStatus.PENDING} but was in state $status"
         }
 
-        return this.copy(status = OrderStatus.STOCKRESERVED, updatedAt = instantNowTruncated())
+        return this.copy(status = OrderStatus.STOCK_RESERVED, updatedAt = instantNowTruncated())
     }
 
     fun applyPaymentSuccessful(): Order {
         check(
-            this.status == OrderStatus.STOCKRESERVED,
+            this.status == OrderStatus.STOCK_RESERVED,
         ) {
-            "Order with id $id must be in state ${OrderStatus.STOCKRESERVED} but was in state $status"
+            "Order with id $id must be in state ${OrderStatus.STOCK_RESERVED} but was in state $status"
         }
 
         return this.copy(status = OrderStatus.PAID, updatedAt = instantNowTruncated())
     }
 
     fun cancel(): Order = this.copy(status = OrderStatus.CANCELLED, updatedAt = instantNowTruncated())
+    fun fail(): Order = this.copy(status = OrderStatus.FAILED, updatedAt = instantNowTruncated())
 
     companion object {
         fun new(id: OrderId, customerId: CustomerId, items: OrderLineItems, discount: Percentage): Order {
@@ -130,10 +131,11 @@ data class OrderLineItem(
 
 enum class OrderStatus {
     PENDING,
-    STOCKRESERVED,
+    STOCK_RESERVED,
     PAID,
     SHIPPED,
     CANCELLED,
+    FAILED,
 }
 
 @JvmInline

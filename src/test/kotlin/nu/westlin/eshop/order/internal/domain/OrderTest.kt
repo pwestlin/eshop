@@ -71,7 +71,7 @@ class OrderTest {
     }
 
     @Test
-    fun `new creates an order with status Pending`() {
+    fun `new creates an order with status PENDING`() {
         val orderId = OrderId.generate()
         val customerId = CustomerId.generate()
         val orderLineItems = OrderLineItems(List(3) { OrderLineItem.example() }.toSet())
@@ -90,7 +90,7 @@ class OrderTest {
     }
 
     @Test
-    fun `ship changes status to Shipped`() {
+    fun `ship changes status to SHIPPED`() {
         val order = Order.example(status = OrderStatus.PENDING)
         val shippedTime = instantNowTruncated()
         assertThat(order.ship(shippedTime))
@@ -100,12 +100,12 @@ class OrderTest {
     }
 
     @Test
-    fun `applyInventoryAllocationSuccessful changes status to StockReserved`() {
+    fun `applyInventoryAllocationSuccessful changes status to STOCK_RESERVED`() {
         val order = Order.example(status = OrderStatus.PENDING)
         assertThat(order.applyInventoryAllocationSuccessful())
             .usingRecursiveComparison()
             .ignoringFields("updatedAt")
-            .isEqualTo(order.copy(status = OrderStatus.STOCKRESERVED))
+            .isEqualTo(order.copy(status = OrderStatus.STOCK_RESERVED))
     }
 
     @Test
@@ -126,8 +126,8 @@ class OrderTest {
     }
 
     @Test
-    fun `applyPaymentSuccessful changes status to StockReserved`() {
-        val order = Order.example(status = OrderStatus.STOCKRESERVED)
+    fun `applyPaymentSuccessful changes status to STOCKRESERVED`() {
+        val order = Order.example(status = OrderStatus.STOCK_RESERVED)
         assertThat(order.applyPaymentSuccessful())
             .usingRecursiveComparison()
             .ignoringFields("updatedAt")
@@ -136,7 +136,7 @@ class OrderTest {
 
     @Test
     fun `applyPaymentSuccessful throws IllegalStateException when order has the wrong status`() {
-        OrderStatus.entries.filter { it != OrderStatus.STOCKRESERVED }.forEach { orderStatus ->
+        OrderStatus.entries.filter { it != OrderStatus.STOCK_RESERVED }.forEach { orderStatus ->
             val shippedTime = if (orderStatus == OrderStatus.SHIPPED) {
                 instantNowTruncated()
             } else {
@@ -146,18 +146,27 @@ class OrderTest {
             assertThatThrownBy { order.applyPaymentSuccessful() }
                 .isExactlyInstanceOf<IllegalStateException>()
                 .hasMessage(
-                    "Order with id ${order.id} must be in state ${OrderStatus.STOCKRESERVED} but was in state $orderStatus",
+                    "Order with id ${order.id} must be in state ${OrderStatus.STOCK_RESERVED} but was in state $orderStatus",
                 )
         }
     }
 
     @Test
-    fun `cancel changes status to Cancelled`() {
+    fun `cancel changes status to CANCELLED`() {
         val order = Order.example(status = OrderStatus.PENDING)
         assertThat(order.cancel())
             .usingRecursiveComparison()
             .ignoringFields("updatedAt")
             .isEqualTo(order.copy(status = OrderStatus.CANCELLED))
+    }
+
+    @Test
+    fun `fail changes status to FAILED`() {
+        val order = Order.example(status = OrderStatus.PENDING)
+        assertThat(order.fail())
+            .usingRecursiveComparison()
+            .ignoringFields("updatedAt")
+            .isEqualTo(order.copy(status = OrderStatus.FAILED))
     }
 
     @Test
