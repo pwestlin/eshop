@@ -29,7 +29,7 @@ data class Order(
     @Embedded.Nullable(prefix = "sub_total_")
     val subTotal: Money = items.subTotal,
     @Embedded.Nullable(prefix = "grand_total_")
-    val grandTotal: Money = subTotal.applyDiscount(discount),
+    val grandTotal: Money = subTotal - (subTotal * discount),
     val shippedTime: Instant? = null,
 ) {
     init {
@@ -37,7 +37,7 @@ data class Order(
             "'subTotal' ($subTotal) does not match total of items (${items.subTotal})"
         }
 
-        val expectedGrandTotal = subTotal.applyDiscount(discount)
+        val expectedGrandTotal = subTotal - (subTotal * discount)
         require(grandTotal == expectedGrandTotal) {
             "'grandTotal' ($grandTotal) is not equal to sub total after discount ($expectedGrandTotal)"
         }

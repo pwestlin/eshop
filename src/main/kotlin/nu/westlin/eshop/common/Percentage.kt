@@ -10,5 +10,7 @@ value class Percentage(val fraction: Double) {
         }
     }
 
-    companion object
+    companion object {
+        val ZERO = Percentage(0.0)
+    }
 }

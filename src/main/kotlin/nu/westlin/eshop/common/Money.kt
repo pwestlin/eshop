@@ -4,13 +4,12 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
 
-data class Money(
-    val amount: BigDecimal,
-    val currency: Currency
-) : Comparable<Money> {
+data class Money(val amount: BigDecimal, val currency: Currency) : Comparable<Money> {
 
     init {
-        require(amount.scale() <= 2) { "Monetary amount scale cannot exceed 2 decimal places: amount: $amount, scale: ${amount.scale()}" }
+        require(
+            amount.scale() <= 2,
+        ) { "Monetary amount scale cannot exceed 2 decimal places: amount: $amount, scale: ${amount.scale()}" }
     }
 
     operator fun plus(other: Money): Money {
@@ -36,11 +35,6 @@ data class Money(
         return Money(calculatedAmount, currency)
     }
 
-    fun applyDiscount(discount: Percentage): Money {
-        val discountAmount = this * discount
-        return this - discountAmount
-    }
-
     private fun requireSameCurrency(other: Money) {
         require(currency == other.currency) {
             "Currency mismatch: $currency vs ${other.currency}"
@@ -55,8 +49,7 @@ data class Money(
 
         fun sek(amount: Long): Money = sek(BigDecimal.valueOf(amount))
 
-        fun zero(currency: Currency = SEK): Money =
-            Money(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP), currency)
+        fun zero(currency: Currency = SEK): Money = Money(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP), currency)
     }
 }
 

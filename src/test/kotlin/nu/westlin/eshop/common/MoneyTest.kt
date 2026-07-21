@@ -70,16 +70,4 @@ class MoneyTest {
                 .hasMessage("Currency mismatch: NOK vs SEK")
         }
     }
-
-    @Test
-    fun applyDiscount() {
-        val money = Money.example(amount = BigDecimal.valueOf(40.00))
-        val result = money.applyDiscount(Percentage(0.5))
-        assertThat(result).isEqualTo(
-            Money(
-                amount = BigDecimal.valueOf(2_000, 2),
-                currency = money.currency,
-            ),
-        )
-    }
 }

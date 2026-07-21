@@ -3,11 +3,15 @@ package nu.westlin.eshop.order.internal.domain
 import nu.westlin.eshop.common.CustomerId
 import nu.westlin.eshop.common.Money
 import nu.westlin.eshop.common.OrderId
+import nu.westlin.eshop.common.Percentage
 import nu.westlin.eshop.common.instantNowTruncated
 import nu.westlin.eshop.test.isExactlyInstanceOf
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
 
 class OrderTest {
 
@@ -33,9 +37,7 @@ class OrderTest {
         }
             .isExactlyInstanceOf<IllegalArgumentException>()
             .hasMessage(
-                "'grandTotal' ($newGrandTotal) is not equal to sub total after discount (${order.subTotal.applyDiscount(
-                    order.discount,
-                )})",
+                "'grandTotal' ($newGrandTotal) is not equal to sub total after discount (${order.subTotal - (order.subTotal * order.discount)})",
             )
     }
 
@@ -177,5 +179,70 @@ class OrderTest {
         assertThatThrownBy { Order.example(status = OrderStatus.SHIPPED) }
             .isExactlyInstanceOf<IllegalArgumentException>()
             .hasMessage("Shipped time (shippedTime) must be provided when status is SHIPPED")
+    }
+
+    @DisplayName("grandTotal")
+    @Nested
+    inner class OrderGrandTotalTest {
+
+        @Test
+        fun `0 percent discount`() {
+            val order = Order.example(
+                items = OrderLineItems.example(
+                    listOf(
+                        OrderLineItem.example(quantity = 2, price = Money.sek(100)),
+                        OrderLineItem.example(quantity = 4, price = Money.sek(200)),
+                    ).toSet(),
+                ),
+                discount = Percentage.ZERO,
+            )
+            assertThat(order.subTotal).isEqualTo(Money.sek(1_000))
+            assertThat(order.grandTotal).isEqualTo(Money.sek(1_000))
+        }
+
+        @Test
+        fun `10 percent discount`() {
+            val order = Order.example(
+                items = OrderLineItems.example(
+                    listOf(
+                        OrderLineItem.example(quantity = 2, price = Money.sek(100)),
+                        OrderLineItem.example(quantity = 4, price = Money.sek(200)),
+                    ).toSet(),
+                ),
+                discount = Percentage(0.1),
+            )
+            assertThat(order.subTotal).isEqualTo(Money.sek(1_000))
+            assertThat(order.grandTotal).isEqualTo(Money.sek(900))
+        }
+
+        @Test
+        fun `70 percent discount`() {
+            val order = Order.example(
+                items = OrderLineItems.example(
+                    listOf(
+                        OrderLineItem.example(quantity = 2, price = Money.sek(100)),
+                        OrderLineItem.example(quantity = 4, price = Money.sek(200)),
+                    ).toSet(),
+                ),
+                discount = Percentage(0.7),
+            )
+            assertThat(order.subTotal).isEqualTo(Money.sek(1_000))
+            assertThat(order.grandTotal).isEqualTo(Money.sek(300))
+        }
+
+        @Test
+        fun `15_3 percent discount`() {
+            val order = Order.example(
+                items = OrderLineItems.example(
+                    listOf(
+                        OrderLineItem.example(quantity = 2, price = Money.sek(100)),
+                        OrderLineItem.example(quantity = 4, price = Money.sek(200)),
+                    ).toSet(),
+                ),
+                discount = Percentage(0.153),
+            )
+            assertThat(order.subTotal).isEqualTo(Money.sek(1_000))
+            assertThat(order.grandTotal).isEqualTo(Money.sek(BigDecimal.valueOf(84_700, 2)))
+        }
     }
 }

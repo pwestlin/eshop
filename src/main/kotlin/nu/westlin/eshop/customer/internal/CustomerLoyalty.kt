@@ -56,7 +56,7 @@ data class CustomerOrder(
 
 @Suppress("MagicNumber")
 enum class DiscountTier(val threshold: Money, val rate: Percentage) {
-    NONE(Money.sek(0), Percentage(0.0)),
+    NONE(Money.sek(0), Percentage.ZERO),
     BRONZE(Money.sek(10_000), Percentage(0.05)),
     SILVER(Money.sek(25_000), Percentage(0.10)),
     GOLD(Money.sek(100_000), Percentage(0.20)),
