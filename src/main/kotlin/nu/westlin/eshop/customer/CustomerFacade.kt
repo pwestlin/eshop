@@ -31,13 +31,13 @@ class CustomerFacade(
     fun storeCustomerOrderHistory(
         customerId: CustomerId,
         orderId: OrderId,
-        totalPrice: Int,
+        grandTotal: Int,
         instant: Instant,
     ): CustomerOrder {
         val customerOrder = CustomerOrder(
             customerId = customerId,
             orderId = orderId,
-            totalPrice = totalPrice,
+            grandTotal = grandTotal,
             instant = instant,
         )
         return customerOrderRepository.insert(customerOrder)

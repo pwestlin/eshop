@@ -46,7 +46,7 @@ class OrderFacade(private val orderRepository: OrderRepository) {
         val order = getOrder(orderId)
         return PaymentDetails(
             customerId = order.customerId,
-            totalAmount = order.totalPrice,
+            totalAmount = order.grandTotal,
         )
     }
 

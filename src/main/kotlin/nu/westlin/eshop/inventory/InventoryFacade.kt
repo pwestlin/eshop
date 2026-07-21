@@ -35,8 +35,6 @@ class InventoryFacade(
                 ),
             )
         }
-
-        // TODO pwestlin: Vad göra om det kastas ett exception?
     }
 
     @Transactional

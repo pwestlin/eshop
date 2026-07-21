@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component
 @Suppress("LoggingSimilarMessage")
 @Component
 class OrderDetailsWorkflowOrchestrator(
-    // TODO pwestlin: Gå igenom alla facades och se om de verkligen behöver ha alla publika metoder
     private val inventoryFacade: InventoryFacade,
     private val orderFacade: OrderFacade,
     private val paymentFacade: PaymentFacade,
@@ -31,7 +30,6 @@ class OrderDetailsWorkflowOrchestrator(
     @ApplicationModuleListener
     fun on(event: OrderPlacedEvent) {
         logger.info("Order placed: ${event.orderId}")
-        // TODO pwestlin: Använd typ från inventorymodulen istället
         inventoryFacade.reserveProducts(event.toProductsReservation())
     }
 
@@ -62,12 +60,10 @@ class OrderDetailsWorkflowOrchestrator(
         customerFacade.storeCustomerOrderHistory(
             customerId = details.customerId,
             orderId = event.orderId,
-            totalPrice = details.totalAmount,
+            grandTotal = details.totalAmount,
             instant = event.shippedTime,
         )
     }
-
-    // TODO pwestlin: Nåt för alla felevents
 
     @ApplicationModuleListener
     fun on(event: InventoryAllocationFailedEvent) {

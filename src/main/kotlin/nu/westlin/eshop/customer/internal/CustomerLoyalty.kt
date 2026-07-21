@@ -37,15 +37,15 @@ data class CustomerOrder(
     val id: Int? = null,
     val customerId: CustomerId,
     val orderId: OrderId,
-    val totalPrice: Int,
+    val grandTotal: Int,
     val instant: Instant,
 ) {
     companion object {
-        fun new(customerId: CustomerId, orderId: OrderId, totalPrice: Int, instant: Instant): CustomerOrder =
+        fun new(customerId: CustomerId, orderId: OrderId, grandTotal: Int, instant: Instant): CustomerOrder =
             CustomerOrder(
                 customerId = customerId,
                 orderId = orderId,
-                totalPrice = totalPrice,
+                grandTotal = grandTotal,
                 instant = instant,
             )
     }

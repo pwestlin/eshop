@@ -18,7 +18,7 @@ import java.util.*
 @RequestMapping("/orders")
 class CheckoutOrderController(private val checkoutOrderService: CheckoutOrderService) {
 
-    // TODO pwestlin: Fixa konstanter för roller
+    // TODO pwestlin: Fixa konstanter för roller? Var ska de då ligga? Inte i security eftersom modulerna inte får känna till varandra.
     @PostMapping("", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun checkout(@RequestBody request: CheckoutRequest): ResponseEntity<Any> {
         // TODO pwestlin: Kolla om OrderId redan finns (idempotens)?

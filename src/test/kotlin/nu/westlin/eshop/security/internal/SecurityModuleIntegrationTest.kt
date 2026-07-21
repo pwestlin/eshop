@@ -2,26 +2,17 @@ package nu.westlin.eshop.security.internal
 
 import nu.westlin.eshop.common.example
 import nu.westlin.eshop.customer.NewCustomerRegisteredEvent
+import nu.westlin.eshop.test.ModulithIntegrationTest
 import nu.westlin.eshop.test.SharedTestcontainersConfiguration
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Import
-import org.springframework.modulith.test.ApplicationModuleTest
 import org.springframework.modulith.test.Scenario
-import org.springframework.test.context.TestPropertySource
 
-// TODO pwestlin: Skapa en annotering som gör mycket av dessa nedan
-// When you run the test with Gradle you get 30 sec timeout after completed test suite and the below is to fix that...
-@TestPropertySource(
-    properties = [
-        "spring.datasource.hikari.connection-timeout=2000",
-        "spring.datasource.hikari.validation-timeout=1000",
-    ],
-)
-@ApplicationModuleTest
+@ModulithIntegrationTest
 @Import(SharedTestcontainersConfiguration::class)
-class NewCustomerHandlerServiceIntegrationTest @Autowired constructor(private val userRepository: UserRepository) {
+class SecurityModuleIntegrationTest @Autowired constructor(private val userRepository: UserRepository) {
 
     @Test
     fun `handle NewCustomerRegisteredEvent`(scenario: Scenario) {

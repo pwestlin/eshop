@@ -6,14 +6,11 @@ import nu.westlin.eshop.inventory.TooFewProducts
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-// TODO pwestlin: Bad name
 @Service
 class ReserveProductsService(
     private val inventoryItemRepository: InventoryItemRepository,
     private val reservedInventoryItemRepository: ReservedInventoryItemRepository,
 ) {
-
-    // TODO pwestlin: Gå igenom alla facades och se om det använder typer från andra moduler (vilket de inte får)
 
     fun areProductsAvailable(orderedItems: Set<ProductsReservation.Item>): Set<TooFewProducts> =
         orderedItems.mapNotNull { orderedItem ->
@@ -47,7 +44,6 @@ class ReserveProductsService(
         }
     }
 
-    // TODO pwestlin: Bad name
     @Transactional
     fun completeReservation(orderId: OrderId) {
         val reservedItems = reservedInventoryItemRepository.findByOrderId(orderId)

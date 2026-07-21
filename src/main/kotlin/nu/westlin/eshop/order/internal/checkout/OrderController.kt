@@ -43,7 +43,7 @@ data class OrderDTO(
     val createdAt: Instant,
     val updatedAt: Instant,
     val status: OrderStatus,
-    val totalPrice: Int,
+    val grandTotal: Int,
     val shippedTime: Instant? = null,
 )
 
@@ -52,7 +52,7 @@ fun Order.toDto(): OrderDTO = OrderDTO(
     createdAt = this.createdAt,
     updatedAt = this.updatedAt,
     status = this.status,
-    totalPrice = this.totalPrice,
+    grandTotal = this.grandTotal,
     shippedTime = this.shippedTime,
 )
 

@@ -154,7 +154,7 @@ class OrderDetailsWorkflowOrchestratorIntegrationTest {
         val expectedCustomerOrder = CustomerOrder.new(
             customerId = paymentDetails.customerId,
             orderId = orderId,
-            totalPrice = paymentDetails.totalAmount,
+            grandTotal = paymentDetails.totalAmount,
             instant = event.shippedTime,
         )
         var stored = false
@@ -162,7 +162,7 @@ class OrderDetailsWorkflowOrchestratorIntegrationTest {
             customerFacade.storeCustomerOrderHistory(
                 customerId = paymentDetails.customerId,
                 orderId = event.orderId,
-                totalPrice = paymentDetails.totalAmount,
+                grandTotal = paymentDetails.totalAmount,
                 instant = event.shippedTime,
             )
         } answers {
@@ -180,7 +180,7 @@ class OrderDetailsWorkflowOrchestratorIntegrationTest {
             customerFacade.storeCustomerOrderHistory(
                 customerId = paymentDetails.customerId,
                 orderId = event.orderId,
-                totalPrice = paymentDetails.totalAmount,
+                grandTotal = paymentDetails.totalAmount,
                 instant = event.shippedTime,
             )
         }

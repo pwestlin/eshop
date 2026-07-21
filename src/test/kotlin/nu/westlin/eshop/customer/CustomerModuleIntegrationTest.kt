@@ -46,18 +46,18 @@ class CustomerModuleIntegrationTest @Autowired constructor(
     fun `store Customer Order History`() {
         val customerId = CustomerId.generate()
         val orderId = OrderId.generate()
-        val totalPrice = 46
+        val grandTotal = 46
         val instant = instantNowTruncated()
         val expected = CustomerOrder(
             customerId = customerId,
             orderId = orderId,
-            totalPrice = totalPrice,
+            grandTotal = grandTotal,
             instant = instant,
         )
         val inserted = customerFacade.storeCustomerOrderHistory(
             customerId = customerId,
             orderId = orderId,
-            totalPrice = totalPrice,
+            grandTotal = grandTotal,
             instant = instant,
         )
         assertThat(inserted)
@@ -101,7 +101,7 @@ class CustomerModuleIntegrationTest @Autowired constructor(
     @Test
     fun `getActiveDiscountFor Customer - bronze`() {
         val customerOrder = CustomerOrder.example(
-            totalPrice = 15_000,
+            grandTotal = 15_000,
             instant = Instant.now().minus(Duration.ofDays(69)),
         )
         entityTemplate.insert(customerOrder)

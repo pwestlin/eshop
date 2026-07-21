@@ -29,3 +29,5 @@ logging:
   level:
     nu.westlin.eshop: debug
     root: warn
+
+customer.loyalty.duration: 365d

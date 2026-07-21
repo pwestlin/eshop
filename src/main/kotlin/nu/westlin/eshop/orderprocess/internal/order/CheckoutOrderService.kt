@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CheckoutOrderService(
-    // TODO pwestlin: Alla ska använda facade
     private val orderFacade: OrderFacade,
     private val customerFacade: CustomerFacade,
     private val catalogFacade: CatalogFacade,

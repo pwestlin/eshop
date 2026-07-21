@@ -8,11 +8,11 @@ import java.time.Instant
 fun CustomerOrder.Companion.example(
     customerId: CustomerId = CustomerId.generate(),
     orderId: OrderId = OrderId.generate(),
-    totalPrice: Int = 42,
+    grandTotal: Int = 42,
     instant: Instant = instantNowTruncated(),
 ): CustomerOrder = CustomerOrder(
     customerId = customerId,
     orderId = orderId,
-    totalPrice = totalPrice,
+    grandTotal = grandTotal,
     instant = instant,
 )

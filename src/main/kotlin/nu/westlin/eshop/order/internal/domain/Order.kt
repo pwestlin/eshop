@@ -25,8 +25,7 @@ data class Order(
     val items: OrderLineItems,
     val discount: Percentage,
     val subTotal: Int = items.subTotal,
-    // TODO pwestlin: totalPrice -> totalAmount?
-    val totalPrice: Int = (subTotal * (1.0 - discount.fraction)).toInt(),
+    val grandTotal: Int = (subTotal * (1.0 - discount.fraction)).toInt(),
     val shippedTime: Instant? = null,
 ) {
     init {
@@ -36,7 +35,7 @@ data class Order(
         require(
             subTotal == items.subTotal,
         ) {
-            "'totalPrice' ($totalPrice) is not equal to sub total - 'discount' (${(subTotal * (1.0 - discount.fraction)).toInt()})"
+            "'grandTotal' ($grandTotal) is not equal to sub total - 'discount' (${(subTotal * (1.0 - discount.fraction)).toInt()})"
         }
 
         if (status == OrderStatus.SHIPPED) {
