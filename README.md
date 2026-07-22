@@ -10,7 +10,7 @@ and [Testcontainers](https://testcontainers.com/).
 
 ## Architecture
 
-Modular Monolith and Event-Driven Architecture (EDA).  
+Modular Monolith, Event-Driven Architecture (EDA) and some parts from Domain-Driven Design.  
 Yes, I did cut some corners here and there beacuse this is not a production-ready system. 😀
 
 ## Features
