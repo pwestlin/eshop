@@ -75,6 +75,7 @@ detekt {
 
     config.setFrom(files("src/main/detekt/detekt.yml"))
 }
+
 tasks.withType<Detekt>().configureEach {
     reports {
         // Aktivera HTML-rapporten
