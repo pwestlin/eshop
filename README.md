@@ -8,6 +8,9 @@ For testing it
 uses [Spring Modulith test](https://docs.spring.io/spring-modulith/reference/testing.html), [JUnit](https://junit.org/), [AssertJ](https://assertj.github.io/doc/)
 and [Testcontainers](https://testcontainers.com/).
 
+The code, KDoc and comments are written in English but Swedish is my native language so it may have slipped in a Swedish
+sentence somewhere... 😀
+
 ## Architecture
 
 Modular Monolith, Event-Driven Architecture (EDA) and some parts from Domain-Driven Design.  

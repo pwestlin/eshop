@@ -1,3 +1,5 @@
+import dev.detekt.gradle.Detekt
+
 plugins {
     // TODO pwestlin: 2.4.10 när Detekt får stöd för det.
     kotlin("jvm") version "2.4.0"
@@ -72,6 +74,17 @@ detekt {
     autoCorrect = true
 
     config.setFrom(files("src/main/detekt/detekt.yml"))
+}
+tasks.withType<Detekt>().configureEach {
+    reports {
+        // Aktivera HTML-rapporten
+        html.required.set(true)
+
+        // Inaktivera övriga rapportformat i Detekt 2.0
+        checkstyle.required.set(false)
+        markdown.required.set(false)
+        sarif.required.set(false)
+    }
 }
 
 // Tasket "check" är kopplat till det gamla tasket "detekt" som inte hittar reglerna i "io.github.pwestlin:detekt-rules".
