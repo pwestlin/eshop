@@ -13,7 +13,8 @@ sentence somewhere... 😀
 
 ## Architecture
 
-Modular Monolith, Event-Driven Architecture (EDA) and some parts from Domain-Driven Design.  
+[Modular Monolith](https://en.wikipedia.org/wiki/Monolithic_application), [Event-Driven Architecture](https://en.wikipedia.org/wiki/Event-driven_architecture)
+(EDA) and some parts from [Domain-driven design](https://en.wikipedia.org/wiki/Domain-driven_design).  
 Yes, I did cut some corners here and there beacuse this is not a production-ready system. 😀
 
 ## Features
